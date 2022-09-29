@@ -8,10 +8,10 @@
 -- hstore [ stores key-value pair]
 -- Special Types [ such as network address and geometric data]
 
-DROP TABLE AUTHOR;
+-- DROP TABLE AUTHOR;
 
-CREATE TABLE AUTHORS 
+CREATE TABLE authors
 (
-    "AUTHOR_ID" VARCHAR PRIMARY KEY,
-    "NAME" VARCHAR NOT NULL
+    "author_id" VARCHAR PRIMARY KEY,
+    "name" VARCHAR NOT NULL
 );

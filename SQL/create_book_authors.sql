@@ -8,18 +8,21 @@
 -- JSON [ stores JSON data]
 -- hstore [ stores key-value pair]
 -- Special Types [ such as network address and geometric data]
-SELECT * FROM "BOOK_AUTHORS";
--- remove everything from table
-DELETE FROM BOOK_AUTHORS;
--- remove the table
-DROP TABLE "BOOK_AUTHORS";
 
-CREATE TABLE "BOOK_AUTHORS" 
+
+
+-- SELECT * FROM "book_authors";
+-- -- remove everything from table
+-- DELETE FROM book_authors;
+-- -- remove the table
+-- DROP TABLE "book_authors";
+
+CREATE TABLE "book_authors" 
 (
-    "AUTHOR_ID" VARCHAR PRIMARY KEY,
-    Isbn VARCHAR NOT NULL,
-    FOREIGN KEY (Isbn) REFERENCES Book(Isbn),
-    FOREIGN KEY ("AUTHOR_ID") REFERENCES Authors("AUTHOR_ID")
+    "author_id" VARCHAR PRIMARY KEY,
+    isbn VARCHAR NOT NULL,
+    FOREIGN KEY (isbn) REFERENCES book("isbn"),
+    FOREIGN KEY ("author_id") REFERENCES authors("author_id")
 );
 
-SELECT * FROM "BOOK_AUTHORS";
+-- SELECT * FROM "book_authors";
