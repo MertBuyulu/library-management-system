@@ -2,7 +2,7 @@
 
 > Important
 
-(Postman Collection)[https://www.getpostman.com/collections/f8032c1c6cde4334f979] 
+[Postman Collection](https://www.getpostman.com/collections/f8032c1c6cde4334f979)
 
 
 > Meeting Time 
