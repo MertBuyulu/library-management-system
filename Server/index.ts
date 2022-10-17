@@ -1,12 +1,11 @@
 // https://blog.logrocket.com/how-to-set-up-node-typescript-express/
 import express from "express"
-import { appendFile } from "fs";
-
+import {BookService} from "./src/services/book.service"
 const port = 3001
 
 const server = express();
 
-server.get('/',(req, res) => {
+server.get('/api/v1/',(req: express.Request, res: express.Response) => {
     res.json({
         "Success":"True",
         "Team":"Beryllium",
@@ -17,21 +16,14 @@ server.get('/',(req, res) => {
             {"Name": "Michelle Gonzales"},
             {"Name": "Jon Abraham"}
         ]
-    
-    
     })
 })
 
-server.get('/books',(req, res) => {
-    // FETCH THE DATA FROM DB
-
-    // SEND THE DATA 
-    res.json({"Success":"True", "data": "No Books"})
-})
+server.get('/api/v1/book', (req, res) => BookService.getAllBooks(req, res))
 
 
 server.listen(port, "127.0.0.1", () => {
-    console.log(`[server]: Server is running at http://127.0.0.1/:${port}`)
+    console.log(`[server] Server is running at http://127.0.0.1:${port}/api/v1`)
 })
 
 
