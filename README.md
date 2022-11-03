@@ -36,5 +36,8 @@ Milestone 2 - November, 18, 2022
 
 
 > Helpful
+
 [Postman Collection](https://www.getpostman.com/collections/f8032c1c6cde4334f979)
+
 [Great Example of Express Server](https://github.com/geshan/expressjs-structure/blob/master/src/services/programmingLanguages.service.js)
+[Prisma Client API](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create)
