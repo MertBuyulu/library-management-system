@@ -1,0 +1,1 @@
+{"version":3,"file":"book.service.js","sourceRoot":"","sources":["../../../src/services/book.service.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,WAAW,GAAG,UAAO,GAAoB,EAAE,GAAqB;;QAClE,sBAAO,GAAG,CAAC,IAAI,CAAC;gBACZ,SAAS,EAAE,MAAM;gBACjB,UAAU,EAAE,OAAO;aAEtB,CAAC,EAAA;;KACL,CAAA;AAGY,QAAA,WAAW,GAAG;IACvB,WAAW,aAAA;CACd,CAAA"}

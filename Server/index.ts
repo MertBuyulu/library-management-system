@@ -1,11 +1,13 @@
 // https://blog.logrocket.com/how-to-set-up-node-typescript-express/
 import express from "express"
 import {BookService} from "./src/services/book.service"
-const port = 3001
+import PrismaClient from "@prisma/client"
+const port = 3001 
+
 
 const server = express();
 
-server.get('/api/v1/',(req: express.Request, res: express.Response) => {
+server.get('/',(req: express.Request, res: express.Response) => {
     res.json({
         "Success":"True",
         "Team":"Beryllium",
@@ -19,7 +21,7 @@ server.get('/api/v1/',(req: express.Request, res: express.Response) => {
     })
 })
 
-server.get('/api/v1/book', (req, res) => BookService.getAllBooks(req, res))
+server.get('/book', (req, res) => BookService.getAllBooks(req, res))
 
 
 server.listen(port, "127.0.0.1", () => {
