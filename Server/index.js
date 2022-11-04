@@ -23,5 +23,5 @@ server.get('/', (req, res) => {
 });
 server.get('/book', (req, res) => book_service_1.BookService.getAllBooks(req, res));
 server.listen(port, "127.0.0.1", () => {
-    console.log(`[server] Server is running at http://127.0.0.1:${port}/api/v1`);
+    console.log(`[server] Server is running at http://127.0.0.1:${port}/`);
 });
