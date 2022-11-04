@@ -14,7 +14,7 @@ server.get('/', (req, res) => {
         "Team": "Beryllium",
         "Team Members": [
             { "Name": "Mert Buyulu" },
-            { "Name": "Minh Nguyen", "Role": "front-endDev" },
+            { "Name": "Minh Nguyen", "Role": "Front-End Dev" },
             { "Name": "Srilokh Karuturi", "Role": "Lead" },
             { "Name": "Michelle Gonzales", "Role": "Programmer" },
             { "Name": "Jonathan Abraham", "Role": "Team Member" }
