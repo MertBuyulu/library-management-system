@@ -8,20 +8,20 @@ const express_1 = __importDefault(require("express"));
 const book_service_1 = require("./src/services/book.service");
 const port = 3001;
 const server = (0, express_1.default)();
-server.get('/api/v1/', (req, res) => {
+server.get('/', (req, res) => {
     res.json({
         "Success": "True",
         "Team": "Beryllium",
         "Team Members": [
             { "Name": "Mert Buyulu" },
-            { "Name": "Minh Nguyen" },
-            { "Name": "Srilokh Karuturi" },
-            { "Name": "Michelle Gonzales" },
-            { "Name": "Jon Abraham" }
+            { "Name": "Minh Nguyen", "Role": "front-endDev" },
+            { "Name": "Srilokh Karuturi", "Role": "Lead" },
+            { "Name": "Michelle Gonzales", "Role": "Programmer" },
+            { "Name": "Jonathan Abraham", "Role": "Team Member" }
         ]
     });
 });
-server.get('/api/v1/book', (req, res) => book_service_1.BookService.getAllBooks(req, res));
+server.get('/book', (req, res) => book_service_1.BookService.getAllBooks(req, res));
 server.listen(port, "127.0.0.1", () => {
     console.log(`[server] Server is running at http://127.0.0.1:${port}/api/v1`);
 });
