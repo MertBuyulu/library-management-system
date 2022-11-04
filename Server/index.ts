@@ -15,7 +15,7 @@ server.get('/',(req: express.Request, res: express.Response) => {
             {
                 "Name": "Mert Buyulu"
             },
-            {"Name": "Minh Nguyen"},
+            {"Name": "Minh Nguyen", "Role": "front-endDev"},
             {"Name": "Srilokh Karuturi", "Role": "Lead"},
             {"Name": "Michelle Gonzales, "Role": "Programmer"},
             {"Name": "Jonathan Abraham"}
