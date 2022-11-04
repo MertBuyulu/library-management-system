@@ -12,9 +12,11 @@ server.get('/',(req: express.Request, res: express.Response) => {
         "Success":"True",
         "Team":"Beryllium",
         "Team Members": [
-            {"Name": "Mert Buyulu"},
+            {
+                "Name": "Mert Buyulu"
+            },
             {"Name": "Minh Nguyen"},
-            {"Name": "Srilokh Karuturi"},
+            {"Name": "Srilokh Karuturi", "Role": "Lead"},
             {"Name": "Michelle Gonzales"},
             {"Name": "Jonathan Abraham"}
         ]
