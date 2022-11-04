@@ -1,5 +1,17 @@
 # BERYLLIUM LIBRARY-MANAGEMENT-SYSTEM
 
+> Requirements for running
+
+1. [Git](https://github.com/git-guides/install-git)
+2. [Node.js](https://nodejs.org)
+3. [NPM](https://www.npmjs.com/)
+4. [Yarn](https://yarnpkg.com/)
+
+> Instructions for running
+1. git clone https://github.com/sai-k02/library-management-system.git
+2. 
+
+
 > Important
 Milestone 1 - 
 Milestone 2 - November, 18, 2022

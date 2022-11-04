@@ -36,6 +36,7 @@ const getCorrectAuthor = (rawBookRecord) => {
         }
 
     }
+
     return newAuthor
 }
 
@@ -54,20 +55,20 @@ export const addAllAuthors = async (rawBookRecords) => {
 
     var numAdded = 0
 
-    // // RUN CREATE ON EACH OF THESE ITEMS
-    // for(var i=0; i< correctAuthorList.length; i++){
-    //     var author = correctAuthorList[i]
-    //     await prisma.authors.create({data: author});
-    //     console.log("Adding a new author: " + author.name)
-    //     numAdded += 1 
-    // }
-
-    correctAuthorList.map(async (author) => {
-        await prisma.authors.create({data: author})
-        console.log("Added " + author.name)
+    // RUN CREATE ON EACH OF THESE ITEMS
+    for(var i=0; i< correctAuthorList.length; i++){
+        var author = correctAuthorList[i]
+        await prisma.authors.create({data: author});
+        console.log("Adding a new author: " + author.name)
+        numAdded += 1 
     }
+
+    // correctAuthorList.map(async (author) => {
+    //     await prisma.authors.create({data: author})
+    //     console.log("Added " + author.name)
+    // }
     
-    )
+    // )
     console.log("Added " + numAdded + " Authors")
 }
 

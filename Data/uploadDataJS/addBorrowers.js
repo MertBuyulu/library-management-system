@@ -1,11 +1,7 @@
 /*
 This file add all borrowers
 */
-import csvtojson from 'csvtojson'
-import {PrismaClient}  from '@prisma/client'
-import { json } from 'stream/consumers';
-import { time } from 'console';
-import { symlinkSync } from 'fs';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient()
 
 // FUNCTION WILL CREATE PROPER BORROWER OBJECT TO ADD 
