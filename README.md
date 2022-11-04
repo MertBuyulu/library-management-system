@@ -4,6 +4,11 @@
 Milestone 1 - 
 Milestone 2 - November, 18, 2022
 
+> Questions
+
+Are there any additional specifications to unique id of an author?
+
+
 > Tasks
 
 [x] - Project Inception (All members)
