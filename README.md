@@ -30,14 +30,14 @@
 
 
 > Important
-Milestone 1 - 
-
 Milestone 2 - November, 18, 2022
-1. Run Initial Depen
+1. Run Initial Dependencies (Thu Nov 3)
+2. Finish "uploadDataJS" application (Monday Nov 7th @ 8:00pm)
 
 > Questions
 
 Are there any additional specifications to unique id of an author?
+How do we handle multiple author names? 
 
 
 > Tasks
@@ -50,7 +50,7 @@ Are there any additional specifications to unique id of an author?
 
 [x] - Create PostgreSQL Docker Container Compose File (Srilokh)
 
-[ ] - Validate SQL Scripts with requirements (Jon, Srilokh)
+[x] - Validate SQL Scripts with requirements (Jon, Srilokh)
 
 [ ] - Create online database so we can all easily work without docker (Srilokh)
 

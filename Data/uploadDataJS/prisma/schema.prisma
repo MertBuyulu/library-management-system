@@ -8,9 +8,9 @@ datasource db {
 }
 
 model authors {
-  author_id    String        @id @db.VarChar
-  name         String        @db.VarChar
-  book_authors book_authors?
+  author_id    String         @id @db.VarChar
+  name         String         @db.VarChar
+  book_authors book_authors[]
 }
 
 model book {
@@ -21,7 +21,8 @@ model book {
 }
 
 model book_authors {
-  author_id String  @id @db.VarChar
+  id        String  @id @db.VarChar
+  author_id String  @db.VarChar
   isbn      String  @db.VarChar
   authors   authors @relation(fields: [author_id], references: [author_id], onDelete: NoAction, onUpdate: NoAction)
   book      book    @relation(fields: [isbn], references: [isbn], onDelete: NoAction, onUpdate: NoAction)
