@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /Users/srilokh/.node/corepack/yarn/1.22.15/bin/yarn.js add @ types/express
+  /usr/local/bin/node /Users/srilokh/.node/corepack/yarn/1.22.15/bin/yarn.js add @types/prisma-redis-middleware
 
 PATH: 
-  /Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin
+  /Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin
 
 Yarn version: 
   1.22.15
@@ -14,8 +14,8 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@: Request "https://registry.yarnpkg.com/@" returned a 405
-      at Request.params.callback [as _callback] (/Users/srilokh/.node/corepack/yarn/1.22.15/lib/cli.js:66149:18)
+  Error: https://registry.yarnpkg.com/@types%2fprisma-redis-middleware: Not found
+      at Request.params.callback [as _callback] (/Users/srilokh/.node/corepack/yarn/1.22.15/lib/cli.js:66140:18)
       at Request.self.callback (/Users/srilokh/.node/corepack/yarn/1.22.15/lib/cli.js:140885:22)
       at Request.emit (node:events:527:28)
       at Request.<anonymous> (/Users/srilokh/.node/corepack/yarn/1.22.15/lib/cli.js:141857:10)
@@ -32,9 +32,19 @@ npm manifest:
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
-    "scripts": {},
+    "scripts": {
+      "build": "yarn tsc",
+      "start": "yarn nodemon index.ts",
+      "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    },
     "dependencies": {
-      "express": "^4.18.1"
+      "@prisma/client": "^4.5.0",
+      "@types/express": "^4.17.14",
+      "@types/node": "^18.7.23",
+      "express": "^4.18.1",
+      "nodemon": "^2.0.20",
+      "prisma": "^4.5.0",
+      "prisma-redis-middleware": "^4.2.1"
     },
     "devDependencies": {
       "ts-node": "^10.9.1",
@@ -57,6 +67,11 @@ Lockfile:
     dependencies:
       "@jridgewell/trace-mapping" "0.3.9"
   
+  "@ioredis/commands@^1.1.1":
+    version "1.2.0"
+    resolved "https://registry.yarnpkg.com/@ioredis/commands/-/commands-1.2.0.tgz#6d61b3097470af1fdbbe622795b8921d42018e11"
+    integrity sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==
+  
   "@jridgewell/resolve-uri@^3.0.3":
     version "3.1.0"
     resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-3.1.0.tgz#2203b118c157721addfe69d47b70465463066d78"
@@ -74,6 +89,23 @@ Lockfile:
     dependencies:
       "@jridgewell/resolve-uri" "^3.0.3"
       "@jridgewell/sourcemap-codec" "^1.4.10"
+  
+  "@prisma/client@^4.5.0":
+    version "4.5.0"
+    resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.5.0.tgz#f708549bee3da396d5741d846b4e4306b120210c"
+    integrity sha512-B2cV0OPI1smhdYUxsJoLYQLoMlLH06MUxgFUWQnHodGMX98VRVXKmQE/9OcrTNkqtke5RC+YU24Szxd04tZA2g==
+    dependencies:
+      "@prisma/engines-version" "4.5.0-43.0362da9eebca54d94c8ef5edd3b2e90af99ba452"
+  
+  "@prisma/engines-version@4.5.0-43.0362da9eebca54d94c8ef5edd3b2e90af99ba452":
+    version "4.5.0-43.0362da9eebca54d94c8ef5edd3b2e90af99ba452"
+    resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.5.0-43.0362da9eebca54d94c8ef5edd3b2e90af99ba452.tgz#5b7fae294ee9bd9790d0e7b7a0b0912e4222ac08"
+    integrity sha512-o7LyVx8PPJBLrEzLl6lpxxk2D5VnlM4Fwmrbq0NoT6pr5aa1OuHD9ZG+WJY6TlR/iD9bhmo2LNcxddCMr5Rv2A==
+  
+  "@prisma/engines@4.5.0":
+    version "4.5.0"
+    resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.5.0.tgz#82df347a893a5ae2a67707d44772ba181f4b9328"
+    integrity sha512-4t9ir2SbQQr/wMCNU4YpHWp5hU14J2m3wHUZnGJPpmBF8YtkisxyVyQsKd1e6FyLTaGq8LOLhm6VLYHKqKNm+g==
   
   "@tsconfig/node10@^1.0.7":
     version "1.0.9"
@@ -95,10 +127,77 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
     integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
   
+  "@types/body-parser@*":
+    version "1.19.2"
+    resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
+    integrity sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==
+    dependencies:
+      "@types/connect" "*"
+      "@types/node" "*"
+  
+  "@types/connect@*":
+    version "3.4.35"
+    resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
+    integrity sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==
+    dependencies:
+      "@types/node" "*"
+  
+  "@types/express-serve-static-core@^4.17.18":
+    version "4.17.31"
+    resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.31.tgz#a1139efeab4e7323834bb0226e62ac019f474b2f"
+    integrity sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q==
+    dependencies:
+      "@types/node" "*"
+      "@types/qs" "*"
+      "@types/range-parser" "*"
+  
+  "@types/express@^4.17.14":
+    version "4.17.14"
+    resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.14.tgz#143ea0557249bc1b3b54f15db4c81c3d4eb3569c"
+    integrity sha512-TEbt+vaPFQ+xpxFLFssxUDXj5cWCxZJjIcB7Yg0k0GMHGtgtQgpvx/MUQUeAkNbA9AAGrwkAsoeItdTgS7FMyg==
+    dependencies:
+      "@types/body-parser" "*"
+      "@types/express-serve-static-core" "^4.17.18"
+      "@types/qs" "*"
+      "@types/serve-static" "*"
+  
+  "@types/mime@*":
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/@types/mime/-/mime-3.0.1.tgz#5f8f2bca0a5863cb69bc0b0acd88c96cb1d4ae10"
+    integrity sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==
+  
+  "@types/node@*", "@types/node@^18.7.23":
+    version "18.7.23"
+    resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.23.tgz#75c580983846181ebe5f4abc40fe9dfb2d65665f"
+    integrity sha512-DWNcCHolDq0ZKGizjx2DZjR/PqsYwAcYUJmfMWqtVU2MBMG5Mo+xFZrhGId5r/O5HOuMPyQEcM6KUBp5lBZZBg==
+  
+  "@types/qs@*":
+    version "6.9.7"
+    resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
+    integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
+  
+  "@types/range-parser@*":
+    version "1.2.4"
+    resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
+    integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
+  
+  "@types/serve-static@*":
+    version "1.15.0"
+    resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.15.0.tgz#c7930ff61afb334e121a9da780aac0d9b8f34155"
+    integrity sha512-z5xyF6uh8CbjAu9760KDKsH2FcDxZ2tFCsA4HIMWE6IkiYMXfVoa+4f9KX+FN0ZLsaMw1WNG2ETLA6N+/YA+cg==
+    dependencies:
+      "@types/mime" "*"
+      "@types/node" "*"
+  
   abbrev@1:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
     integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
+  
+  abstract-logging@^2.0.1:
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/abstract-logging/-/abstract-logging-2.0.1.tgz#6b0c371df212db7129b57d2e7fcf282b8bf1c839"
+    integrity sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==
   
   accepts@~1.3.8:
     version "1.3.8"
@@ -135,6 +234,15 @@ Lockfile:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-1.1.1.tgz#9a5f699051b1e7073328f2a008968b64ea2955d2"
     integrity sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==
+  
+  async-cache-dedupe@1.4.2:
+    version "1.4.2"
+    resolved "https://registry.yarnpkg.com/async-cache-dedupe/-/async-cache-dedupe-1.4.2.tgz#5b14c7467c6e32ccc1a30e0abbd2bba5677e71c3"
+    integrity sha512-vfkyV1XOECXiBdax+glMeCEamJ19H52bw2chO25GWtviUULj6nvF0uyBh0g80N25ubF1n68lP5IXuWsY84OXQA==
+    dependencies:
+      abstract-logging "^2.0.1"
+      mnemonist "^0.39.2"
+      safe-stable-stringify "^2.3.1"
   
   balanced-match@^1.0.0:
     version "1.0.2"
@@ -207,6 +315,11 @@ Lockfile:
     optionalDependencies:
       fsevents "~2.3.2"
   
+  cluster-key-slot@^1.1.0:
+    version "1.1.2"
+    resolved "https://registry.yarnpkg.com/cluster-key-slot/-/cluster-key-slot-1.1.2.tgz#88ddaa46906e303b5de30d3153b7d9fe0a0c19ac"
+    integrity sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==
+  
   concat-map@0.0.1:
     version "0.0.1"
     resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -252,6 +365,18 @@ Lockfile:
     integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
     dependencies:
       ms "^2.1.1"
+  
+  debug@^4.3.4:
+    version "4.3.4"
+    resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+    integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+    dependencies:
+      ms "2.1.2"
+  
+  denque@^2.0.1:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/denque/-/denque-2.1.0.tgz#e93e1a6569fb5e66f16a3c2a2964617d349d6ab1"
+    integrity sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==
   
   depd@2.0.0:
     version "2.0.0"
@@ -426,6 +551,21 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
     integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
   
+  ioredis@5.2.3:
+    version "5.2.3"
+    resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.2.3.tgz#d5b37eb13e643241660d6cee4eeb41a026cda8c0"
+    integrity sha512-gQNcMF23/NpvjCaa1b5YycUyQJ9rBNH2xP94LWinNpodMWVUPP5Ai/xXANn/SM7gfIvI62B5CCvZxhg5pOgyMw==
+    dependencies:
+      "@ioredis/commands" "^1.1.1"
+      cluster-key-slot "^1.1.0"
+      debug "^4.3.4"
+      denque "^2.0.1"
+      lodash.defaults "^4.2.0"
+      lodash.isarguments "^3.1.0"
+      redis-errors "^1.2.0"
+      redis-parser "^3.0.0"
+      standard-as-callback "^2.1.0"
+  
   ipaddr.js@1.9.1:
     version "1.9.1"
     resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
@@ -454,6 +594,16 @@ Lockfile:
     version "7.0.0"
     resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
     integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
+  
+  lodash.defaults@^4.2.0:
+    version "4.2.0"
+    resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
+    integrity sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==
+  
+  lodash.isarguments@^3.1.0:
+    version "3.1.0"
+    resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
+    integrity sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==
   
   make-error@^1.1.1:
     version "1.3.6"
@@ -499,10 +649,22 @@ Lockfile:
     dependencies:
       brace-expansion "^1.1.7"
   
+  mnemonist@^0.39.2:
+    version "0.39.5"
+    resolved "https://registry.yarnpkg.com/mnemonist/-/mnemonist-0.39.5.tgz#5850d9b30d1b2bc57cc8787e5caa40f6c3420477"
+    integrity sha512-FPUtkhtJ0efmEFGpU14x7jGbTB+s18LrzRL2KgoWz9YvcY3cPomz8tih01GbHwnGk/OmkOKfqd/RAQoc8Lm7DQ==
+    dependencies:
+      obliterator "^2.0.1"
+  
   ms@2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
     integrity sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==
+  
+  ms@2.1.2:
+    version "2.1.2"
+    resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
+    integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
   
   ms@2.1.3, ms@^2.1.1:
     version "2.1.3"
@@ -547,6 +709,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.12.2.tgz#c0641f26394532f28ab8d796ab954e43c009a8ea"
     integrity sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==
   
+  obliterator@^2.0.1:
+    version "2.0.4"
+    resolved "https://registry.yarnpkg.com/obliterator/-/obliterator-2.0.4.tgz#fa650e019b2d075d745e44f1effeb13a2adbe816"
+    integrity sha512-lgHwxlxV1qIg1Eap7LgIeoBWIMFibOjbrYPIPJZcI1mmGAI2m3lNYpK12Y+GBdPQ0U1hRwSord7GIaawz962qQ==
+  
   on-finished@2.4.1:
     version "2.4.1"
     resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.4.1.tgz#58c8c44116e54845ad57f14ab10b03533184ac3f"
@@ -568,6 +735,21 @@ Lockfile:
     version "2.3.1"
     resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
     integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
+  
+  prisma-redis-middleware@^4.2.1:
+    version "4.2.1"
+    resolved "https://registry.yarnpkg.com/prisma-redis-middleware/-/prisma-redis-middleware-4.2.1.tgz#18fbe4b94aa1401c55cf7d9509feb6d82d1baf2e"
+    integrity sha512-lywHWQF03uwX8fZZ9Som8AuTUUxEf8x8QTT2D7KAeSirB21KqMoiiCSEEUyGxEz1S/2rJ2YvVTiYY6zSnAeM7Q==
+    dependencies:
+      async-cache-dedupe "1.4.2"
+      ioredis "5.2.3"
+  
+  prisma@^4.5.0:
+    version "4.5.0"
+    resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.5.0.tgz#361ae3f4476d0821b97645e5da42975a7c2943bb"
+    integrity sha512-9Aeg4qiKlv9Wsjz4NO8k2CzRzlvS3A4FYVJ5+28sBBZ0eEwbiVOE/Jj7v6rZC1tFW2s4GSICQOAyuOjc6WsNew==
+    dependencies:
+      "@prisma/engines" "4.5.0"
   
   proxy-addr@~2.0.7:
     version "2.0.7"
@@ -611,10 +793,27 @@ Lockfile:
     dependencies:
       picomatch "^2.2.1"
   
+  redis-errors@^1.0.0, redis-errors@^1.2.0:
+    version "1.2.0"
+    resolved "https://registry.yarnpkg.com/redis-errors/-/redis-errors-1.2.0.tgz#eb62d2adb15e4eaf4610c04afe1529384250abad"
+    integrity sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==
+  
+  redis-parser@^3.0.0:
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/redis-parser/-/redis-parser-3.0.0.tgz#b66d828cdcafe6b4b8a428a7def4c6bcac31c8b4"
+    integrity sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==
+    dependencies:
+      redis-errors "^1.0.0"
+  
   safe-buffer@5.2.1:
     version "5.2.1"
     resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
     integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
+  
+  safe-stable-stringify@^2.3.1:
+    version "2.4.1"
+    resolved "https://registry.yarnpkg.com/safe-stable-stringify/-/safe-stable-stringify-2.4.1.tgz#34694bd8a30575b7f94792aa51527551bd733d61"
+    integrity sha512-dVHE6bMtS/bnL2mwualjc6IxEv1F+OCUpA46pKUj6F8uDbUM0jCCulPqRNPSnWwGNKx5etqMjZYdXtrm5KJZGA==
   
   "safer-buffer@>= 2.1.2 < 3":
     version "2.1.2"
@@ -680,6 +879,11 @@ Lockfile:
     integrity sha512-BBKgR84BJQJm6WjWFMHgLVuo61FBDSj1z/xSFUIozqO6wO7ii0JxCqlIud7Enr/+LhlbNI0whErq96P2qHNWew==
     dependencies:
       semver "~7.0.0"
+  
+  standard-as-callback@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/standard-as-callback/-/standard-as-callback-2.1.0.tgz#8953fc05359868a77b5b9739a665c5977bb7df45"
+    integrity sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==
   
   statuses@2.0.1:
     version "2.0.1"

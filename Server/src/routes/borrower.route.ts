@@ -13,15 +13,18 @@ const borrowerRouter = express.Router();
 import {
     createBorrower,
     getAllBorrowers,
-    getBorrower
+    getBorrower,
+    removeBorrower,
+    updateBorrower
 } from "../services/bookBorrower.service";
 
 console.log("[server] Routing Borrower Request")
 
 // DEFINE ROUTES
 borrowerRouter.get("/", getAllBorrowers);
-borrowerRouter.get("/:id", getBorrower);
+borrowerRouter.get("/:card_id", getBorrower);
 borrowerRouter.post("/", createBorrower);
-
+borrowerRouter.delete("/:card_id", removeBorrower)
+borrowerRouter.put("/:card_id", updateBorrower)
 // EXPORT ROUTER 
 export default borrowerRouter;

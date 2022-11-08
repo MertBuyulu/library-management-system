@@ -1,9 +1,8 @@
 import express from "express";
-import { Module } from "module";
-
+import { REPL_MODE_SLOPPY } from "repl";
+import { prisma, redis } from "../utils/PrismaClient"
 // DEFINE PRISMA CLIENT
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+
 
 
 // DEFINE TYPES
@@ -24,35 +23,27 @@ export const getAllBorrowers = async (
     return res.json(await prisma.borrower.findMany());
 };
 
+// DEFINE GET BORROWER
 export const getBorrower = async (
     req: express.Request,
     res: express.Response
 ) => {
-    const { id: borrowerID } = req.params;
+    const { card_id } = req.params;
     const borrower = await prisma.borrower.findUnique({
         where: {
-            card_id: borrowerID,
+            card_id: card_id,
         },
     });
     return res.json(borrower);
 };
 
-/*
-{
-    "card_id": "",
-    "ssn": ,
-    "bname": "",
-    "address": "",
-    "phone": ""
-}
-*/
+// DEFINE GET 
 export const createBorrower = async (
     req: express.Request,
     res: express.Response
 ) => {
     try {
-        // GET QUERY PARAMS
-        console.log(req.body)
+        // GET VARIABLES FROM BODY
         const card_id = req.body['card_id'];
         const ssn = req.body['ssn'];
         const bname = req.body['bname'];
@@ -69,24 +60,77 @@ export const createBorrower = async (
 
         // OUTPUT TO CONSOLE
         console.log('Creating a new borrower : \n')
-        console.log(borrower)
 
         // CREATE IN DATABASE
         const borrowerCreate = await prisma.borrower.create({
-            data: {
-                card_id: card_id,
-                ssn: ssn,
-                bname: bname,
-                address: address,
-                phone: phone,
-            }
+            data: borrower
         });
 
-        return res.send(200).json(borrowerCreate);
+        return res.json(borrowerCreate);
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            res.status(409).json({ message: err.message });
+            return res.send(409).json({ message: err.message });
         }
     }
 };
+
+
+// DEFINE GET 
+export const removeBorrower = async (
+    req: express.Request,
+    res: express.Response
+) => {
+    try {
+        // DEFINE CARD_ID OF BORROWER TO REMOVE
+        const { card_id } = req.params
+
+        // CREATE IN DATABASE
+        const borrowerRemoving = await prisma.borrower.delete({ where: { card_id: card_id } })
+
+        // OUTPUT TO CONSOLE
+        console.log('Removed ' + card_id + ' borrower');
+
+        return res.json(borrowerRemoving);
+
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            return res.status(400).json(err.message)
+        }
+    }
+};
+
+
+// DEFINE GET 
+export const updateBorrower = async (
+    req: express.Request,
+    res: express.Response
+) => {
+    try {
+        // DEFINE CARD_ID OF BORROWER TO REMOVE
+        const { card_id } = req.params
+
+        // DEFINE DATA
+        const data = req.body
+
+        // CREATE IN DATABASE
+        const borrowerUpdating = await prisma.borrower.update({
+            where: {
+                card_id: card_id
+            },
+            data: data
+        })
+
+        // OUTPUT TO CONSOLE
+        console.log('[server] Updated ' + card_id + ' borrower');
+
+        return res.json(borrowerUpdating);
+
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            return res.status(400).json(err.message)
+        }
+    }
+};
+
+// 

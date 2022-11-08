@@ -12,5 +12,8 @@ const express_1 = __importDefault(require("express"));
 const borrowerRouter = express_1.default.Router();
 // IMPORT SERVICES
 const book_service_1 = require("../services/book.service");
+// / 
 borrowerRouter.get("/", book_service_1.getAllBooks);
+borrowerRouter.get("/:id", book_service_1.getBook);
+borrowerRouter.post("/", book_service_1.createBook);
 exports.default = borrowerRouter;

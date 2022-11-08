@@ -85,4 +85,8 @@ How do we handle multiple author names?
 
 [Tailwind](https://tailwindui.com/?ref=top)
 
+[Cache](https://yunpengn.github.io/blog/2019/05/04/consistent-redis-sql/)
+
+[Redis](https://www.techaheadcorp.com/blog/enhance-database-performance-with-redis/)
+
 

@@ -10,9 +10,12 @@ import express from "express";
 const borrowerRouter = express.Router();
 
 // IMPORT SERVICES
-import { getAllBooks } from "../services/book.service";
+import { createBook, getAllBooks, getBook } from "../services/book.service";
 
+// / 
 borrowerRouter.get("/", getAllBooks);
+borrowerRouter.get("/:isbn", getBook);
+borrowerRouter.post("/", createBook);
 
 
 export default borrowerRouter;

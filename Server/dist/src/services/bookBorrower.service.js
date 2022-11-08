@@ -19,6 +19,7 @@ const getAllBorrowers = (req, res) => __awaiter(void 0, void 0, void 0, function
     return res.json(yield prisma.borrower.findMany());
 });
 exports.getAllBorrowers = getAllBorrowers;
+// DEFINE GET BORROWER
 const getBorrower = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id: borrowerID } = req.params;
     const borrower = yield prisma.borrower.findUnique({
@@ -29,15 +30,7 @@ const getBorrower = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     return res.json(borrower);
 });
 exports.getBorrower = getBorrower;
-/*
-{
-    "card_id": "",
-    "ssn": ,
-    "bname": "",
-    "address": "",
-    "phone": ""
-}
-*/
+// DEFINE GET 
 const createBorrower = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // GET QUERY PARAMS
@@ -56,23 +49,17 @@ const createBorrower = (req, res) => __awaiter(void 0, void 0, void 0, function*
         };
         // OUTPUT TO CONSOLE
         console.log('Creating a new borrower : \n');
-        console.log(borrower);
         // CREATE IN DATABASE
         const borrowerCreate = yield prisma.borrower.create({
-            data: {
-                card_id: card_id,
-                ssn: ssn,
-                bname: bname,
-                address: address,
-                phone: phone,
-            }
+            data: borrower
         });
-        return res.send(200).json(borrowerCreate);
+        return res.json(borrowerCreate);
     }
     catch (err) {
         if (err instanceof Error) {
-            res.status(409).json({ message: err.message });
+            return res.send(409).json({ message: err.message });
         }
     }
 });
 exports.createBorrower = createBorrower;
+// 
