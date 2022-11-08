@@ -51,6 +51,8 @@ const getCorrectAuthorList = (rawBookRecords) => {
     // DEFINE THE ARRAYS TO RETURN 
     var authorArray = []
     var bookAuthorArray = []
+
+    // DEFINE THE AUTHORS THAT EXIST 
     var authorsAdded = new Map()
 
     rawBookRecords.forEach((record) => {
@@ -82,6 +84,8 @@ const getCorrectAuthorList = (rawBookRecords) => {
 
     return [authorArray, bookAuthorArray]
 }
+
+
 // FUNCTION WILL ADD ALL Authors and populate the one-on-one 
 export const addAllAuthors = async (rawBookRecords) => {
     // GET ALL 
@@ -91,9 +95,9 @@ export const addAllAuthors = async (rawBookRecords) => {
     var numAuthorsAdded = await prisma.authors.createMany({data: authorArray})
     var numBookAuthorsAdded = await prisma.book_authors.createMany({data: bookAuthorArray, skipDuplicates: false})
 
-    // // ADD ALL AUTHORS INTO BOOK_AUTHORS
-    // console.log("Added " + numAuthorsAdded + " Authors")
-    // console.log("Added " + numBookAuthorsAdded + "Book Authors")
+    // ADD ALL AUTHORS INTO BOOK_AUTHORS
+    console.log("Added " + numAuthorsAdded.count + " Authors")
+    console.log("Added " + numBookAuthorsAdded.count + " Book Authors")
 
 }
 

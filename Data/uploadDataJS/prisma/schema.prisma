@@ -31,7 +31,7 @@ model book_authors {
 model book_loans {
   loan_id  String   @id @db.VarChar
   isbn     String   @db.VarChar
-  card_id  Int
+  card_id  String   @db.VarChar
   date_out DateTime @db.Date
   due_date DateTime @db.Date
   date_in  DateTime @db.Date
@@ -41,7 +41,7 @@ model book_loans {
 }
 
 model borrower {
-  card_id    Int          @id
+  card_id    String       @id @db.VarChar
   ssn        Int
   bname      String       @db.VarChar
   address    String       @db.VarChar

@@ -11,7 +11,8 @@ CREATE TABLE authors
 
 CREATE TABLE "book_authors" 
 (
-    "author_id" VARCHAR PRIMARY KEY,
+    "id" VARCHAR PRIMARY KEY,
+    "author_id" VARCHAR NOT NULL,
     isbn VARCHAR NOT NULL,
     FOREIGN KEY (isbn) REFERENCES book(isbn),
     FOREIGN KEY ("author_id") REFERENCES authors("author_id")

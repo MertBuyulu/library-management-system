@@ -6,12 +6,11 @@ const prisma = new PrismaClient()
 
 // FUNCTION WILL CREATE PROPER BORROWER OBJECT TO ADD 
 const getCorrectBorrower = (borrower) => {
-    var borrowerID = Number((borrower.ID0000id).replace("ID", ""))
-    var borrowerSSN = parseInt((borrower.ssn).replaceAll("-",""))
+    var borrowerSSN = parseInt((borrower.ssn))
     var newBorrower = {
-        "card_id":borrowerID,
+        "card_id":borrower.card_id,
         "ssn":borrowerSSN,
-        "bname":borrower.first_name + " " + borrower.last_name,
+        "bname":borrower.bname,
         "address":borrower.address,
         "phone":borrower.phone
     }
