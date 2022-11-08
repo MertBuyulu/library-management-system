@@ -14,10 +14,10 @@ import { createfines, deletefines, getAllfiness, getfines, updatefines } from ".
 
 // IMPLEMENT ROUTES
 finesRouter.get("/", getAllfiness);
-finesRouter.get("/:isbn", getfines);
+finesRouter.get("/:loan_id", getfines);
 finesRouter.post("/", createfines);
-finesRouter.put("/:isbn", updatefines);
-finesRouter.delete("/:isbn", deletefines);
+finesRouter.put("/:loan_id", updatefines);
+finesRouter.delete("/:loan_id", deletefines);
 
 
 export default finesRouter;
