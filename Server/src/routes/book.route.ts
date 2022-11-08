@@ -7,15 +7,17 @@
 import express from "express";
 
 // DEFINE ROUTER
-const borrowerRouter = express.Router();
+const bookRouter = express.Router();
 
 // IMPORT SERVICES
-import { createBook, getAllBooks, getBook } from "../services/book.service";
+import { createBook, deleteBook, getAllBooks, getBook, updateBook } from "../services/book.service";
 
-// / 
-borrowerRouter.get("/", getAllBooks);
-borrowerRouter.get("/:isbn", getBook);
-borrowerRouter.post("/", createBook);
+// IMPLEMENT ROUTES
+bookRouter.get("/", getAllBooks);
+bookRouter.get("/:isbn", getBook);
+bookRouter.post("/", createBook);
+bookRouter.put("/:isbn", updateBook);
+bookRouter.delete("/:isbn", deleteBook);
 
 
-export default borrowerRouter;
+export default bookRouter;
