@@ -1,9 +1,6 @@
 import express from "express";
 import { REPL_MODE_SLOPPY } from "repl";
 import { prisma, redis } from "../utils/PrismaClient"
-// DEFINE PRISMA CLIENT
-
-
 
 // DEFINE TYPES
 type Borrower = {
@@ -34,7 +31,13 @@ export const getBorrower = async (
             card_id: card_id,
         },
     });
-    return res.json(borrower);
+
+    if (borrower) {
+        return res.json(borrower);
+    } else {
+        return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
+    }
+
 };
 
 // DEFINE GET 
@@ -59,15 +62,15 @@ export const createBorrower = async (
         };
 
         // OUTPUT TO CONSOLE
-        console.log('Creating a new borrower : \n')
+        console.log('[server] Creating borrower ' + card_id)
 
         // CREATE IN DATABASE
         const borrowerCreate = await prisma.borrower.create({
             data: borrower
         });
 
+        // RETURN
         return res.json(borrowerCreate);
-
     } catch (err: unknown) {
         if (err instanceof Error) {
             return res.send(409).json({ message: err.message });
@@ -132,5 +135,3 @@ export const updateBorrower = async (
         }
     }
 };
-
-// 
