@@ -33,7 +33,14 @@ export const getBook = async (
         },
     });
 
-    return res.json(book);
+    if (book) {
+        console.log("[server] Created book " + isbn);
+        return res.json(book);
+    }
+    else {
+        console.log("[server] Could not create book" + isbn)
+        return res.status(400).json(book);
+    }
 };
 
 // DEFINE GET BORROWER
@@ -51,14 +58,18 @@ export const createBook = async (
             title: title
         };
         // OUTPUT TO CONSOLE
-        console.log('Creating a new book : \n')
 
         // CREATE IN DATABASE
         const bookCreate = await prisma.book.create({
             data: book
         });
 
-        return res.json(bookCreate);
+        if (bookCreate) {
+            console.log('[server] Created a new book ' + isbn)
+            return res.json(bookCreate);
+        } else {
+            return res.status(404).json({ "Success": "Failure", "Message": "Book could not be created." })
+        }
 
     } catch (err: unknown) {
         if (err instanceof Error) {
@@ -68,4 +79,39 @@ export const createBook = async (
 };
 
 
-// 
+// DELETE BOOK 
+export const deleteBook = async (req: express.Request, res: express.Response) => {
+    // GET BOOK FROM PARAMS
+    const { isbn } = req.params
+
+    // DELETE BOOK
+    const deletingBook = await prisma.book.delete({ where: { isbn: isbn } })
+
+    if (deletingBook) {
+        return res.json(deletingBook)
+    } else {
+        return res.status(400).json({ "Success": "Failure", "Message": "Book could not be deleted due to non existent resource." })
+    }
+}
+
+// UPDATE BOOK
+export const updateBook = async (req: express.Request, res: express.Response) => {
+    // GET BOOK FROM PARAMS
+    const { isbn } = req.params
+
+    // GET DATA FROM ISBN
+    const data = req.body
+
+    // UPDATE
+    const updatingBook = await prisma.book.update({ where: { isbn: isbn }, data: data })
+
+    // ERROR HANDLING
+    if (updatingBook) {
+        return res.json(updatingBook)
+    } else {
+        return res.status(400).json({ "Success": "Failure", "Message": "Could not update book for some reason" })
+    }
+}
+
+
+
