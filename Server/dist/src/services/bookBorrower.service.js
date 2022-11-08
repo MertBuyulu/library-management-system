@@ -9,14 +9,70 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BorrowerService = void 0;
+exports.createBorrower = exports.getBorrower = exports.getAllBorrowers = void 0;
 // DEFINE PRISMA CLIENT
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 // DEFINE GET ALL BORROWERS ROUTE
 const getAllBorrowers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("[server] Getting all Borrowers");
     return res.json(yield prisma.borrower.findMany());
 });
-exports.BorrowerService = {
-    getAllBorrowers
-};
+exports.getAllBorrowers = getAllBorrowers;
+const getBorrower = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id: borrowerID } = req.params;
+    const borrower = yield prisma.borrower.findUnique({
+        where: {
+            card_id: borrowerID,
+        },
+    });
+    return res.json(borrower);
+});
+exports.getBorrower = getBorrower;
+/*
+{
+    "card_id": "",
+    "ssn": ,
+    "bname": "",
+    "address": "",
+    "phone": ""
+}
+*/
+const createBorrower = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // GET QUERY PARAMS
+        console.log(req.body);
+        const card_id = req.body['card_id'];
+        const ssn = req.body['ssn'];
+        const bname = req.body['bname'];
+        const address = req.body['address'];
+        const phone = req.body['phone'];
+        const borrower = {
+            card_id: card_id,
+            ssn: ssn,
+            bname: bname,
+            address: address,
+            phone: phone,
+        };
+        // OUTPUT TO CONSOLE
+        console.log('Creating a new borrower : \n');
+        console.log(borrower);
+        // CREATE IN DATABASE
+        const borrowerCreate = yield prisma.borrower.create({
+            data: {
+                card_id: card_id,
+                ssn: ssn,
+                bname: bname,
+                address: address,
+                phone: phone,
+            }
+        });
+        return res.send(200).json(borrowerCreate);
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            res.status(409).json({ message: err.message });
+        }
+    }
+});
+exports.createBorrower = createBorrower;

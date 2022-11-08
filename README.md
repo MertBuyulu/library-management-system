@@ -80,3 +80,9 @@ How do we handle multiple author names?
 [Great Example of Express Server](https://github.com/geshan/expressjs-structure/blob/master/src/services/programmingLanguages.service.js)
 
 [Prisma Client API](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create)
+
+[TRPC](https://trpc.io/docs/v10/)
+
+[Tailwind](https://tailwindui.com/?ref=top)
+
+

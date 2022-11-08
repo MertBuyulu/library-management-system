@@ -2,7 +2,7 @@ import express from 'express'
 import { Module } from 'module'
 
 
-const getAllBooks = async (req: express.Request, res: express.Response) => {
+export const getAllBooks = async (req: express.Request, res: express.Response) => {
     return res.json({
         "Success": "True",
         "Endpoint": "/book"
@@ -10,7 +10,3 @@ const getAllBooks = async (req: express.Request, res: express.Response) => {
     })
 }
 
-
-export const BookService = {
-    getAllBooks
-}

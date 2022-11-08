@@ -9,13 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BookService = void 0;
+exports.getAllBooks = void 0;
 const getAllBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json({
         "Success": "True",
         "Endpoint": "/book"
     });
 });
-exports.BookService = {
-    getAllBooks
-};
+exports.getAllBooks = getAllBooks;

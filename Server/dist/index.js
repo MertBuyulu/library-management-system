@@ -5,10 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // https://blog.logrocket.com/how-to-set-up-node-typescript-express/
 const express_1 = __importDefault(require("express"));
-const book_service_1 = require("./src/services/book.service");
-const bookBorrower_service_1 = require("./src/services/bookBorrower.service");
+const borrower_route_1 = __importDefault(require("./src/routes/borrower.route"));
+const body_parser_1 = __importDefault(require("body-parser"));
 const port = 3001;
 const server = (0, express_1.default)();
+server.use(body_parser_1.default.json({ limit: "30mb" }));
+server.use(body_parser_1.default.urlencoded({ limit: "30mb", extended: true }));
+// server.use(cors());
 server.get('/', (req, res) => {
     res.json({
         "Success": "True",
@@ -22,8 +25,10 @@ server.get('/', (req, res) => {
         ]
     });
 });
-server.get('/book', (req, res) => book_service_1.BookService.getAllBooks(req, res));
-server.get('/borrower', (req, res) => bookBorrower_service_1.BorrowerService.getAllBorrowers(req, res));
+server.use('/borrower', borrower_route_1.default);
 server.listen(port, "127.0.0.1", () => {
     console.log(`[server] Server is running at http://127.0.0.1:${port}/`);
 });
+function cors() {
+    throw new Error("Function not implemented.");
+}
