@@ -5,19 +5,20 @@
 
 
 import express from "express";
+import { createFine, deleteFine, getAllFines, getFine, updateFine } from "../services/bookFines.service";
 
 // DEFINE ROUTER
 const finesRouter = express.Router();
 
 // IMPORT SERVICES
-import { createfines, deletefines, getAllfiness, getfines, updatefines } from "../services/fines.service";
+
 
 // IMPLEMENT ROUTES
-finesRouter.get("/", getAllfiness);
-finesRouter.get("/:loan_id", getfines);
-finesRouter.post("/", createfines);
-finesRouter.put("/:loan_id", updatefines);
-finesRouter.delete("/:loan_id", deletefines);
+finesRouter.get("/", getAllFines);
+finesRouter.get("/:loan_id", getFine);
+finesRouter.post("/", createFine);
+finesRouter.put("/:loan_id", updateFine);
+finesRouter.delete("/:loan_id", deleteFine);
 
 
 export default finesRouter;
