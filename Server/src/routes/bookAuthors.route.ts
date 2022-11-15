@@ -1,8 +1,3 @@
-// router.get("/:id", getbookAuthors)
-// router.post("/", createPost);
-// router.patch("/:id", updatePost);
-// router.delete("/:id", deletePost);
-
 // IMPORT EXPRESS
 import express from "express";
 

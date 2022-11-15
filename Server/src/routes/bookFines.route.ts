@@ -1,9 +1,3 @@
-// router.get("/:id", getBorrowers)
-// router.post("/", createPost);
-// router.patch("/:id", updatePost);
-// router.delete("/:id", deletePost);
-
-
 import express from "express";
 import { createFine, deleteFine, getAllFines, getFine, updateFine } from "../services/bookFines.service";
 
