@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 # GET THE DATA
-setwd("~/Projects/library-management-system/Data")
+setwd("~/Projects/EOG/HackUTD-EOG")
 library(readr)
 books <- read_csv("uploadDataJS/books.csv")
 
@@ -35,9 +35,9 @@ missingRows <- reducedBooks[rowSums(is.na(reducedBooks)) > 0,]
 # EXTRACT ONLY ROWS WITH ALL VALUE
 cleanReducedBooks <- reducedBooks[rowSums(is.na(reducedBooks)) == 0,]
 
+
 # OUTPUT DATA
 write.csv(cleanReducedBooks, "cleanBooks.csv", row.names=FALSE)
-write.csv
 
 
 ```
