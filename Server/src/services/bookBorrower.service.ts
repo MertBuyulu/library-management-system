@@ -1,6 +1,6 @@
 import express from "express";
 import { REPL_MODE_SLOPPY } from "repl";
-import { prisma, redis } from "../utils/PrismaClient"
+import { prisma } from "../utils/PrismaClient"
 
 // DEFINE TYPES
 type Borrower = {
@@ -92,7 +92,7 @@ export const removeBorrower = async (
         const borrowerRemoving = await prisma.borrower.delete({ where: { card_id: card_id } })
 
         // OUTPUT TO CONSOLE
-        console.log('Removed ' + card_id + ' borrower');
+        console.log('[server] Removed ' + card_id + ' borrower');
 
         return res.json(borrowerRemoving);
 
