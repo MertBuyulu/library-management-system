@@ -56,21 +56,21 @@ How do we handle multiple author names?
 
 [x] - Create CRUD Operations with Node.js Express TypeScript Server
 
-[x] - Create Test Coverages for all operations regardining the Express Serever
+[~] - Create Test Coverages for all operations regardining the Express Serever
 
-[x] - Sketch UI on ipad
+[~] - Sketch UI on ipad
 
-[x] - Implement on Figma
+[~] - Implement on Figma
 
-[ ] - Create Front-end using React
+[~] - Create Front-end using React
+
+[ ] - Deploy Project
+
+[~] - Create Part 2 Submission Documents
 
 [ ] - Create Demo
 
 [ ] - Mock Demo
-
-[ ] - Productionize project with good constructs
-
-[ ] - Deploy Project
 
 [ ] - Final Turn in
 
