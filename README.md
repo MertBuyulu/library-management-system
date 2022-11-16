@@ -52,11 +52,11 @@ How do we handle multiple author names?
 
 [x] - Validate SQL Scripts with requirements (Jon, Srilokh)
 
-[ ] - Create online database so we can all easily work without docker (Srilokh)
+[x] -  Create independent javascript application to upload the data to that database (Srilokh)
 
-[ ] -  Create independent javascript application to upload the data to that database (Srilokh)
+[x] - Create CRUD Operations with Node.js Express TypeScript Server
 
-[ ] - Create CRUD Operations with Node.js Express TypeScript Server
+[x] - Create Test Coverages for all operations regardining the Express Serever
 
 [ ] - Create Front-end using React
 
