@@ -58,6 +58,10 @@ How do we handle multiple author names?
 
 [x] - Create Test Coverages for all operations regardining the Express Serever
 
+[x] - Sketch UI on ipad
+
+[x] - Implement on Figma
+
 [ ] - Create Front-end using React
 
 [ ] - Create Demo
