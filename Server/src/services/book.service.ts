@@ -34,11 +34,11 @@ export const getBook = async (
     });
 
     if (book) {
-        console.log("[server] Created book " + isbn);
+        console.log("[server] Retrieved book " + isbn);
         return res.json(book);
     }
     else {
-        console.log("[server] Could not create book" + isbn)
+        console.log("[server] Could not retrieve book " + isbn)
         return res.status(400).json(book);
     }
 };
