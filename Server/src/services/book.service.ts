@@ -21,7 +21,7 @@ export const getAllBooks = async (
 
     if (onlyMeta == true) {
         console.log("[server] Getting Books Meta")
-        return res.json({ "Count": await prisma.book.count() })
+        return res.json({ "Amount": await prisma.book.count() })
     }
 
     console.log("[server] Getting all Books")

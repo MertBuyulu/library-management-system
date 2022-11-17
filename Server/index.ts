@@ -2,12 +2,13 @@
 import express from "express"
 import borrowerRouter from "./src/routes/borrower.route"
 import bookRouter from "./src/routes/book.route"
-
+import cors from "cors"
 import PrismaClient from "@prisma/client"
 import bodyParser from "body-parser";
 
 const port = 3001
 export const server = express();
+server.use(cors())
 server.use(bodyParser.json({ limit: "30mb" }));
 server.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
