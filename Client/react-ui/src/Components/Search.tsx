@@ -1,8 +1,9 @@
 import React from "react"
 import { Input } from "@supabase/ui"
+
 export default function Search() {
     // SET STATE FOR SHOW SEARCH ICON
-    const [showSearchIcon, setShowSearchIcon] = React.useState(false)
+    const [showSearchIcon, setShowSearchIcon] = React.useState(true)
 
     const handleChange = (event: any) => {
         if (event.target.value.length > 0) {
@@ -16,10 +17,10 @@ export default function Search() {
 
     return (
 
-        <form className="lg:max-w-screen-lg md:max-w-screen-md sm: max-w-screen-sm">
+        <form className="">
 
             <div className="relative">
-                <input onChange={handleChange} type="search" id="default-search" className="border border-transparent block w-full p-4 pl-4 text-sm text-gray-900 rounded-lg bg-gray-50 dark:text-white" placeholder="Search..." required></input>
+                <input onChange={handleChange} type="search" id="default-search" className="border border-transparent block w-96  p-4 pl-4 text-sm text-gray-900 rounded-lg bg-gray-50 dark:text-white" placeholder="Search..." required></input>
 
                 {
                     showSearchIcon ?
