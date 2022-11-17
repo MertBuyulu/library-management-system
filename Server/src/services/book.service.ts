@@ -17,9 +17,17 @@ export const getAllBooks = async (
     req: express.Request,
     res: express.Response
 ) => {
+    const onlyMeta: Boolean = Boolean(req.query["onlyMeta"])
+
+    if (onlyMeta == true) {
+        console.log("[server] Getting Books Meta")
+        return res.json({ "Count": await prisma.book.count() })
+    }
+
     console.log("[server] Getting all Books")
     return res.json(await prisma.book.findMany());
 };
+
 
 // DEFINE GET BORROWER
 export const getBook = async (
