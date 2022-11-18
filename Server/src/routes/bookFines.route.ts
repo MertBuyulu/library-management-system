@@ -4,7 +4,7 @@ import { createFine, deleteFine, getAllFines, getFine, updateFine } from "../ser
 // DEFINE ROUTER
 const finesRouter = express.Router();
 
-// IMPORT SERVICES
+console.log("[server] Routing bookFines Request")
 
 
 // IMPLEMENT ROUTES

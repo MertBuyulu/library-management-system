@@ -13,7 +13,7 @@ import {
     updateBorrower
 } from "../services/bookBorrower.service";
 
-console.log("[server] Routing Borrower Request")
+console.log("[server] Routing borrower Request")
 
 // DEFINE ROUTES
 borrowerRouter.get("/", getAllBorrowers);

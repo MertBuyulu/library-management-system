@@ -1,11 +1,6 @@
 import express from "express";
 import { prisma } from "../utils/PrismaClient"
 
-
-
-
-
-
 // DEFINE TYPES
 type Book = {
     isbn: string
@@ -27,7 +22,6 @@ export const getAllBooks = async (
     console.log("[server] Getting all Books")
     return res.json(await prisma.book.findMany());
 };
-
 
 // DEFINE GET BORROWER
 export const getBook = async (
@@ -86,7 +80,6 @@ export const createBook = async (
     }
 };
 
-
 // DELETE BOOK 
 export const deleteBook = async (req: express.Request, res: express.Response) => {
     // GET BOOK FROM PARAMS
@@ -111,14 +104,20 @@ export const updateBook = async (req: express.Request, res: express.Response) =>
     const data = req.body
 
     // UPDATE
-    const updatingBook = await prisma.book.update({ where: { isbn: isbn }, data: data })
+    try {
 
-    // ERROR HANDLING
-    if (updatingBook) {
-        return res.json(updatingBook)
-    } else {
+        const updatingBook = await prisma.book.update({ where: { isbn: isbn }, data: data })
+
+        if (updatingBook) {
+            return res.json(updatingBook)
+        } else {
+            return res.status(400).json({ "Success": "Failure", "Message": "Could not update book for some reason" })
+        }
+    } catch {
         return res.status(400).json({ "Success": "Failure", "Message": "Could not update book for some reason" })
     }
+
+    // ERROR HANDLING
 }
 
 

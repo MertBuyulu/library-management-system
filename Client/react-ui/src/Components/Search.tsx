@@ -13,8 +13,6 @@ export default function Search() {
             setShowSearchIcon(true)
         }
     }
-
-
     return (
 
         <form className="">

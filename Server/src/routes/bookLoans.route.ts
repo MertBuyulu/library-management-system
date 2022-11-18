@@ -9,7 +9,7 @@ import {
     getAllFines, getFine, createFine, deleteFine, updateFine
 } from "../services/bookLoans.service";
 
-console.log("[server] Routing Borrower Request")
+console.log("[server] Routing bookLoans Request")
 
 // DEFINE ROUTES
 bookLoansRouter.get("/", getAllFines);

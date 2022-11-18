@@ -1,6 +1,6 @@
 import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
-import 'mocha';
+import Done from 'mocha';
 import { server } from "../index"
 import { getBook, createBook, getAllBooks, updateBook, deleteBook } from "../src/services/book.service"
 
@@ -21,10 +21,20 @@ const testBook: Book = {
 console.log("[TESTING] Testing Book Services")
 
 describe("/POST book", () => {
-    it("This test will create a new sample book.", () => {
-        chai.request(server)
-            .post("/book")
-            .send(testBook)
-            .end((err, res) => { expect(res).to.have.status(res.status).equal(200) })
+    it("This test will create a test sample book.", () => {
+        chai.request(server).post("/book").send(testBook).end((err, res) => {
+            expect(res).to.have.status(200)
+        })
     })
 })
+
+describe("/DELETE book", () => {
+    it("This test will delete the test sample book.", () => {
+        chai.request(server).delete("/book").query({ isbn: "0123456789" }).end((err, res) => {
+            expect(res).to.have.status(200)
+        })
+    })
+})
+
+
+

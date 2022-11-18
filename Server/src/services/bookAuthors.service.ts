@@ -14,6 +14,12 @@ export const getAllBookAuthors = async (
     req: express.Request,
     res: express.Response
 ) => {
+    const onlyMeta: Boolean = Boolean(req.query["onlyMeta"])
+
+    if (onlyMeta == true) {
+        console.log("[server] Getting Books Authors Meta")
+        return res.json({ "Amount": await prisma.book_authors.count() })
+    }
     console.log("[server] Getting all Book Author")
     return res.json(await prisma.book_authors.findMany());
 };

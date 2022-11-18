@@ -16,6 +16,12 @@ export const getAllBorrowers = async (
     req: express.Request,
     res: express.Response
 ) => {
+    const onlyMeta: Boolean = Boolean(req.query["onlyMeta"])
+
+    if (onlyMeta == true) {
+        console.log("[server] Getting Borrowers Meta")
+        return res.json({ "Amount": await prisma.borrower.count() })
+    }
     console.log("[server] Getting all Borrowers")
     return res.json(await prisma.borrower.findMany());
 };
@@ -73,7 +79,8 @@ export const createBorrower = async (
         return res.json(borrowerCreate);
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.send(409).json({ message: err.message });
+            console.log('[server] Could not create borrower')
+            return res.status(409).json({ message: "Could not create borrower", "error": err.message });
         }
     }
 };
@@ -98,7 +105,7 @@ export const removeBorrower = async (
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.status(400).json(err.message)
+            return res.status(400).json({ "Message": "Could not delete" })
         }
     }
 };
@@ -131,7 +138,7 @@ export const updateBorrower = async (
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.status(400).json(err.message)
+            return res.status(400).json({ "message": "Could not update borrower", "Error": err.message })
         }
     }
 };

@@ -52,27 +52,39 @@ How do we handle multiple author names?
 
 [x] - Validate SQL Scripts with requirements (Jon, Srilokh)
 
-[x] -  Create independent javascript application to upload the data to that database (Srilokh)
+[x] -  Create independent javascript application to perform data normalization (Srilokh)
 
-[x] - Create CRUD Operations with Node.js Express TypeScript Server
+[x] - Create CRUD Operations with Node.js Express TypeScript Server (Srilokh)
 
-[~] - Create Test Coverages for all operations regardining the Express Serever
+[~] - Create Test Coverages for all CRUD operations ()
 
-[~] - Sketch UI on ipad
+[~] - Implement general design and flow on Figma ()
 
-[~] - Implement on Figma
+[~] - Create Front-end using React ()
 
-[~] - Create Front-end using React
+[~] - Implement Requirements with UI with Backend ()
 
-[ ] - Deploy Project
+[ ] - Implement Redux Basics
 
-[~] - Create Part 2 Submission Documents
+[ ] - Pages to work on (Books, Authors, Borrowers/Members, Loans, Fines)
 
-[ ] - Create Demo
+[ ] - Components(Books, Authors, Borrower Component, Loans (Table), Fines(Table))
 
-[ ] - Mock Demo
+[ ] - Change the search bar component to have a dropdown for picking between which things to search for 
 
-[ ] - Final Turn in
+[ ] - Validate all of the types from project instructions 
+
+[ ] - Triple check requirements before deployment ()
+
+[ ] - Deploy Project ()
+
+[~] - Create Part 2 Submission Documents ()
+
+[ ] - Create Demo ()
+
+[ ] - Mock Demo ()
+
+[ ] - Final Turn in ()
 
 
 > Helpful

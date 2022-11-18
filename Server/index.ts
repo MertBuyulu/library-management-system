@@ -5,6 +5,10 @@ import bookRouter from "./src/routes/book.route"
 import cors from "cors"
 import PrismaClient from "@prisma/client"
 import bodyParser from "body-parser";
+import bookAuthorRouter from "./src/routes/bookAuthors.route"
+import finesRouter from "./src/routes/bookFines.route"
+import bookLoansRouter from "./src/routes/bookLoans.route"
+import authorRouter from "./src/routes/authors.route"
 
 const port = 3001
 export const server = express();
@@ -28,6 +32,10 @@ server.get('/', (req: express.Request, res: express.Response) => {
 
 server.use('/borrower', borrowerRouter)
 server.use('/book', bookRouter)
+server.use('/bookAuthor', bookAuthorRouter)
+server.use('/author', authorRouter)
+server.use('/fine', finesRouter)
+server.use('/loan', bookLoansRouter)
 
 server.listen(port, "127.0.0.1", () => {
     console.log(`[server] Server is running at http://127.0.0.1:${port}/`)

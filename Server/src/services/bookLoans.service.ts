@@ -14,6 +14,13 @@ export const getAllFines = async (
     req: express.Request,
     res: express.Response
 ) => {
+    const onlyMeta: Boolean = Boolean(req.query["onlyMeta"])
+
+    if (onlyMeta == true) {
+        console.log("[server] Getting Fines Meta")
+        return res.json({ "Amount": await prisma.fines.count() })
+    }
+
     console.log("[server] Getting all Fines")
     return res.json(await prisma.fines.findMany());
 };
