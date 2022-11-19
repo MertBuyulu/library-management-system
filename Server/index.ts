@@ -21,7 +21,7 @@ server.get('/', (req: express.Request, res: express.Response) => {
         "Success": "True",
         "Team": "Beryllium",
         "Team Members": [
-            { "Name": "Mert Buyulu" },
+            { "Name": "Mert Buyulu", "Role": "Scrum Master" },
             { "Name": "Minh Nguyen", "Role": "Front-End Dev" },
             { "Name": "Srilokh Karuturi", "Role": "Lead" },
             { "Name": "Michelle Gonzales", "Role": "Programmer" },
@@ -30,12 +30,12 @@ server.get('/', (req: express.Request, res: express.Response) => {
     })
 })
 
-server.use('/borrower', borrowerRouter)
-server.use('/book', bookRouter)
-server.use('/bookAuthor', bookAuthorRouter)
-server.use('/author', authorRouter)
-server.use('/fine', finesRouter)
-server.use('/loan', bookLoansRouter)
+server.use('/books', bookRouter)
+server.use('/borrowers', borrowerRouter)
+server.use('/bookAuthors', bookAuthorRouter)
+server.use('/authors', authorRouter)
+server.use('/fines', finesRouter)
+server.use('/loans', bookLoansRouter)
 
 server.listen(port, "127.0.0.1", () => {
     console.log(`[server] Server is running at http://127.0.0.1:${port}/`)
