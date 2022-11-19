@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Search from '../components/Search';
@@ -13,6 +13,8 @@ import { getAuthors } from '../redux/authors/authors.utils'
 import { SelectBookCount } from '../redux/books';
 import { SelectAuthorCount } from '../redux/authors';
 import { SelectBorrowerCount } from '../redux/borrowers';
+import { SelectLoanCount } from '../redux/loans';
+import { getLoans } from '../redux/loans/loans.utils';
 
 const Home = () => {
     const dispatch = useAppDispatch()
@@ -20,27 +22,29 @@ const Home = () => {
     const bookCount = useAppSelector(SelectBookCount)
     const borrowerCount = useAppSelector(SelectBorrowerCount)
     const authorCount = useAppSelector(SelectAuthorCount)
+    const loanCount = useAppSelector(SelectLoanCount)
+
 
     useEffect(() => {
         dispatch(getBooks())
         dispatch(getBorrowers())
         dispatch(getAuthors())
+        dispatch(getLoans())
     }, [dispatch]);
 
     return (
         <div className="">
             <Header />
-
             <div className="bg-[#d9d9d9] w-screen h-screen">
                 <div className={"flex flex-col items-center justify-center "} >
                     <div className="m-8">
                         <Search />
                     </div>
                     <div className={"flex space-x-10 m-2"}>
-                        <StatCard Amount={bookCount} />
-                        <StatCard Amount={borrowerCount}/>
-                        <StatCard Amount={authorCount}/>
-                        <StatCard Amount={0}/>
+                        <StatCard Name={"Books"} Amount={bookCount} />
+                        <StatCard Name={"Authors"} Amount={authorCount} />
+                        <StatCard Name={"Borrowers"} Amount={borrowerCount} />
+                        <StatCard Name={"Loans"} Amount={loanCount} />
                     </div>
                     <div className="flex justify-center mt-10 ">
                         <h1 className="absolute font-bold text-4xl "> Team Beriyllium </h1>

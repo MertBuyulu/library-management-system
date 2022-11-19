@@ -1,3 +1,6 @@
+import Skeleton from "./Skeleton"
+
+
 
 type StatCardProps = {
     Name?: String,
@@ -6,21 +9,23 @@ type StatCardProps = {
 }
 
 const StatCard = (props: StatCardProps) => {
-    if (props.Amount) {
+    if (props.Amount && props.Name) {
         return (
-            <div className="relative w-80 h-80 bg-[#6D696A] rounded-lg">
+            <div className="flex flex-col items-center w-80 h-80 bg-[#6D696A] rounded-lg">
                 <div className="text-white font-semibold p-2">
+                    {props.Name}
+                </div>
+                <div className="mt-20 text-white text-4xl font-bold">
                     {props.Amount}
                 </div>
             </div>
         )
     }
 
+
     return (
-        <div className="relative w-80 h-80 bg-[#6D696A] rounded-lg">
-            <div className="text-white font-semibold p-2">
-                Books
-            </div>
+        <div className="flex items-center justify-center w-80 h-80 bg-[#6D696A] rounded-lg">
+            <Skeleton />
         </div>
     )
 }
