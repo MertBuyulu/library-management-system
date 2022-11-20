@@ -36,7 +36,7 @@ const FinesSlice = createSlice({
         })
         .addCase(getFines.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while fetching all loan..."
+            state.error = action.error.message || "Something went wrong while fetching all fines..."
         })
         .addCase(createFine.pending, (state) => {
             state.loading = true;
@@ -47,7 +47,7 @@ const FinesSlice = createSlice({
         })
         .addCase(createFine.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while creating a new loan...";
+            state.error = action.error.message || "Something went wrong while creating a new fines...";
         })
         .addCase(updateFine.pending, (state) => {
             state.loading = true;
@@ -58,7 +58,7 @@ const FinesSlice = createSlice({
         })
         .addCase(updateFine.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while updating a loan...";
+            state.error = action.error.message || "Something went wrong while updating a fines...";
         })
         .addCase(deleteFine.pending, (state) => {
             state.loading = true;
@@ -69,7 +69,7 @@ const FinesSlice = createSlice({
         })
         .addCase(deleteFine.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while deleting a loan...";
+            state.error = action.error.message || "Something went wrong while deleting a fines...";
         })
     }
 });

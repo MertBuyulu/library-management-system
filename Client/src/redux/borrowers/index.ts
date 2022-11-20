@@ -38,7 +38,7 @@ const BorrowersSlice = createSlice({
         })
         .addCase(getBorrowers.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while fetching all books..."
+            state.error = action.error.message || "Something went wrong while fetching all borrowers..."
         })
         .addCase(createBorrower.pending, (state) => {
             state.loading = true;

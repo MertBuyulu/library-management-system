@@ -35,7 +35,7 @@ const AuthorsSlice = createSlice({
         })
         .addCase(getAuthors.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while fetching all books..."
+            state.error = action.error.message || "Something went wrong while fetching all authors..."
         })
         .addCase(createAuthor.pending, (state) => {
             state.loading = true;
@@ -46,7 +46,7 @@ const AuthorsSlice = createSlice({
         })
         .addCase(createAuthor.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while creating a new book...";
+            state.error = action.error.message || "Something went wrong while creating a new authors...";
         })
         .addCase(updateAuthor.pending, (state) => {
             state.loading = true;
@@ -57,7 +57,7 @@ const AuthorsSlice = createSlice({
         })
         .addCase(updateAuthor.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while updating a book...";
+            state.error = action.error.message || "Something went wrong while updating a authors...";
         })
         .addCase(deleteAuthor.pending, (state) => {
             state.loading = true;
@@ -68,7 +68,7 @@ const AuthorsSlice = createSlice({
         })
         .addCase(deleteAuthor.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message || "Something went wrong while deleting a book...";
+            state.error = action.error.message || "Something went wrong while deleting a authors...";
         })
     }
 });
