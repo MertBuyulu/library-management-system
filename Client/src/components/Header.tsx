@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom"
 
 
 const Header = () => {
-    // SET 
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     return (
         <div className="border-2 border-b-black-500 bg-[#d9d9d9]">

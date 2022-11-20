@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 
 const Logo = () => {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     return (
         <div className="flex space-x-2 items-stretch">
             <div>

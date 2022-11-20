@@ -22,14 +22,15 @@ const Home = () => {
     const bookCount = useAppSelector(SelectBookCount)
     const borrowerCount = useAppSelector(SelectBorrowerCount)
     const authorCount = useAppSelector(SelectAuthorCount)
-    const loanCount = useAppSelector(SelectLoanCount)
+    //const loanCount = useAppSelector(SelectLoanCount)
+    const loanCount = 100
 
 
     useEffect(() => {
         dispatch(getBooks())
         dispatch(getBorrowers())
         dispatch(getAuthors())
-        dispatch(getLoans())
+       //dispatch(getLoans())
     }, [dispatch]);
 
     return (
