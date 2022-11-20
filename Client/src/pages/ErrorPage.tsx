@@ -1,4 +1,5 @@
-const Error = () => {
+
+const ErrorPage = () => {
   return (
     <div className="Unknown">
         "You should not be here"
@@ -6,4 +7,4 @@ const Error = () => {
   )
 }
 
-export default Error;
+export default ErrorPage;

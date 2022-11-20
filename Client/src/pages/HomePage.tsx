@@ -9,14 +9,14 @@ import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { getBooks } from '../redux/books/books.utils';
 import { getBorrowers } from '../redux/borrowers/borrowers.utils'
 import { getAuthors } from '../redux/authors/authors.utils'
+import { getLoans } from '../redux/loans/loans.utils';
 
 import { SelectBookCount } from '../redux/books';
 import { SelectAuthorCount } from '../redux/authors';
 import { SelectBorrowerCount } from '../redux/borrowers';
 import { SelectLoanCount } from '../redux/loans';
-import { getLoans } from '../redux/loans/loans.utils';
 
-const Home = () => {
+const HomePage = () => {
     const dispatch = useAppDispatch()
     // get the total number of books
     const bookCount = useAppSelector(SelectBookCount)
@@ -35,7 +35,6 @@ const Home = () => {
 
     return (
         <div className="">
-            <Header />
             <div className="bg-[#d9d9d9] w-screen h-screen">
                 <div className={"flex flex-col items-center justify-center "} >
                     <div className="m-8">
@@ -69,4 +68,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default HomePage;
