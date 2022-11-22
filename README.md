@@ -27,6 +27,13 @@
    3. Run Server
       1. `yarn start`
 
+4. Yarn config:
+   1. Server: 
+      1. Include .env
+      2. npx generate
+      3. npx prisma db pull
+   2. Client:
+      1. Inspect -> Apllication -> Local Storage -> Clear (localhost:3000)
 
 
 > Important
