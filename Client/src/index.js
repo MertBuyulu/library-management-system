@@ -9,6 +9,7 @@ import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 
 import "./index.css";
+import '../node_modules/antd/dist/reset.css';
 import App from "./App";
 
 const queryClient = new QueryClient();

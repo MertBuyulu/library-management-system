@@ -1,12 +1,10 @@
 .borrowers-page {
     display: flex;
+    flex-direction: column;
     width: auto;
     justify-content: space-between;
     margin: 30px auto;
     padding: 0rem 13rem;
-
-    .borrowers-page{
-        align-items: center;
-    }
-    
 }
+
+

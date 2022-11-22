@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // styles
 import "./BorrowersPage.styles.scss";
 // components
+import { Button, message, FloatButton, Modal, Input } from 'antd';
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import Table from "../../components/table/Table.component";
@@ -11,6 +12,7 @@ import { createBorrower } from "../../redux/borrowers/borrowers.utils";
 import { SelectBorrowers } from "../../redux/borrowers/index";
 // validation
 import { validateSsn } from "../../utils/validate";
+import Search from "../../components/Search";
 
 const initialState = {
   ssn: "",
@@ -20,11 +22,24 @@ const initialState = {
 };
 
 const BorrowersPage = () => {
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [searchContent, setSearchContent] = React.useState("");
+  const [messageApi, contextHolder] = message.useMessage();
+
   const dispatch = useDispatch();
   const borrowers = useSelector(SelectBorrowers);
-
   const [state, setState] = useState(initialState);
+
   const { ssn, bname, address, phone } = state;
+  
+  React.useEffect(() => {console.log(searchContent)}, [searchContent])
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'This is a success message',
+    });
+  };
 
   const onChange = (e) => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
@@ -51,7 +66,20 @@ const BorrowersPage = () => {
 
   return (
     <div className="borrowers-page">
-      <div className="borrower-form">
+      <div className={"flex flex-col space-y-1"}>
+        {/* <Search onChange={(content) => {}} /> */}
+        <CustomButton onClick={() => {setModalOpen(true)}}> Add Borrower</CustomButton>
+        <div className="borrower-table">
+          <Table data={borrowers} columns={columns} />
+        </div>
+      </div>
+      <Modal 
+      title="Add Borrower" 
+      open={modalOpen} 
+      onCancel={() => setModalOpen(false)} 
+      onOk={() => setModalOpen(false)} 
+      footer={[<CustomButton>Submit</CustomButton>]}>
+            <div className="borrower-form">
         <form onSubmit={onSubmit(ssn)}>
           <FormInput
             name="ssn"
@@ -84,14 +112,13 @@ const BorrowersPage = () => {
             value={phone}
             onChange={onChange}
           />
-          <CustomButton>Submit</CustomButton>
+
         </form>
       </div>
-      <div className="borrower-table">
-        <Table data={borrowers} columns={columns} />
-      </div>
+    </Modal>
     </div>
   );
 };
+
 
 export default BorrowersPage;
