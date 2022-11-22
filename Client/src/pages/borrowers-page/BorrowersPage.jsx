@@ -4,11 +4,11 @@ import "./BorrowersPage.styles.scss";
 // components
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
+import Table from "../../components/table/Table.component";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { createBorrower } from "../../redux/borrowers/borrowers.utils";
 import { SelectBorrowers } from "../../redux/borrowers/index";
-
 // validation
 import { validateSsn } from "../../utils/validate";
 
@@ -24,7 +24,6 @@ const BorrowersPage = () => {
   const borrowers = useSelector(SelectBorrowers);
 
   const [state, setState] = useState(initialState);
-
   const { ssn, bname, address, phone } = state;
 
   const onChange = (e) => {
@@ -42,11 +41,18 @@ const BorrowersPage = () => {
     setState({ ...initialState });
   };
 
+  const columns = [
+    { heading: "Borrower ID", value: "card_id", key: 1 },
+    { heading: "Ssn", value: "ssn", key: 2 },
+    { heading: "Full Name", value: "bname", key: 3 },
+    { heading: "Home Adress", value: "address", key: 4 },
+    { heading: "Phone", value: "phone", key: 5 },
+  ];
+
   return (
     <div className="borrowers-page">
       <div className="borrower-form">
         <form onSubmit={onSubmit(ssn)}>
-          <h1>Create a New Borrower</h1>
           <FormInput
             name="ssn"
             type="text"
@@ -81,7 +87,9 @@ const BorrowersPage = () => {
           <CustomButton>Submit</CustomButton>
         </form>
       </div>
-      <div className="borrower-table"></div>
+      <div className="borrower-table">
+        <Table data={borrowers} columns={columns} />
+      </div>
     </div>
   );
 };

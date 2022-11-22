@@ -16,3 +16,7 @@ https://coolors.co/ff6f59-011936-a2a7a5-6d696a-d9d9d9
 ##### State Persistence
 
 1. we need to persist the global state of the application after brower or page refresh [DONE]
+
+##### UI Design
+
+1. https://www.htmlelements.com/docs/react/
