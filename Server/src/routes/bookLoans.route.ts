@@ -1,21 +1,20 @@
 // IMPORT EXPRESS
 import express from "express";
+import { createBookLoan, deleteBookLoan, getAllBookLoans, getBookLoan, updateBookLoan } from "../services/bookLoans.service";
 
 // DEFINE ROUTER
 const bookLoansRouter = express.Router();
 
 // IMPORT SERVICES
-import {
-    getAllFines, getFine, createFine, deleteFine, updateFine
-} from "../services/bookLoans.service";
+
 
 console.log("[server] Routing bookLoans Request")
 
 // DEFINE ROUTES
-bookLoansRouter.get("/", getAllFines);
-bookLoansRouter.get("/:loan_id", getFine);
-bookLoansRouter.post("/", createFine);
-bookLoansRouter.delete("/:loan_id", deleteFine)
-bookLoansRouter.put("/:loan_id", updateFine)
+bookLoansRouter.get("/", getAllBookLoans);
+bookLoansRouter.get("/:loan_id", getBookLoan);
+bookLoansRouter.post("/", createBookLoan);
+bookLoansRouter.delete("/:loan_id", deleteBookLoan)
+bookLoansRouter.put("/:loan_id", updateBookLoan)
 // EXPORT ROUTER 
 export default bookLoansRouter;

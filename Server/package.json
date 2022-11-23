@@ -19,6 +19,7 @@
     "@types/react-router": "^5.1.19",
     "@types/react-router-dom": "^5.3.3",
     "@types/redis-server": "^1.2.0",
+    "@types/uuid": "^8.3.4",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
@@ -26,7 +27,8 @@
     "ioredis": "^5.2.4",
     "nodemon": "^2.0.20",
     "prisma": "^4.5.0",
-    "prisma-redis-middleware": "^4.2.1"
+    "prisma-redis-middleware": "^4.2.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "mocha": "^10.1.0",
