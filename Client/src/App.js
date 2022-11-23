@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import LoansPage from "./pages/loans-page/LoansPage";
 import FinesPage from "./pages/fines-page/FinesPage";
 import ErrorPage from "./pages/ErrorPage";
+import BooksPage from "./pages/books-page/BooksPage";
 import BorrowersPage from "./pages/borrowers-page/BorrowersPage";
 // components
 import Header from "./components/Header";
@@ -16,7 +17,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/Books" element={<h1> To be implemented </h1>} />
+        <Route path="/Books" element={<BooksPage/>} />
         <Route path="/Authors" element={<h1> To be implemented </h1>} />
         <Route path="/Borrowers" element={<BorrowersPage />} />
         <Route path="/Loans" element={<LoansPage />} />
