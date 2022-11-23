@@ -32,9 +32,9 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <div className="">
+    <div className="flex">
       <div className="bg-[#d9d9d9] w-screen h-screen">
-        <div className={"flex flex-col items-center justify-center "}>
+        <div className={"flex flex-col items-center justify-center"}>
           <div className="m-8">
             <Search />
           </div>
@@ -46,12 +46,12 @@ const HomePage = () => {
           </div>
           <div className="flex justify-center mt-10 ">
             <h1 className="absolute font-bold text-4xl "> Team Beriyllium </h1>
-            <div className="pt-16 flex space-x-4 ">
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray"></div>
+            <div className="pt-16 flex space-x-4">
+              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
+              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
+              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
+              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
+              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
             </div>
           </div>
         </div>
