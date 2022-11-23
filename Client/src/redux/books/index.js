@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
+import Search from "antd/es/transfer/search";
 // reducer functions
 import { getBooks, createBook, updateBook, deleteBook } from "./books.utils";
 
@@ -69,6 +70,11 @@ const BooksSlice = createSlice({
   },
 });
 
+export function BooksSearchBar() {
+  return (
+    <Search />
+  );
+};
 export const SelectBooks = (state) => state.books.books;
 
 export const SelectBookCount = createSelector([SelectBooks], (books) => {
@@ -81,3 +87,4 @@ export const SelectBookById = (isbn) =>
   );
 
 export default BooksSlice.reducer;
+
