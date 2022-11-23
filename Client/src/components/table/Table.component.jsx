@@ -2,7 +2,7 @@ import React from "react";
 // styles
 import "./Table.styles.scss";
 
-const Table = ({ data, columns }) => {
+const Table = ({ data, columns }, ...otherProps) => {
   return (
     <table>
       <thead>

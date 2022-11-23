@@ -71,13 +71,17 @@ const FinesSlice = createSlice({
 
 export const SelectFines = (state) => state.fines.fines;
 
-export const SelectFineCount = createSelector([SelectFines], (fines) => {
-  return fines.reduce((accumulator) => accumulator + 1, 0);
-});
+export const SelectFineCount = createSelector([SelectFines], (fines) =>
+  fines.reduce((accumulator) => accumulator + 1, 0)
+);
 
-export const SelectFineById = (loan_id) =>
+export const SelectFinesById = (loan_id) =>
   createSelector([SelectFines], (fines) =>
-    loan_id ? fines.find((fine) => fine.loan_id === loan_id) : null
+    fines.filter((fine) => fine.loan_id !== loan_id)
   );
+
+// return the fine amount associated with a particular loan_id
+export const SelectFineAmountById = (loan_id) =>
+  createSelector([SelectFinesById(loan_id)], (fine) => fine.fine_amout);
 
 export default FinesSlice.reducer;

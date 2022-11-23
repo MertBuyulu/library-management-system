@@ -2,17 +2,16 @@ import React, { useState } from "react";
 // styles
 import "./BorrowersPage.styles.scss";
 // components
-import { Button, message, FloatButton, Modal, Input } from 'antd';
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import Table from "../../components/table/Table.component";
+import Modal from "../../components/modal/Modal";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { createBorrower } from "../../redux/borrowers/borrowers.utils";
 import { SelectBorrowers } from "../../redux/borrowers/index";
 // validation
-import { validateSsn } from "../../utils/validate";
-import Search from "../../components/Search";
+import { validateSsn } from "../../utils/utils";
 
 const initialState = {
   ssn: "",
@@ -22,36 +21,36 @@ const initialState = {
 };
 
 const BorrowersPage = () => {
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [searchContent, setSearchContent] = React.useState("");
-  const [messageApi, contextHolder] = message.useMessage();
-
   const dispatch = useDispatch();
   const borrowers = useSelector(SelectBorrowers);
+
   const [state, setState] = useState(initialState);
+  const [modal, setModal] = useState(false);
 
   const { ssn, bname, address, phone } = state;
-  
-  React.useEffect(() => {console.log(searchContent)}, [searchContent])
 
-  const success = () => {
-    messageApi.open({
-      type: 'success',
-      content: 'This is a success message',
-    });
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+
+  const onCancel = (e) => {
+    toggleModal();
+    setState({ ...initialState });
   };
 
   const onChange = (e) => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const onSubmit = (ssn) => (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (!validateSsn(ssn))
       //dispatch(createBorrower({ ssn, bname, address, phone }));
-      alert("Ssn you entered is valid!!");
-    else alert("Ssn you entered is already in use. Please enter a unique ssn.");
+      alert("Invalid SSN!!!");
+    else alert("Valid SSN!!!");
 
+    // close the modal pop up page
+    toggleModal();
     // reset the state
     setState({ ...initialState });
   };
@@ -66,59 +65,50 @@ const BorrowersPage = () => {
 
   return (
     <div className="borrowers-page">
-      <div className={"flex flex-col space-y-1"}>
-        {/* <Search onChange={(content) => {}} /> */}
-        <CustomButton onClick={() => {setModalOpen(true)}}> Add Borrower</CustomButton>
-        <div className="borrower-table">
-          <Table data={borrowers} columns={columns} />
-        </div>
+      <div>
+        <Modal toggleModal={toggleModal} modal={modal}>
+          <form onSubmit={onSubmit}>
+            <FormInput
+              name="ssn"
+              type="text"
+              label="SSN"
+              value={ssn}
+              onChange={onChange}
+              required
+            />
+            <FormInput
+              name="bname"
+              type="text"
+              label="Full Name"
+              value={bname}
+              onChange={onChange}
+              required
+            />
+            <FormInput
+              name="address"
+              type="text"
+              label="Billing Address"
+              value={address}
+              onChange={onChange}
+              required
+            />
+            <FormInput
+              name="phone"
+              type="text"
+              label="Phone Number"
+              value={phone}
+              onChange={onChange}
+            />
+            <CustomButton>Submit</CustomButton>
+          </form>
+          <CustomButton onClick={onCancel}>CANCEL</CustomButton>
+        </Modal>
       </div>
-      <Modal 
-      title="Add Borrower" 
-      open={modalOpen} 
-      onCancel={() => setModalOpen(false)} 
-      onOk={() => setModalOpen(false)} 
-      footer={[<CustomButton>Submit</CustomButton>]}>
-            <div className="borrower-form">
-        <form onSubmit={onSubmit(ssn)}>
-          <FormInput
-            name="ssn"
-            type="text"
-            label="SSN"
-            value={ssn}
-            onChange={onChange}
-            required
-          />
-          <FormInput
-            name="bname"
-            type="text"
-            label="Full Name"
-            value={bname}
-            onChange={onChange}
-            required
-          />
-          <FormInput
-            name="address"
-            type="text"
-            label="Billing Address"
-            value={address}
-            onChange={onChange}
-            required
-          />
-          <FormInput
-            name="phone"
-            type="text"
-            label="Phone Number"
-            value={phone}
-            onChange={onChange}
-          />
-
-        </form>
+      <div>
+        <Table data={borrowers} columns={columns} />
       </div>
-    </Modal>
     </div>
   );
 };
-
 
 export default BorrowersPage;

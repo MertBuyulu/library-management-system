@@ -20,3 +20,9 @@ https://coolors.co/ff6f59-011936-a2a7a5-6d696a-d9d9d9
 ##### UI Design
 
 1. https://www.htmlelements.com/docs/react/
+
+##### Tasks
+
+1. Problem with the borrowers page
+2. Loans page
+3. Fines page - redux logic

@@ -71,13 +71,19 @@ const LoansSlice = createSlice({
 
 export const SelectLoans = (state) => state.loans.loans;
 
-export const SelectLoanCount = createSelector([SelectLoans], (loans) => {
-  return loans.reduce((accumulator) => accumulator + 1, 0);
-});
+export const SelectLoanCount = createSelector([SelectLoans], (loans) =>
+  loans.reduce((accumulator) => accumulator + 1, 0)
+);
+
+export const SelectLoansWithKeys = createSelector([SelectLoans], (loans) =>
+  loans.map((loan, index) => {
+    return { ...loan, key: index + 1 };
+  })
+);
 
 export const SelectLoanById = (loan_id) =>
   createSelector([SelectLoans], (loans) =>
-    loan_id ? loans.find((loans) => loans._id === loan_id) : null
+    loan_id ? loans.find((loan) => loan._id === loan_id) : null
   );
 
 export default LoansSlice.reducer;

@@ -85,6 +85,14 @@ export const SelectBorrowerCount = createSelector(
   }
 );
 
+export const SelectBorrowersWithKeys = createSelector(
+  [SelectBorrowers],
+  (borrowers) =>
+    borrowers.map((borrower, index) => {
+      return { ...borrower, key: index + 1 };
+    })
+);
+
 export const SelectBorrowerById = (card_id) =>
   createSelector([SelectBorrowers], (borrowers) =>
     card_id ? borrowers.find((borrower) => borrower.card_id === card_id) : null
