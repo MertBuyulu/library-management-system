@@ -9,6 +9,7 @@ const url = "http://localhost:3001/books";
 // }
 
 export const fetchBooks = () => axios.get(url);
+export const fetchBooksById = (id) => axios.get(`${url}/${id}`);
 export const createBook = (newBook) => axios.post(url, newBook);
 export const updateBook = (id, updatedBook) =>
   axios.patch(`${url}/${id}`, updatedBook);
