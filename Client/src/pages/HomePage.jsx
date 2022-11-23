@@ -9,6 +9,7 @@ import { getBooks } from "../redux/books/books.utils";
 import { getBorrowers } from "../redux/borrowers/borrowers.utils";
 import { getLoans } from "../redux/loans/loans.utils";
 import { getAuthors } from "../redux/authors/authors.utils";
+import { getFines } from "../redux/fines/fines.utils";
 
 import { SelectBookCount } from "../redux/books";
 import { SelectAuthorCount } from "../redux/authors";

@@ -1,5 +1,5 @@
 import express from "express";
-import { createAuthor, deleteAuthor, getAllAuthors, getAuthor, updateAuthor } from "../authors.service";
+import { createAuthor, deleteAuthor, getAllAuthors, getAuthor, updateAuthor } from "../services/authors.service";
 
 // DEFINE ROUTER
 const authorRouter = express.Router();

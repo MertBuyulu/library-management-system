@@ -12,7 +12,7 @@ import {
     removeBorrower,
     updateBorrower,
     getBorrowerBySSN
-} from "../bookBorrower.service";
+} from "../services/bookBorrower.service";
 
 console.log("[server] Routing borrower Request")
 

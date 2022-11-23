@@ -1,6 +1,6 @@
 // IMPORT EXPRESS
 import express from "express";
-import { createBookLoan, deleteBookLoan, getAllBookLoans, getBookLoan, updateBookLoan } from "../bookLoans.service";
+import { createBookLoan, deleteBookLoan, getAllBookLoans, getBookLoan, updateBookLoan } from "../services/bookLoans.service";
 
 // DEFINE ROUTER
 const bookLoansRouter = express.Router();

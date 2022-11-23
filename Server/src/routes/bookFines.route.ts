@@ -1,5 +1,5 @@
 import express from "express";
-import { createFine, deleteFine, getAllFines, getFine, updateFine } from "../bookFines.service";
+import { createFine, deleteFine, getAllFines, getFine, updateFine } from "../services/bookFines.service";
 
 // DEFINE ROUTER
 const finesRouter = express.Router();

@@ -4,12 +4,12 @@ import cors from "cors"
 import bodyParser from "body-parser";
 
 // route imports
-import borrowerRouter from "./src/services/routes/borrower.route"
-import bookRouter from "./src/services/routes/book.route"
-import bookAuthorRouter from "./src/services/routes/bookAuthors.route"
-import finesRouter from "./src/services/routes/bookFines.route"
-import bookLoansRouter from "./src/services/routes/bookLoans.route"
-import authorRouter from "./src/services/routes/authors.route"
+import borrowerRouter from "./src/routes/borrower.route"
+import bookRouter from "./src/routes/book.route"
+import bookAuthorRouter from "./src/routes/bookAuthors.route"
+import finesRouter from "./src/routes/bookFines.route"
+import bookLoansRouter from "./src/routes/bookLoans.route"
+import authorRouter from "./src/routes/authors.route"
 
 const port = 3001
 export const server = express();
