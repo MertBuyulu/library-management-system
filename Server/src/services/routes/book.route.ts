@@ -4,7 +4,7 @@ import express from "express";
 const bookRouter = express.Router();
 
 // IMPORT SERVICES
-import { createBook, deleteBook, getAllBooks, getBook, updateBook } from "../services/book.service";
+import { createBook, deleteBook, getAllBooks, getBook, updateBook } from "../book.service";
 
 console.log("[server] Routing book call")
 

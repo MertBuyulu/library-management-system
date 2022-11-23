@@ -22,7 +22,7 @@ const HomePage = () => {
   const bookCount = useSelector(SelectBookCount);
   const borrowerCount = useSelector(SelectBorrowerCount);
   const authorCount = useSelector(SelectAuthorCount);
-  const loanCount = useSelector(SelectLoanCount) || 1000;
+  const loanCount = useSelector(SelectLoanCount);
 
   useEffect(() => {
     dispatch(getBooks());

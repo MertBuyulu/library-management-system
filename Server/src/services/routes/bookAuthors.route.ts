@@ -11,7 +11,7 @@ import {
     getBookAuthor,
     deleteBookAuthor,
     updateBookAuthor
-} from "../services/bookAuthors.service";
+} from "../bookAuthors.service";
 
 console.log("[server] Routing bookAuthor Request")
 

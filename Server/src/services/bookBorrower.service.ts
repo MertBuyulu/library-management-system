@@ -59,8 +59,6 @@ export const getBorrower = async (
 
     }
 
-
-
     if (borrower) {
         return res.json(borrower);
     } else {
@@ -78,24 +76,18 @@ export const getBorrowerBySSN = async (
     // DEFINE BORROWER
     var borrower;
 
-
-
     const { ssn } = req.params;
     borrower = await prisma.borrower.findFirst({
         where: {
             ssn: Number(ssn),
         },
     });
-
-
-
-
-
-
-
-    if (borrower) {
+    
+    if (borrower) 
         return res.json(borrower);
-    } else {
+    else if (borrower === null)
+        return res.json({})
+    else {
         return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
     }
 
