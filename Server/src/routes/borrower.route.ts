@@ -10,7 +10,8 @@ import {
     getAllBorrowers,
     getBorrower,
     removeBorrower,
-    updateBorrower
+    updateBorrower,
+    getBorrowerBySSN
 } from "../services/bookBorrower.service";
 
 console.log("[server] Routing borrower Request")
@@ -18,6 +19,7 @@ console.log("[server] Routing borrower Request")
 // DEFINE ROUTES
 borrowerRouter.get("/", getAllBorrowers);
 borrowerRouter.get("/:card_id", getBorrower);
+borrowerRouter.get("/ssn/:ssn", getBorrowerBySSN);
 borrowerRouter.post("/", createBorrower);
 borrowerRouter.delete("/:card_id", removeBorrower)
 borrowerRouter.put("/:card_id", updateBorrower)
