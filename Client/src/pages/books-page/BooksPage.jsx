@@ -10,7 +10,7 @@ import Table from "../../components/table/Table.component";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooks } from "../../redux/books/index";
 // validation
-import { validateIsbn } from "../../utils/validate";
+import {validateIsbn} from "../../utils/utils";
 import Search from "../../components/Search";
 import books from "../../redux/books";
 
