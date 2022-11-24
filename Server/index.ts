@@ -36,7 +36,7 @@ server.use('/borrowers', borrowerRouter)
 server.use('/bookAuthors', bookAuthorRouter)
 server.use('/authors', authorRouter)
 server.use('/fines', finesRouter)
-server.use('/loans', bookLoansRouter)
+server.use('/bookLoans', bookLoansRouter)
 
 server.listen(port, "127.0.0.1", () => {
     console.log(`[server] Server is running at http://127.0.0.1:${port}/`)
