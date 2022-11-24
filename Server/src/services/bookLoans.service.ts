@@ -176,5 +176,40 @@ export const updateBookLoan = async (req: express.Request, res: express.Response
     }
 }
 
+export const updateBookLoans = async (req: express.Request, res: express.Response) => {
+    console.log("[server] Updating many book loans")
+    type updateLoan = {
+        loan_id: string,
+        date_in: Date,
+    }
+
+    // DEFINE DATA
+    const data: updateLoan[] = Array.from(req.body)
+
+    // GET TWO ARRAYS 
+    // GET THE ARRAYS OF IDS TO 
+    const IDArrays: string[] = []
+    data.forEach((item: updateLoan) => { IDArrays.push(item.loan_id) })
+
+    // DEFINE CHECK IN ITEM
+    const date_in: Date = data[0].date_in
+
+    console.log("[server] Book Loans: " + IDArrays)
+    console.log("[server] Date IN: " + date_in)
+    console.log("[server] Date IN: " + date_in)
+
+    // UPDATE
+    const updatingBookLoan = await prisma.book_loans.updateMany({ data: { "date_in": date_in }, where: { "loan_id": { in: IDArrays } } })
+
+    // ERROR HANDLING
+    if (updatingBookLoan) {
+        return res.json(updatingBookLoan)
+    } else {
+        return res.status(400).json({ "Success": "Failure", "Message": "Could not update fine for some reason" })
+    }
+}
+
+
+
 
 
