@@ -14,7 +14,7 @@ import "../node_modules/antd/dist/reset.css";
 const App = () => {
   return (
     <>
-      <Header />
+      <Header/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/Books" element={<BooksPage/>} />
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/Fines" element={<FinesPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-      <Footer />
+      <Footer/>
     </>
   );
 };

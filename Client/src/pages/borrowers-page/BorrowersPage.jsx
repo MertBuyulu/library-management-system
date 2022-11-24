@@ -99,9 +99,11 @@ const BorrowersPage = () => {
               value={phone}
               onChange={onChange}
             />
-            <CustomButton>Submit</CustomButton>
           </form>
+          <div className="flex justify-between">
+          <CustomButton>Submit</CustomButton>
           <CustomButton onClick={onCancel}>CANCEL</CustomButton>
+          </div>
         </Modal>
       </div>
       <div>

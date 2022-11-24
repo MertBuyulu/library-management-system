@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 
+// styles
+import "./HomePage.styles.scss";
+
 // components
 import Search from "../components/Search";
 import StatCard from "../components/StatCard";
@@ -32,27 +35,17 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex">
-      <div className="bg-[#d9d9d9] w-screen h-screen">
-        <div className={"flex flex-col items-center justify-center"}>
+    <div>
+      <div className="bg-[#d9d9d9] w-screen">
+        <div className={"flex flex-col items-center "}>
           <div className="m-8">
             <Search />
           </div>
-          <div className={"flex space-x-10 m-2"}>
+          <div className={"flex flex-wrap space-x-10 m-2"}>
             <StatCard Name={"Books"} Amount={bookCount} />
             <StatCard Name={"Authors"} Amount={authorCount} />
             <StatCard Name={"Borrowers"} Amount={borrowerCount} />
             <StatCard Name={"Loans"} Amount={loanCount} />
-          </div>
-          <div className="flex justify-center mt-10 ">
-            <h1 className="absolute font-bold text-4xl "> Team Beriyllium </h1>
-            <div className="pt-16 flex space-x-4">
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
-              <div className="w-40 h-40 bg-gray-200 rounded-full dark:bg-gray group cursor-pointer"></div>
-            </div>
           </div>
         </div>
       </div>

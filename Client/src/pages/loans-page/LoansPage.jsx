@@ -17,7 +17,7 @@ const LoansPage = () => {
     { title: "Check-in Date", dataIndex: "date_in", key: 6 },
   ];
   return (
-    <div>
+    <div className="h-screen">
       <Table dataSource={loans} columns={columns}></Table>
     </div>
   );

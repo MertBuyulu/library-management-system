@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // styles
-// import "./BooksPage.styles.scss";
+import "./BooksPage.styles.scss";
 // components
 import { Button, message, FloatButton, Modal, Input } from 'antd';
 import CustomButton from "../../components/custom-button/CustomButton.component";
