@@ -160,6 +160,7 @@ export const deleteBookLoan = async (req: express.Request, res: express.Response
 // UPDATE fine
 export const updateBookLoan = async (req: express.Request, res: express.Response) => {
     // GET fine FROM PARAMS
+
     const { loan_id } = req.params
 
     // GET DATA FROM ISBN
@@ -182,7 +183,7 @@ export const updateBookLoans = async (req: express.Request, res: express.Respons
         loan_id: string,
         date_in: Date,
     }
-
+    
     // DEFINE DATA
     const data: updateLoan[] = Array.from(req.body)
 
