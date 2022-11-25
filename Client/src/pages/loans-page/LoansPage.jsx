@@ -33,39 +33,66 @@ const LoansPage = () => {
   });
 
   const handleSingleCheckIn = (record) => {
-    const today = new Date().toISOString().slice(0, 10);
-    const updatedLoan = { ...record, date_in: today };
+    const today = new Date("2015-03-25").toISOString();
+    const { loan_id, card_id, isbn, date_out, date_in, due_date } = record;
+    const updatedLoan = {
+      ...{ loan_id, isbn, card_id, date_out, due_date, date_in },
+      date_in: today,
+    };
 
-    //dispatch(updateLoan(record.loan_id, updatedLoan))
+    dispatch(updateLoan({ loan_id: record.loan_id, loan: updatedLoan }));
+    // CLEAR THE SELECTION OF THE ROWS WITH THE KEY SAME AS THIS.RECORD'S KEY
+    setSelectedRowKeys(selectedRowKeys.filter((key) => key !== record.key));
   };
 
   const handleMultipleCheckIn = () => {
-    // to made batch update to the server
-    const updatedLoans = selectedRowKeys.map((key) =>
+    // TO MADE A BATCH UPDATE TO THE SERVER
+    const selectedLoans = selectedRowKeys.map((key) =>
       loans.find((loan) => loan.key === key)
     );
-    //dispatch(updateLoans(updateLoans))
+
+    const today = new Date().toISOString();
+    const updatedLoans = selectedLoans.map((loan) => {
+      return { loan_id: loan.loan_id, date_in: today };
+    });
+
+    dispatch(updateLoans(updatedLoans));
+
+    // CLEAR THE SELECTION
+    setSelectedRowKeys([]);
   };
 
-  // to keep track of selected rows
+  // TO KEEP TRACK OF THE SELECTED ROWS
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  // to enable search functionality
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    // "2022-11-24T00:00:00.000Z" IS BEING USED FOR TESTING PURPOSES ONLY
+    getCheckboxProps: (record) => {
+      if (record.date_in !== "2022-11-24T00:00:00.000Z")
+        return {
+          disabled: true,
+        };
+    },
+  };
+
+  // TO ENABLE SEARCH FUNCTIONALITY
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
 
-  // to enable search functionality
+  // TO ENABLE SEARCH FUNCTIONALITY
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
   };
 
-  // search logic
+  // SEARCH LOGIC
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -78,7 +105,7 @@ const LoansPage = () => {
         style={{
           padding: 10,
         }}
-        //onKeyDown={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         <Input
           ref={searchInput}
@@ -152,11 +179,6 @@ const LoansPage = () => {
       ),
   });
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
   const columns = [
     {
       title: "Loan ID",
@@ -210,12 +232,18 @@ const LoansPage = () => {
       key: 8,
       align: "center",
       width: 150,
-      render: (_, record) =>
-        loans.length >= 1 && (
-          <CustomButton onClick={() => handleSingleCheckIn(record)} small>
-            Check in now
-          </CustomButton>
-        ),
+      // CONDITIONALLY RENDER BUTTON
+      render: (_, record) => (
+        // !record.date_in ? (
+        <CustomButton onClick={() => handleSingleCheckIn(record)} small>
+          Check in now
+        </CustomButton>
+      ),
+      // ) : (
+      //   <CustomButton flag={true} small>
+      //     Checked in
+      //   </CustomButton>
+      // ),
     },
   ];
 
@@ -231,7 +259,14 @@ const LoansPage = () => {
           {hasSelected ? `Selected ${selectedRowKeys.length} loans` : ""}
         </span>
       </div>
-      <Table rowSelection={rowSelection} dataSource={data} columns={columns} />
+      <Table
+        pagination={{
+          position: ["bottomCenter"],
+        }}
+        rowSelection={rowSelection}
+        dataSource={data}
+        columns={columns}
+      />
     </div>
   );
 };
