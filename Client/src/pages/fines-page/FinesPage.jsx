@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 // components
 import { Table, Tag } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
