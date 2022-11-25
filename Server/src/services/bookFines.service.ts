@@ -100,7 +100,6 @@ export const deleteFine = async (req: express.Request, res: express.Response) =>
     }
 }
 
-// UPDATE fine
 export const updateFine = async (req: express.Request, res: express.Response) => {
     // GET fine FROM PARAMS
     const { loan_id } = req.params
@@ -119,5 +118,16 @@ export const updateFine = async (req: express.Request, res: express.Response) =>
     }
 }
 
+
+export const refreshFines = async (req: express.Request, res: express.Response) => {
+   console.log("refreshing...")
+
+    // // ERROR HANDLING
+    // if (updatingfine) {
+    //     return res.json(updatingfine)
+    // } else {
+    //     return res.status(400).json({ "Success": "Failure", "Message": "Could not refresh the fines for some reason" })
+    // }
+}
 
 

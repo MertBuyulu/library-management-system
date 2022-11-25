@@ -7,3 +7,4 @@ export const createFine = (newFine) => axios.post(url, newFine);
 export const updateFine = (id, updatedFine) =>
   axios.patch(`${url}/${id}`, updatedFine);
 export const deleteFine = (id) => axios.delete(`${url}/${id}`);
+export const refreshFines = () => axios.patch(url);

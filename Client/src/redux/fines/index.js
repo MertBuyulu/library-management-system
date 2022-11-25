@@ -1,6 +1,12 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { createSlice, createSelector, isAnyOf } from "@reduxjs/toolkit";
 // reducer functions
-import { getFines, createFine, updateFine, deleteFine } from "./fines.utils";
+import {
+  getFines,
+  refreshFines,
+  createFine,
+  updateFine,
+  deleteFine,
+} from "./fines.utils";
 
 const INITIAL_STATE = { fines: [], loading: false, error: "" };
 
@@ -10,19 +16,25 @@ const FinesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getFines.pending, (state) => {
+      .addMatcher(isAnyOf(getFines.pending, refreshFines.pending), (state) => {
         state.loading = true;
       })
-      .addCase(getFines.fulfilled, (state, action) => {
-        state.loading = false;
-        state.fines = action.payload;
-      })
-      .addCase(getFines.rejected, (state, action) => {
-        state.loading = false;
-        state.error =
-          action.error.message ||
-          "Something went wrong while fetching all fines...";
-      })
+      .addMatcher(
+        isAnyOf(getFines.fulfilled, refreshFines.fulfilled),
+        (state, action) => {
+          state.loading = false;
+          state.fines = action.payload;
+        }
+      )
+      .addMatcher(
+        isAnyOf(getFines.rejected, refreshFines.rejected),
+        (state, action) => {
+          state.loading = false;
+          state.error =
+            action.error.message ||
+            "Something went wrong while fetching all fines...";
+        }
+      )
       .addCase(createFine.pending, (state) => {
         state.loading = true;
       })

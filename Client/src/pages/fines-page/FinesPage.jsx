@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // components
 import { Table, Tag } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
@@ -7,30 +7,27 @@ import { useSelector } from "react-redux";
 import { SelectBorrowersWithKeys } from "../../redux/borrowers";
 import { SelectFines } from "../../redux/fines";
 import { SelectLoans } from "../../redux/loans";
+// validation method
+import { validatePayment, validatMultiplePayments } from "../../utils/utils";
 
 const FinesPage = () => {
   const borrowers = useSelector(SelectBorrowersWithKeys);
   const fines = useSelector(SelectFines);
   const loans = useSelector(SelectLoans);
 
+  const [filtered, setFiltered] = useState(false);
+
   const outerTableData = borrowers.map((current_borrower) => {
     // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING FILTER
-    let borrower_loans = loans.filter(
+    const borrower_loans = loans.filter(
       (loan) => loan.card_id === current_borrower.card_id
     );
     let borrower_fines = [];
     // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
-    borrower_loans.every((current_loan, index) => {
+    borrower_loans.forEach((current_loan, index) => {
       const fine = fines.find((fine) => fine.loan_id === current_loan.loan_id);
 
-      if (fine) {
-        // CONTINUE WITH THE NEXT ITEM
-        borrower_fines.push({ ...fine, key: index + 1 });
-        return true;
-      } else {
-        // BREAK THE LOOP
-        return false;
-      }
+      if (fine) borrower_fines.push({ ...fine, key: index + 1 });
     });
 
     let total_fine_amount = 0;
@@ -45,12 +42,23 @@ const FinesPage = () => {
     return { ...current_borrower, borrower_fines, total_fine_amount };
   });
 
-  const handleSinglePayment = () => {
-    console.log("Success...single payment has proceeded!!");
+  const handleSinglePayment = async ({ loan_id }) => {
+    if (await validatePayment(loan_id)) {
+      alert("SUCCESS!!!");
+    } else {
+      alert("FAILUREEE!!!");
+    }
   };
 
-  const handleMultiplePayment = () => {
-    console.log("Success!!");
+  const handleMultiplePayment = async ({ borrower_fines }) => {
+    const loan_ids = borrower_fines.map((fine) => {
+      return fine.loan_id;
+    });
+    if (await validatMultiplePayments(loan_ids)) {
+      alert("SUCCESS!!!");
+    } else {
+      alert("FAILUREEE!!!");
+    }
   };
 
   const handleTableRefresh = () => {
@@ -59,6 +67,7 @@ const FinesPage = () => {
 
   const handleFiltering = () => {
     console.log("table is filtered!!");
+    setFiltered(!filtered);
   };
 
   const expandedRowRender = (record) => {
@@ -156,8 +165,14 @@ const FinesPage = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <CustomButton>Filter Paid Fines</CustomButton>
-        <CustomButton>Refresh Fines</CustomButton>
+        {!filtered ? (
+          <CustomButton onClick={handleFiltering}>
+            Filter Paid Fines
+          </CustomButton>
+        ) : (
+          <CustomButton onClick={handleFiltering}>Reset</CustomButton>
+        )}
+        <CustomButton onClick={handleTableRefresh}>Refresh Fines</CustomButton>
       </div>
       <Table
         pagination={{
@@ -167,6 +182,7 @@ const FinesPage = () => {
         expandable={{
           expandedRowRender,
           defaultExpandAllRows: false,
+          rowExpandable: (record) => record.borrower_fines.length,
         }}
         columns={columns}
         dataSource={outerTableData}

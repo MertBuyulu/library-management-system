@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import moment from "moment";
 // styles
 import "./LoansPage.styles.scss";
 // componenents
@@ -33,7 +34,9 @@ const LoansPage = () => {
   });
 
   const handleSingleCheckIn = (record) => {
-    const today = new Date("2015-03-25").toISOString();
+    // CST IS THE DEFAULT TIME ZONE
+    const today = moment().format();
+    console.log(today);
     const { loan_id, card_id, isbn, date_out, date_in, due_date } = record;
     const updatedLoan = {
       ...{ loan_id, isbn, card_id, date_out, due_date, date_in },
@@ -51,7 +54,7 @@ const LoansPage = () => {
       loans.find((loan) => loan.key === key)
     );
 
-    const today = new Date().toISOString();
+    const today = moment().format();
     const updatedLoans = selectedLoans.map((loan) => {
       return { loan_id: loan.loan_id, date_in: today };
     });
@@ -72,7 +75,7 @@ const LoansPage = () => {
     onChange: onSelectChange,
     // "2022-11-24T00:00:00.000Z" IS BEING USED FOR TESTING PURPOSES ONLY
     getCheckboxProps: (record) => {
-      if (record.date_in !== "2022-11-24T00:00:00.000Z")
+      if (record.date_in > "2022-11-24T00:00:00.000Z")
         return {
           disabled: true,
         };

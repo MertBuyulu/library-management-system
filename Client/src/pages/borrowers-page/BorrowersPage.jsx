@@ -98,6 +98,7 @@ const BorrowersPage = () => {
               label="Phone Number"
               value={phone}
               onChange={onChange}
+              required
             />
             <CustomButton>Submit</CustomButton>
           </form>

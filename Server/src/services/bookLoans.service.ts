@@ -47,6 +47,34 @@ export const getBookLoan = async (
     }
 };
 
+
+export const getSomeBookLoans = async (
+    req: express.Request,
+    res: express.Response
+) => {
+
+
+   const SelectedIDs: string[] = Array.from(req.body)
+
+   // RETURN ALL BOOK_LOANS TUPLES WHERE THE DATE_IN VALUE IS SET TO NULL/UNDEFINED
+    const book_loans = await prisma.book_loans.findMany({
+        where: {
+            loan_id: {in: SelectedIDs},
+            date_in: undefined
+        },
+    });
+
+    console.log(book_loans)
+    if (book_loans) {
+        return res.json(book_loans);
+    }
+    else if (book_loans === null){
+        return null;
+    } else {
+        return res.status(400).json({ message: "[server] Could not retrieve selected book loans" });
+    }
+};
+
 /*
 model book_loans {
   loan_id  String   @id @db.VarChar
