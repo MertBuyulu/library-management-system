@@ -32,9 +32,4 @@ https://coolors.co/ff6f59-011936-a2a7a5-6d696a-d9d9d9
    - https://momentjs.com/docs/
 
 2. date_in field of a BOOK_LOAN Tuple shouldn't have a null value constraint
-
-##### 11/25/22 What I have done today
-
-1. Fine's Page
-   - Implement validation function for denying user from paying fee for loans(s) that are still out. [NOT DONE]
-   - Hide the expand row icon whenever there is no fine associated with a row in the outer table [DONE]
+3. filtering book_loans on date_in field being null?

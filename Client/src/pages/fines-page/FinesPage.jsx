@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 // components
 import { Table, Tag } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 // redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SelectBorrowersWithKeys } from "../../redux/borrowers";
-import { SelectFines } from "../../redux/fines";
+import { SelectFines, filter as FilterFines } from "../../redux/fines";
 import { SelectLoans } from "../../redux/loans";
+import { getFines } from "../../redux/fines/fines.utils";
+
 // validation method
 import { validatePayment, validatMultiplePayments } from "../../utils/utils";
 
 const FinesPage = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getFines());
+  }, [dispatch]);
+
   const borrowers = useSelector(SelectBorrowersWithKeys);
   const fines = useSelector(SelectFines);
   const loans = useSelector(SelectLoans);
@@ -66,8 +74,13 @@ const FinesPage = () => {
   };
 
   const handleFiltering = () => {
-    console.log("table is filtered!!");
-    setFiltered(!filtered);
+    dispatch(FilterFines());
+    setFiltered(true);
+  };
+
+  const handleReset = () => {
+    dispatch(getFines());
+    setFiltered(false);
   };
 
   const expandedRowRender = (record) => {
@@ -170,7 +183,7 @@ const FinesPage = () => {
             Filter Paid Fines
           </CustomButton>
         ) : (
-          <CustomButton onClick={handleFiltering}>Reset</CustomButton>
+          <CustomButton onClick={handleReset}>Reset</CustomButton>
         )}
         <CustomButton onClick={handleTableRefresh}>Refresh Fines</CustomButton>
       </div>

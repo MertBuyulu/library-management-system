@@ -47,7 +47,7 @@ export const getBookLoan = async (
     }
 };
 
-
+// TODO: THE RESULT IS NOT FILTERED BASED ON THE DATE_IN FIELD VALUE
 export const getSomeBookLoans = async (
     req: express.Request,
     res: express.Response
