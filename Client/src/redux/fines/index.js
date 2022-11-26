@@ -5,6 +5,7 @@ import {
   refreshFines,
   createFine,
   updateFine,
+  updateFines,
   deleteFine,
 } from "./fines.utils";
 
@@ -64,18 +65,25 @@ const FinesSlice = createSlice({
           action.error.message ||
           "Something went wrong while deleting a fines...";
       })
-      .addMatcher(isAnyOf(getFines.pending, refreshFines.pending), (state) => {
-        state.loading = true;
-      })
       .addMatcher(
-        isAnyOf(getFines.fulfilled, refreshFines.fulfilled),
+        isAnyOf(getFines.pending, refreshFines.pending, updateFines.pending),
+        (state) => {
+          state.loading = true;
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          getFines.fulfilled,
+          refreshFines.fulfilled,
+          updateFines.fulfilled
+        ),
         (state, action) => {
           state.loading = false;
           state.fines = action.payload;
         }
       )
       .addMatcher(
-        isAnyOf(getFines.rejected, refreshFines.rejected),
+        isAnyOf(getFines.rejected, refreshFines.rejected, updateFines.rejected),
         (state, action) => {
           state.loading = false;
           state.error =

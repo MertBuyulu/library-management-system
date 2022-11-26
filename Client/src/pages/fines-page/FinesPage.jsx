@@ -10,6 +10,7 @@ import { SelectLoans } from "../../redux/loans";
 import {
   getFines,
   refreshFines,
+  updateFines,
   updateFine,
 } from "../../redux/fines/fines.utils";
 
@@ -28,9 +29,13 @@ const FinesPage = () => {
   const borrowers = useSelector(SelectBorrowersWithKeys);
 
   const [filtered, setFiltered] = useState(false);
-  const [clickedSinglePay, setclickedSingePay] = useState(false);
+  const [enteredAmount, setEnteredAmount] = useState(0);
+  // EDITING KEY DOES NOT WORK.
+  //const [editingKey, setEditingKey] = useState(0);
   const [clickedFullPay, setclickedFullPay] = useState(false);
+  const [clickedSinglePay, setclickedSingePay] = useState(false);
 
+  let index = 0;
   const outerTableData = borrowers.map((current_borrower) => {
     // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING FILTER
     const borrower_loans = loans.filter(
@@ -38,10 +43,13 @@ const FinesPage = () => {
     );
     let borrower_fines = [];
     // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
-    borrower_loans.forEach((current_loan, index) => {
+    borrower_loans.forEach((current_loan) => {
       const fine = fines.find((fine) => fine.loan_id === current_loan.loan_id);
-
-      if (fine) borrower_fines.push({ ...fine, key: index + 1 });
+      if (fine) {
+        borrower_fines.push({ ...fine, key: index + 1 });
+        // UPDATE THE INDEX KEY
+        index = index + 1;
+      }
     });
 
     let total_fine_amount = 0;
@@ -57,34 +65,51 @@ const FinesPage = () => {
   });
 
   const startSinglePayment = async (fine) => {
+    //setEditingKey(fine.key);
     if (await validatePayment(fine.loan_id)) {
       setclickedSingePay(true);
     } else {
-      error();
+      errorSingleFine(fine.loan_id);
     }
   };
 
-  // TODO FINISH THIS FUNC
-  const processSinglePayment = () => {
-    success();
+  const processSinglePayment = (fine) => {
+    const { loan_id, fine_amount, paid } = fine;
+    const balance_left = fine_amount - enteredAmount;
+    dispatch(
+      updateFine({
+        loan_id: loan_id,
+        fine: { loan_id: loan_id, fine_amount: balance_left, paid: paid },
+      })
+    );
     setclickedSingePay(false);
+    successSingleFine(balance_left);
+    setEnteredAmount(0);
   };
 
-  const startBatchPayment = async ({ borrower_fines }) => {
+  const startBatchPayment = async ({ card_id, borrower_fines }) => {
     const loan_ids = borrower_fines.map((fine) => {
       return fine.loan_id;
     });
     if (await validatMultiplePayments(loan_ids)) {
       setclickedFullPay(true);
     } else {
-      error();
+      errorMultipleFines(card_id);
     }
   };
 
   // TODO FINISH THIS FUNC
-  const processBatchPayment = () => {
-    success();
+  const processBatchPayment = ({ borrower_fines }) => {
+    const fines_to_be_updated = borrower_fines
+      .filter((fine) => fine.paid !== true)
+      .map((fine) => {
+        return fine.loan_id;
+      });
+
+    dispatch(updateFines(fines_to_be_updated));
     setclickedFullPay(false);
+    successMultipleFines();
+    setEnteredAmount(0);
   };
 
   const handleTableRefresh = () => {
@@ -101,15 +126,44 @@ const FinesPage = () => {
     setFiltered(false);
   };
 
-  const success = () =>
+  const onChange = (e) => {
+    setEnteredAmount(e.currentTarget.value);
+  };
+
+  // TO ALLOW ONLY ONE TABLE TO BE EDITED AT ANY TIME - DOESN'T WORK
+  // const isEditing = (key) => {
+  //   return key === editingKey;
+  // };
+
+  const successSingleFine = (balance_left) =>
     message.info("Action in progress...", 2, () =>
-      message.success("Success: Payment went through!!", 3)
+      message.success(
+        `Success: Payment went through!! Remaining Balance: $${balance_left}!!`,
+        3
+      )
     );
 
-  const error = () => {
+  const errorSingleFine = (loan_id) => {
     message.info("Action in progress...", 2, () =>
       message.error(
-        "Error: Payment not allowed...Try again later when the book is returned.",
+        `Error: Payment not allowed... Book with loan ID ${loan_id} has been returned yet.`,
+        3
+      )
+    );
+  };
+
+  const successMultipleFines = () =>
+    message.info("Action in progress...", 2, () =>
+      message.success(
+        `Success: Payment went through!! Remaining Balance: $0!!`,
+        3
+      )
+    );
+
+  const errorMultipleFines = (card_id) => {
+    message.info("Action in progress...", 2, () =>
+      message.error(
+        `Error: Payment not allowed... One or more books associated with Borrower ID ${card_id} has been returned yet.`,
         3
       )
     );
@@ -162,7 +216,7 @@ const FinesPage = () => {
                     width: "55%",
                   }}
                   placeholder={`$${record.fine_amount}`}
-                  allowClear
+                  onChange={onChange}
                 />
                 <CustomButton
                   extra_small
@@ -179,7 +233,7 @@ const FinesPage = () => {
     ];
     return (
       <Table
-        rowKey={(record) => record.card_id}
+        rowKey={(record) => record.loan_id}
         dataSource={record.borrower_fines}
         columns={columns}
         pagination={false}
@@ -234,9 +288,10 @@ const FinesPage = () => {
                 style={{
                   height: 30,
                   width: "55%",
+                  fontSize: 15,
                 }}
                 placeholder={`$${record.total_fine_amount}`}
-                allowClear
+                onChange={onChange}
               />
               <CustomButton
                 extra_small
@@ -253,7 +308,7 @@ const FinesPage = () => {
   ];
 
   return (
-    <div className="">
+    <div>
       <div className="flex justify-center">
         {!filtered ? (
           <CustomButton onClick={handleFiltering}>

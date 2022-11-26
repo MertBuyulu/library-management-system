@@ -107,14 +107,35 @@ export const updateFine = async (req: express.Request, res: express.Response) =>
     // GET DATA FROM ISBN
     const data = req.body
 
-    // UPDATE
-    const updatingfine = await prisma.fines.update({ where: { loan_id: loan_id }, data: data })
+    // IF THE REMAINING BALANCE IS NOT ZERO, THEN SET PAID FIELD TO FALSE
+    data.paid = data.fine_amount? false: true
+    
+   //UPDATE
+    const updatedFine = await prisma.fines.update({ where: { loan_id: loan_id }, data: data})
 
     // ERROR HANDLING
-    if (updatingfine) {
-        return res.json(updatingfine)
+    if (updatedFine) {
+        return res.json(updatedFine)
     } else {
         return res.status(400).json({ "Success": "Failure", "Message": "Could not update fine for some reason" })
+    }
+}
+
+export const updateFines = async (req: express.Request, res: express.Response) => {
+
+    const SelectedIDs: string[] = Array.from(req.body)
+    
+    // UPDATE FINES
+    await prisma.fines.updateMany({where: {"loan_id": {in: SelectedIDs}}, data: {fine_amount: 0, paid: true}})
+
+    // FETCH THE UPDATED FINES
+    const updatedFines = await prisma.fines.findMany()
+
+    console.log(updatedFines)
+        if (updatedFines) {
+            return res.json(updatedFines);
+        } else {
+            return res.status(400).json({ message: "[server] Could not retrieve selected book loans" });
     }
 }
 

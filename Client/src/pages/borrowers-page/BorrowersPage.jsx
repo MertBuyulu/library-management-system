@@ -100,11 +100,11 @@ const BorrowersPage = () => {
               onChange={onChange}
               required
             />
+            <div className="flex justify-between">
+              <CustomButton>Submit</CustomButton>
+              <CustomButton onClick={onCancel}>CANCEL</CustomButton>
+            </div>
           </form>
-          <div className="flex justify-between">
-          <CustomButton>Submit</CustomButton>
-          <CustomButton onClick={onCancel}>CANCEL</CustomButton>
-          </div>
         </Modal>
       </div>
       <div>

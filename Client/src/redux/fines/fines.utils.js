@@ -30,9 +30,21 @@ export const createFine = createAsyncThunk("posts/createFine", async (loan) => {
 
 export const updateFine = createAsyncThunk(
   "posts/updateFine",
-  async (id, fine) => {
+  async ({ loan_id, fine }) => {
     try {
-      const response = await api.updateFine(id, fine);
+      const response = await api.updateFine(loan_id, fine);
+      return response.data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
+export const updateFines = createAsyncThunk(
+  "posts/updateFines",
+  async (fines) => {
+    try {
+      const response = await api.updateFines(fines);
       return response.data;
     } catch (error) {
       return error.message;

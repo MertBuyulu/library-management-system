@@ -1,17 +1,5 @@
-import { fetchBooksById} from "../api/books";
-import { fetchBorrowerById } from "../api/borrowers";
 import { fetchBorrowerBySsn } from "../api/borrowers";
-import { fetchLoanById, fetchLoans, fetchLoansById } from "../api/loans";
-
-export const validateIsbn = async (isbn) => {
-  try {
-    const response = await fetchBooksById(isbn);
-    const { data } = response;
-    return Object.keys(data).length === 0;
-  } catch (error) {
-    return error.message;
-  }
-};
+import { fetchLoanById, fetchLoansById } from "../api/loans";
 
 export const validateSsn = async (ssn) => {
   try {

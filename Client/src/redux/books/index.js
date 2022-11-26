@@ -71,11 +71,15 @@ const BooksSlice = createSlice({
 });
 
 export function BooksSearchBar() {
-  return (
-    <Search />
-  );
-};
+  return <Search />;
+}
 export const SelectBooks = (state) => state.books.books;
+
+export const SelectBookssWithKeys = createSelector([SelectBooks], (books) =>
+  books.map((book, index) => {
+    return { ...book, key: index + 1 };
+  })
+);
 
 export const SelectBookCount = createSelector([SelectBooks], (books) => {
   return books.reduce((accumulator) => accumulator + 1, 0);
@@ -87,4 +91,3 @@ export const SelectBookById = (isbn) =>
   );
 
 export default BooksSlice.reducer;
-

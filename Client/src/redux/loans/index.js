@@ -1,4 +1,4 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { createSlice, createSelector, isAnyOf } from "@reduxjs/toolkit";
 // reducer functions
 import {
   getLoans,
@@ -16,19 +16,6 @@ const LoansSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getLoans.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getLoans.fulfilled, (state, action) => {
-        state.loading = false;
-        state.loans = action.payload;
-      })
-      .addCase(getLoans.rejected, (state, action) => {
-        state.loading = false;
-        state.error =
-          action.error.message ||
-          "Something went wrong while fetching all loan...";
-      })
       .addCase(createLoan.pending, (state) => {
         state.loading = true;
       })
@@ -57,24 +44,6 @@ const LoansSlice = createSlice({
           action.error.message ||
           "Something went wrong while updating a loan...";
       })
-      .addCase(updateLoans.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(updateLoans.fulfilled, (state, action) => {
-        state.loading = false;
-        state.loans = state.loans.map((loan) => {
-          const updatedLoan = action.payload.find(
-            (updated) => (updated.loan_id = loan.loan_id)
-          );
-          return updatedLoan;
-        });
-      })
-      .addCase(updateLoans.rejected, (state, action) => {
-        state.loading = false;
-        state.error =
-          action.error.message ||
-          "Something went wrong while updating a loan...";
-      })
       .addCase(deleteLoan.pending, (state) => {
         state.loading = true;
       })
@@ -89,7 +58,26 @@ const LoansSlice = createSlice({
         state.error =
           action.error.message ||
           "Something went wrong while deleting a loan...";
-      });
+      })
+      .addMatcher(isAnyOf(getLoans.pending, updateLoans.pending), (state) => {
+        state.loading = true;
+      })
+      .addMatcher(
+        isAnyOf(getLoans.fulfilled, updateLoans.fulfilled),
+        (state, action) => {
+          state.loading = false;
+          state.loans = action.payload;
+        }
+      )
+      .addMatcher(
+        isAnyOf(getLoans.rejected, updateLoans.rejected),
+        (state, action) => {
+          state.loading = false;
+          state.error =
+            action.error.message ||
+            "Something went wrong while fetching all loan...";
+        }
+      );
   },
 });
 
