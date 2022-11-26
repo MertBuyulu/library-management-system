@@ -43,7 +43,7 @@ const HomePage = () => {
           <div className="m-20">
             <Search />
           </div>
-          <div className={"flex flex-wrap space-x-10 m-2"}>
+          <div className={"flex space-x-10 m-2"}>
             <StatCard Name={"Books"} Amount={bookCount} />
             <StatCard Name={"Authors"} Amount={authorCount} />
             <StatCard Name={"Borrowers"} Amount={borrowerCount} />

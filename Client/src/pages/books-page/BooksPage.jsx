@@ -9,10 +9,12 @@ import Table from "../../components/table/Table.component";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooks } from "../../redux/books/index";
+import { SelectAuthorById } from "../../redux/authors";
 // validation
 import {validateIsbn} from "../../utils/utils";
 import Search from "../../components/Search";
 import books from "../../redux/books";
+import authors from "../../redux/authors";
 
 const initialState = {
     isbn: "",
@@ -58,7 +60,7 @@ const initialState = {
     const columns = [
       { heading: "ISBN", value: "isbn", key: 1 },
       { heading: "Title", value: "title", key: 2 },
-      { heading: "Author", value: "authors_id", key: 3 },
+      { heading: "Author", value: "authors", key: 3 },
     ];
   
     return (

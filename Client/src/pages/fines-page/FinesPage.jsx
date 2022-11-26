@@ -253,7 +253,7 @@ const FinesPage = () => {
   ];
 
   return (
-    <div>
+    <div className="">
       <div className="flex justify-center">
         {!filtered ? (
           <CustomButton onClick={handleFiltering}>
