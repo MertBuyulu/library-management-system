@@ -98,6 +98,7 @@ const BorrowersPage = () => {
               label="Phone Number"
               value={phone}
               onChange={onChange}
+              required
             />
           </form>
           <div className="flex justify-between">

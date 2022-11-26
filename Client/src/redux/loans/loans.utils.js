@@ -21,9 +21,9 @@ export const createLoan = createAsyncThunk("posts/createLoan", async (loan) => {
 
 export const updateLoan = createAsyncThunk(
   "posts/updateLoan",
-  async (id, loan) => {
+  async ({ loan_id, loan }) => {
     try {
-      const response = await api.updateLoan(id, loan);
+      const response = await api.updateLoan(loan_id, loan);
       return response.data;
     } catch (error) {
       return error.message;

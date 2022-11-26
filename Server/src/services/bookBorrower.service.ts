@@ -37,27 +37,13 @@ export const getBorrower = async (
     // DEFINE BORROWER
     var borrower;
 
+    const { card_id } = req.params;
 
-    if (givenSSN) {
-        const { card_id } = req.params;
-        borrower = await prisma.borrower.findFirst({
-            where: {
-                ssn: Number(card_id),
-            },
-        });
-
-    }
-    else {
-
-        const { card_id } = req.params;
-        borrower = await prisma.borrower.findUnique({
-            where: {
-                card_id: card_id,
-            },
-        });
-
-
-    }
+    borrower = await prisma.borrower.findUnique({
+        where: {
+            card_id: card_id,
+        },
+    });
 
     if (borrower) {
         return res.json(borrower);
@@ -82,8 +68,8 @@ export const getBorrowerBySSN = async (
             ssn: Number(ssn),
         },
     });
-    
-    if (borrower) 
+
+    if (borrower)
         return res.json(borrower);
     else if (borrower === null)
         return res.json({})
@@ -93,7 +79,14 @@ export const getBorrowerBySSN = async (
 
 };
 
-// DEFINE GET 
+
+// DEFINE GET NEW BORROWER ID 
+export const getNewBorrowerID = () => {
+
+    return
+}
+
+
 export const createBorrower = async (
     req: express.Request,
     res: express.Response

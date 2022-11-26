@@ -20,7 +20,9 @@ export const getAllBookAuthors = async (
         console.log("[server] Getting Books Authors Meta")
         return res.json({ "Amount": await prisma.book_authors.count() })
     }
-    console.log("[server] Getting all Book Author")
+    console.log("[server] Getting all Book Authors")
+    const book_authors = await prisma.book_authors.findMany()
+    console.log(book_authors)
     return res.json(await prisma.book_authors.findMany());
 };
 

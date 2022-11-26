@@ -43,7 +43,35 @@ export const getBookLoan = async (
     }
     else {
         console.log("[server] Could not retrieve Book Loan" + loan_id)
-        return res.status(400).json(loan_id);
+        return res.status(400).json({ message: "[server] Could not retrieve Book Loan" + loan_id });
+    }
+};
+
+// TODO: THE RESULT IS NOT FILTERED BASED ON THE DATE_IN FIELD VALUE
+export const getSomeBookLoans = async (
+    req: express.Request,
+    res: express.Response
+) => {
+
+
+   const SelectedIDs: string[] = Array.from(req.body)
+
+   // RETURN ALL BOOK_LOANS TUPLES WHERE THE DATE_IN VALUE IS SET TO NULL/UNDEFINED
+    const book_loans = await prisma.book_loans.findMany({
+        where: {
+            loan_id: {in: SelectedIDs},
+            date_in: undefined
+        },
+    });
+
+    console.log(book_loans)
+    if (book_loans) {
+        return res.json(book_loans);
+    }
+    else if (book_loans === null){
+        return null;
+    } else {
+        return res.status(400).json({ message: "[server] Could not retrieve selected book loans" });
     }
 };
 
@@ -65,36 +93,67 @@ export const createBookLoan = async (
     req: express.Request,
     res: express.Response
 ) => {
+    type loanInput = {
+        isbn: string,
+        card_id: string,
+        date_out: Date,
+        due_date: Date,
+    }
+
     try {
-        const loan_id: string = uuidv4();
+        var data: loanInput[] = Array.from(req.body)
+        var length = req.body.length
+    } catch {
+        console.log("Data is not in list form.")
+        var data: loanInput[] = []
+        data.push(req.body)
+    }
 
-        // GET QUERY PARAMS
-        const isbn: string = req.body['isbn'];
-        const card_id: string = req.body['card_id'];
-        const date_out: Date = new Date(req.body['date_out']);
-        const due_date: Date = new Date(req.body['due_date']);
-        const date_in: Date = new Date()
+    try {
 
+        var bookLoanList = data.map((loan: loanInput) => {
+            return (
+                {
+                    loan_id: uuidv4(),
+                    isbn: loan["isbn"],
+                    card_id: loan["card_id"],
+                    date_out: new Date(loan["date_out"]),
+                    due_date: new Date(loan["due_date"]),
+                    date_in: new Date()
+                }
+            )
+        })
 
-        const bookLoan: BookLoan = {
-            loan_id: loan_id,
-            isbn: isbn,
-            card_id: card_id,
-            date_out: date_out,
-            due_date: due_date,
-            date_in: date_in
-        }
+        // // CREATE A NEW LIST 
+        // const loan_id: string = uuidv4();
+
+        // // GET QUERY PARAMS
+        // const isbn: string = req.body['isbn'];
+        // const card_id: string = req.body['card_id'];
+        // const date_out: Date = new Date(req.body['date_out']);
+        // const due_date: Date = new Date(req.body['due_date']);
+        // const date_in: Date = new Date()
+
+        // const bookLoan: BookLoan = {
+        //     loan_id: loan_id,
+        //     isbn: isbn,
+        //     card_id: card_id,
+        //     date_out: date_out,
+        //     due_date: due_date,
+        //     date_in: date_in
+        // }
 
         // CREATE IN DATABASE
-        const bookLoanCreate = await prisma.book_loans.create({
-            data: bookLoan
+        const bookLoanCreate = await prisma.book_loans.createMany({
+            data: bookLoanList
         });
 
-
-        if (bookLoanCreate) {
-            console.log('[server] Created a new Book Loan ' + loan_id)
-            return res.json(bookLoanCreate);
-        } else {
+        if (bookLoanCreate.count) {
+            console.log('[server] Created Book Loan(s) ' + bookLoanCreate.count)
+            return res.json('[server] Created Book Loan(s) ' + bookLoanCreate.count);
+        }
+        else {
+            console.log(bookLoanCreate)
             return res.status(404).json({ "Success": "Failure", "Message": "Book Loan could not be created." })
         }
 
@@ -105,25 +164,31 @@ export const createBookLoan = async (
     }
 };
 
-
 // DELETE BOOK 
 export const deleteBookLoan = async (req: express.Request, res: express.Response) => {
-    // GET fine FROM PARAMS
-    const { loan_id } = req.params
 
-    // DELETE fine
-    const deletingBookLoan = await prisma.book_loans.delete({ where: { loan_id: loan_id } })
+    try {
+        // GET fine FROM PARAMS
+        const { loan_id } = req.params
 
-    if (deletingBookLoan) {
-        return res.json(deletingBookLoan)
-    } else {
-        return res.status(400).json({ "Success": "Failure", "Message": "Fine could not be deleted due to non existent resource." })
+        // DELETE fine
+        const deletingBookLoan = await prisma.book_loans.delete({ where: { loan_id: loan_id } })
+
+        if (deletingBookLoan) {
+            return res.json(deletingBookLoan)
+        } else {
+            return res.status(400).json({ "Success": "Failure", "Message": "Book Loan could not be deleted." })
+        }
+
+    } catch {
+        return res.status(400).json({ "Success": "Failure", "Message": "Book Loan could not be deleted." })
     }
 }
 
 // UPDATE fine
 export const updateBookLoan = async (req: express.Request, res: express.Response) => {
     // GET fine FROM PARAMS
+
     const { loan_id } = req.params
 
     // GET DATA FROM ISBN
@@ -139,6 +204,41 @@ export const updateBookLoan = async (req: express.Request, res: express.Response
         return res.status(400).json({ "Success": "Failure", "Message": "Could not update fine for some reason" })
     }
 }
+
+export const updateBookLoans = async (req: express.Request, res: express.Response) => {
+    console.log("[server] Updating many book loans")
+    type updateLoan = {
+        loan_id: string,
+        date_in: Date,
+    }
+    
+    // DEFINE DATA
+    const data: updateLoan[] = Array.from(req.body)
+
+    // GET TWO ARRAYS 
+    // GET THE ARRAYS OF IDS TO 
+    const IDArrays: string[] = []
+    data.forEach((item: updateLoan) => { IDArrays.push(item.loan_id) })
+
+    // DEFINE CHECK IN ITEM
+    const date_in: Date = data[0].date_in
+
+    console.log("[server] Book Loans: " + IDArrays)
+    console.log("[server] Date IN: " + date_in)
+    console.log("[server] Date IN: " + date_in)
+
+    // UPDATE
+    const updatingBookLoan = await prisma.book_loans.updateMany({ data: { "date_in": date_in }, where: { "loan_id": { in: IDArrays } } })
+
+    // ERROR HANDLING
+    if (updatingBookLoan) {
+        return res.json(updatingBookLoan)
+    } else {
+        return res.status(400).json({ "Success": "Failure", "Message": "Could not update fine for some reason" })
+    }
+}
+
+
 
 
 

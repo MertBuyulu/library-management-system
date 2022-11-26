@@ -13,7 +13,7 @@ import { getBorrowers } from "../redux/borrowers/borrowers.utils";
 import { getLoans } from "../redux/loans/loans.utils";
 import { getAuthors } from "../redux/authors/authors.utils";
 import { getFines } from "../redux/fines/fines.utils";
-
+import { getBookAuthors } from "../redux/bookAuthors/book_authors.utils";
 import { SelectBookCount } from "../redux/books";
 import { SelectAuthorCount } from "../redux/authors";
 import { SelectBorrowerCount } from "../redux/borrowers";
@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  // get the total number of books
   const bookCount = useSelector(SelectBookCount);
   const borrowerCount = useSelector(SelectBorrowerCount);
   const authorCount = useSelector(SelectAuthorCount);
@@ -33,6 +32,8 @@ const HomePage = () => {
     dispatch(getBorrowers());
     dispatch(getAuthors());
     dispatch(getLoans());
+    dispatch(getFines());
+    dispatch(getBookAuthors());
   }, [dispatch]);
 
   return (

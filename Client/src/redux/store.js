@@ -13,6 +13,7 @@ import authorsReducer from "./authors/index";
 import borrowersReducer from "./borrowers/index";
 import finesReducer from "./fines/index";
 import loansReducer from "./loans/index";
+import bookAuthorsReducer from "./bookAuthors/index";
 
 const middlewares = [thunk];
 
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === "development") {
 
 const rootReducer = combineReducers({
   books: booksReducer,
+  bookAuthors: bookAuthorsReducer,
   authors: authorsReducer,
   borrowers: borrowersReducer,
   fines: finesReducer,
@@ -30,7 +32,6 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
   key: "root",
-  version: 1,
   storage,
 };
 

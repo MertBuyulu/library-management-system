@@ -39,7 +39,7 @@ const AuthorsSlice = createSlice({
         state.loading = false;
         state.error =
           action.error.message ||
-          "Something went wrong while creating a new authors...";
+          "Something went wrong while creating a new author...";
       })
       .addCase(updateAuthor.pending, (state) => {
         state.loading = true;
@@ -54,7 +54,7 @@ const AuthorsSlice = createSlice({
         state.loading = false;
         state.error =
           action.error.message ||
-          "Something went wrong while updating a authors...";
+          "Something went wrong while updating a author...";
       })
       .addCase(deleteAuthor.pending, (state) => {
         state.loading = true;
@@ -69,7 +69,7 @@ const AuthorsSlice = createSlice({
         state.loading = false;
         state.error =
           action.error.message ||
-          "Something went wrong while deleting a authors...";
+          "Something went wrong while deleting a author...";
       });
   },
 });
