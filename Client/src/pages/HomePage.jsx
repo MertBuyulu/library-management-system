@@ -12,6 +12,7 @@ import { getBooks } from "../redux/books/books.utils";
 import { getBorrowers } from "../redux/borrowers/borrowers.utils";
 import { getLoans } from "../redux/loans/loans.utils";
 import { getAuthors } from "../redux/authors/authors.utils";
+import { getFines } from "../redux/fines/fines.utils";
 
 import { SelectBookCount } from "../redux/books";
 import { SelectAuthorCount } from "../redux/authors";
@@ -25,7 +26,7 @@ const HomePage = () => {
   const bookCount = useSelector(SelectBookCount);
   const borrowerCount = useSelector(SelectBorrowerCount);
   const authorCount = useSelector(SelectAuthorCount);
-  const loanCount = useSelector(SelectLoanCount) || 1000;
+  const loanCount = useSelector(SelectLoanCount);
 
   useEffect(() => {
     dispatch(getBooks());
@@ -36,9 +37,9 @@ const HomePage = () => {
 
   return (
     <div>
-      <div className="bg-[#d9d9d9] w-screen">
-        <div className={"flex flex-col items-center "}>
-          <div className="m-8">
+      <div className="bg-[#d9d9d9] w-screen h-screen">
+        <div className={"flex flex-col items-center"}>
+          <div className="m-20">
             <Search />
           </div>
           <div className={"flex flex-wrap space-x-10 m-2"}>

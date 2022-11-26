@@ -31,6 +31,18 @@ export const updateLoan = createAsyncThunk(
   }
 );
 
+export const updateLoans = createAsyncThunk(
+  "posts/updateLoans",
+  async (loans) => {
+    try {
+      const response = await api.updateLoans(loans);
+      return response.data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
 export const deleteLoan = createAsyncThunk("posts/deleteLoan", async (id) => {
   try {
     const response = await api.deleteLoan(id);

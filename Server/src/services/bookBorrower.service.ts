@@ -31,16 +31,63 @@ export const getBorrower = async (
     req: express.Request,
     res: express.Response
 ) => {
-    const { card_id } = req.params;
-    const borrower = await prisma.borrower.findUnique({
-        where: {
-            card_id: card_id,
-        },
-    });
+    // DEFINE GIVEN SSN 
+    const givenSSN = Boolean(req.query["givenSSN"])
+
+    // DEFINE BORROWER
+    var borrower;
+
+
+    if (givenSSN) {
+        const { card_id } = req.params;
+        borrower = await prisma.borrower.findFirst({
+            where: {
+                ssn: Number(card_id),
+            },
+        });
+
+    }
+    else {
+
+        const { card_id } = req.params;
+        borrower = await prisma.borrower.findUnique({
+            where: {
+                card_id: card_id,
+            },
+        });
+
+
+    }
 
     if (borrower) {
         return res.json(borrower);
     } else {
+        return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
+    }
+
+};
+
+
+export const getBorrowerBySSN = async (
+    req: express.Request,
+    res: express.Response
+) => {
+
+    // DEFINE BORROWER
+    var borrower;
+
+    const { ssn } = req.params;
+    borrower = await prisma.borrower.findFirst({
+        where: {
+            ssn: Number(ssn),
+        },
+    });
+    
+    if (borrower) 
+        return res.json(borrower);
+    else if (borrower === null)
+        return res.json({})
+    else {
         return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
     }
 

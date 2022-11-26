@@ -1,10 +1,11 @@
 // https://blog.logrocket.com/how-to-set-up-node-typescript-express/
 import express from "express"
+import cors from "cors"
+import bodyParser from "body-parser";
+
+// route imports
 import borrowerRouter from "./src/routes/borrower.route"
 import bookRouter from "./src/routes/book.route"
-import cors from "cors"
-import PrismaClient from "@prisma/client"
-import bodyParser from "body-parser";
 import bookAuthorRouter from "./src/routes/bookAuthors.route"
 import finesRouter from "./src/routes/bookFines.route"
 import bookLoansRouter from "./src/routes/bookLoans.route"

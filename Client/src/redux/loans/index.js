@@ -1,6 +1,12 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 // reducer functions
-import { getLoans, createLoan, updateLoan, deleteLoan } from "./loans.utils";
+import {
+  getLoans,
+  createLoan,
+  updateLoan,
+  updateLoans,
+  deleteLoan,
+} from "./loans.utils";
 
 const INITIAL_STATE = { loans: [], loading: false, error: "" };
 
@@ -42,10 +48,28 @@ const LoansSlice = createSlice({
       .addCase(updateLoan.fulfilled, (state, action) => {
         state.loading = false;
         state.loans = state.loans.map((loan) =>
-          loan._id === action.payload._id ? action.payload : loan
+          loan.loan_id === action.payload.loan_id ? action.payload : loan
         );
       })
       .addCase(updateLoan.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.error.message ||
+          "Something went wrong while updating a loan...";
+      })
+      .addCase(updateLoans.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateLoans.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loans = state.loans.map((loan) => {
+          const updatedLoan = action.payload.find(
+            (updated) => (updated.loan_id = loan.loan_id)
+          );
+          return updatedLoan;
+        });
+      })
+      .addCase(updateLoans.rejected, (state, action) => {
         state.loading = false;
         state.error =
           action.error.message ||
@@ -57,7 +81,7 @@ const LoansSlice = createSlice({
       .addCase(deleteLoan.fulfilled, (state, action) => {
         state.loading = false;
         state.loans = state.loans.filter(
-          (loan) => loan._id !== action.payload._id
+          (loan) => loan.loan_id !== action.payload.loan_id
         );
       })
       .addCase(deleteLoan.rejected, (state, action) => {
@@ -83,7 +107,7 @@ export const SelectLoansWithKeys = createSelector([SelectLoans], (loans) =>
 
 export const SelectLoanById = (loan_id) =>
   createSelector([SelectLoans], (loans) =>
-    loan_id ? loans.find((loan) => loan._id === loan_id) : null
+    loan_id ? loans.find((loan) => loan.loan_id === loan_id) : null
   );
 
 export default LoansSlice.reducer;

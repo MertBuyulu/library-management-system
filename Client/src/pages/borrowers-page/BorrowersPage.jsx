@@ -42,12 +42,12 @@ const BorrowersPage = () => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (!validateSsn(ssn))
+    if (await validateSsn(ssn))
       //dispatch(createBorrower({ ssn, bname, address, phone }));
-      alert("Invalid SSN!!!");
-    else alert("Valid SSN!!!");
+      alert("Valid SSN!!!");
+    else alert("Invalid SSN!!!");
 
     // close the modal pop up page
     toggleModal();

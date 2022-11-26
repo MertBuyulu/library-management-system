@@ -15,25 +15,30 @@ const FinesPage = () => {
   const borrowers = useSelector(SelectBorrowers);
   const fines = useSelector(SelectFines);
   const loans = useSelector(SelectLoans);
-  console.log(loans);
-  console.log(fines);
   // NOT EVERY EFFICIENT BUT WORKS
   const preparedData = borrowers.map((current_borrower) => {
     // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING FILTER
-    let borrowers_loans = loans.filter(
-      (loan) => loan.card_id !== current_borrower.card_id
+    const borrower_loans = loans.filter(
+      (loan) => loan.card_id === current_borrower.card_id
     );
-    let borrower_fines = [];
+
+    const borrower_fines = [];
     // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
-    borrowers_loans.forEach((current_loan) => {
+    borrower_loans.forEach((current_loan) => {
       borrower_fines.push(
         fines.find((fine) => fine.loan_id === current_loan.loan_id)
       );
     });
-    return { ...current_borrower, borrower_fines };
+    // FIND TOTAL FINE AMOUNT FOR A PARTICULAR BORROWER
+    const total_fine_amount = borrower_fines.reduce(
+      (accumulator, { fine_amount }) => accumulator + fine_amount,
+      0
+    );
+    return { ...current_borrower, borrower_fines, total_fine_amount };
   });
 
   console.log(preparedData);
+
   return <div>FinesPage</div>;
 };
 

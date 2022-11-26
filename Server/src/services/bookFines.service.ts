@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import express from "express";
 import { prisma } from "../utils/PrismaClient"
 
+
 // DEFINE TYPES
 interface Fine extends Prisma.finesUncheckedCreateInput {
 
@@ -56,7 +57,6 @@ export const createFine = async (
         const loan_id: string = req.body['loan_id'];
         const fine_amount = Number(req.body['fine_amount']);
         const paid = Boolean(req.body['paid']);
-
 
         const fine: Fine = {
             loan_id: loan_id,

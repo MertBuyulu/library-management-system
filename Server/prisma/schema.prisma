@@ -29,14 +29,14 @@ model book_authors {
 }
 
 model book_loans {
-  loan_id  String   @id @db.VarChar
-  isbn     String   @db.VarChar
-  card_id  String   @db.VarChar
-  date_out DateTime @db.Date
-  due_date DateTime @db.Date
-  date_in  DateTime @db.Date
-  borrower borrower @relation(fields: [card_id], references: [card_id], onDelete: NoAction, onUpdate: NoAction)
-  book     book     @relation(fields: [isbn], references: [isbn], onDelete: NoAction, onUpdate: NoAction)
+  loan_id  String    @id @db.VarChar
+  isbn     String    @db.VarChar
+  card_id  String    @db.VarChar
+  date_out DateTime  @db.Date
+  due_date DateTime  @db.Date
+  date_in  DateTime? @db.Date
+  borrower borrower  @relation(fields: [card_id], references: [card_id], onDelete: NoAction, onUpdate: NoAction)
+  book     book      @relation(fields: [isbn], references: [isbn], onDelete: NoAction, onUpdate: NoAction)
   fines    fines?
 }
 

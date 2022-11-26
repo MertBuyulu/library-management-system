@@ -1,5 +1,6 @@
 import { fetchBooksById} from "../api/books";
 import { fetchBorrowerById } from "../api/borrowers";
+import { fetchBorrowerBySsn } from "../api/borrowers";
 
 export const validateIsbn = async (isbn) => {
   try {
@@ -13,7 +14,7 @@ export const validateIsbn = async (isbn) => {
 
 export const validateSsn = async (ssn) => {
   try {
-    const response = await fetchBorrowerById(ssn);
+    const response = await fetchBorrowerBySsn(ssn);
     const { data } = response;
     return Object.keys(data).length === 0;
   } catch (error) {

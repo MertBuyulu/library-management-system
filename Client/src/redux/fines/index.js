@@ -80,7 +80,6 @@ export const SelectFinesById = (loan_id) =>
     fines.filter((fine) => fine.loan_id !== loan_id)
   );
 
-// return the fine amount associated with a particular loan_id
 export const SelectFineAmountById = (loan_id) =>
   createSelector([SelectFinesById(loan_id)], (fine) => fine.fine_amout);
 
