@@ -1,15 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // components
-import { Table, Tag } from "antd";
+import { Table, Tag, message, Input } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBorrowersWithKeys } from "../../redux/borrowers";
 import { SelectFines, filter as FilterFines } from "../../redux/fines";
 import { SelectLoans } from "../../redux/loans";
-import { getFines } from "../../redux/fines/fines.utils";
+import {
+  getFines,
+  refreshFines,
+  updateFine,
+} from "../../redux/fines/fines.utils";
 
-// validation method
+// validation methods
 import { validatePayment, validatMultiplePayments } from "../../utils/utils";
 
 const FinesPage = () => {
@@ -19,11 +23,13 @@ const FinesPage = () => {
     dispatch(getFines());
   }, [dispatch]);
 
-  const borrowers = useSelector(SelectBorrowersWithKeys);
   const fines = useSelector(SelectFines);
   const loans = useSelector(SelectLoans);
+  const borrowers = useSelector(SelectBorrowersWithKeys);
 
   const [filtered, setFiltered] = useState(false);
+  const [clickedSinglePay, setclickedSingePay] = useState(false);
+  const [clickedFullPay, setclickedFullPay] = useState(false);
 
   const outerTableData = borrowers.map((current_borrower) => {
     // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING FILTER
@@ -50,27 +56,39 @@ const FinesPage = () => {
     return { ...current_borrower, borrower_fines, total_fine_amount };
   });
 
-  const handleSinglePayment = async ({ loan_id }) => {
-    if (await validatePayment(loan_id)) {
-      alert("SUCCESS!!!");
+  const startSinglePayment = async (fine) => {
+    if (await validatePayment(fine.loan_id)) {
+      setclickedSingePay(true);
     } else {
-      alert("FAILUREEE!!!");
+      error();
     }
   };
 
-  const handleMultiplePayment = async ({ borrower_fines }) => {
+  // TODO FINISH THIS FUNC
+  const processSinglePayment = () => {
+    success();
+    setclickedSingePay(false);
+  };
+
+  const startBatchPayment = async ({ borrower_fines }) => {
     const loan_ids = borrower_fines.map((fine) => {
       return fine.loan_id;
     });
     if (await validatMultiplePayments(loan_ids)) {
-      alert("SUCCESS!!!");
+      setclickedFullPay(true);
     } else {
-      alert("FAILUREEE!!!");
+      error();
     }
   };
 
+  // TODO FINISH THIS FUNC
+  const processBatchPayment = () => {
+    success();
+    setclickedFullPay(false);
+  };
+
   const handleTableRefresh = () => {
-    console.log("table is refreshed!!");
+    dispatch(refreshFines());
   };
 
   const handleFiltering = () => {
@@ -81,6 +99,20 @@ const FinesPage = () => {
   const handleReset = () => {
     dispatch(getFines());
     setFiltered(false);
+  };
+
+  const success = () =>
+    message.info("Action in progress...", 2, () =>
+      message.success("Success: Payment went through!!", 3)
+    );
+
+  const error = () => {
+    message.info("Action in progress...", 2, () =>
+      message.error(
+        "Error: Payment not allowed...Try again later when the book is returned.",
+        3
+      )
+    );
   };
 
   const expandedRowRender = (record) => {
@@ -115,12 +147,34 @@ const FinesPage = () => {
         dataIndex: "action",
         key: 4,
         align: "center",
-        width: 150,
-        render: (_, record) => (
-          <CustomButton onClick={() => handleSinglePayment(record)} small>
-            Pay Fine
-          </CustomButton>
-        ),
+        width: !clickedSinglePay ? 150 : 200,
+        render: (_, record) =>
+          record.fine_amount ? (
+            !clickedSinglePay ? (
+              <CustomButton onClick={() => startSinglePayment(record)} small>
+                Pay Fine
+              </CustomButton>
+            ) : (
+              <Input.Group compact>
+                <Input
+                  style={{
+                    height: 30,
+                    width: "55%",
+                  }}
+                  placeholder={`$${record.fine_amount}`}
+                  allowClear
+                />
+                <CustomButton
+                  extra_small
+                  onClick={() => processSinglePayment(record)}
+                >
+                  Submit
+                </CustomButton>
+              </Input.Group>
+            )
+          ) : (
+            <span>NO PAYMENT DUE</span>
+          ),
       },
     ];
     return (
@@ -133,6 +187,7 @@ const FinesPage = () => {
     );
   };
 
+  // TODO STYLE THE SPANS
   const columns = [
     {
       title: "Borrower ID",
@@ -166,12 +221,34 @@ const FinesPage = () => {
       dataIndex: "action",
       key: 5,
       align: "center",
-      width: 150,
-      render: (_, record) => (
-        <CustomButton onClick={() => handleMultiplePayment(record)} small>
-          Pay All Fines
-        </CustomButton>
-      ),
+      width: !clickedFullPay ? 150 : 200,
+      render: (_, record) =>
+        record.total_fine_amount ? (
+          !clickedFullPay ? (
+            <CustomButton onClick={() => startBatchPayment(record)} small>
+              Pay All Fines
+            </CustomButton>
+          ) : (
+            <Input.Group compact>
+              <Input
+                style={{
+                  height: 30,
+                  width: "55%",
+                }}
+                placeholder={`$${record.total_fine_amount}`}
+                allowClear
+              />
+              <CustomButton
+                extra_small
+                onClick={() => processBatchPayment(record)}
+              >
+                Submit
+              </CustomButton>
+            </Input.Group>
+          )
+        ) : (
+          <span>NO PAYMENT DUE</span>
+        ),
     },
   ];
 
