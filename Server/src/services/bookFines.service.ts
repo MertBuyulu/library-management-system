@@ -121,13 +121,16 @@ export const updateFine = async (req: express.Request, res: express.Response) =>
 
 export const refreshFines = async (req: express.Request, res: express.Response) => {
    console.log("refreshing...")
+   // 1. CHECK WHETHER WE NEED TO CREATE A NEW FINE FOR ANY EXISTING LOAN
+        // 1.1 CREATE NEW FINES
+        // 1.2 CONTINUE IF NO NEED
 
-    // // ERROR HANDLING
-    // if (updatingfine) {
-    //     return res.json(updatingfine)
-    // } else {
-    //     return res.status(400).json({ "Success": "Failure", "Message": "Could not refresh the fines for some reason" })
-    // }
+   // 2. UPDATE STEP 
+        // 2.1 LOAN IS STILL OUT AND NOT PAID [PAID = FALSE] -> UPDATE ITS FINE AMOUNT [(today - due_date) * $0.25]
+        // 2.2 LOAN IS RETURNED BUT NOT PAID [PAID = FALSE] -> DO NOTHING
+        // 2.3 LOAN IS RETURNED AND PAID -> DO NOTHING
+
+    // RETURN ALL FINES [UPDATED/NEW/NOT_UPDATED] AS JSON TO THE CLIENT
 }
 
 

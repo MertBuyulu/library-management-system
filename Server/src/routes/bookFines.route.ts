@@ -11,8 +11,8 @@ console.log("[server] Routing bookFines Request")
 finesRouter.get("/", getAllFines);
 finesRouter.get("/:loan_id", getFine);
 finesRouter.post("/", createFine);
+finesRouter.put("/refresh", refreshFines);
 finesRouter.put("/:loan_id", updateFine);
-finesRouter.put("/", refreshFines)
 finesRouter.delete("/:loan_id", deleteFine);
 
 
