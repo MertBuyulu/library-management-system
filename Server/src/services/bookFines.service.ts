@@ -131,7 +131,6 @@ export const updateFines = async (req: express.Request, res: express.Response) =
     // FETCH THE UPDATED FINES
     const updatedFines = await prisma.fines.findMany()
 
-    console.log(updatedFines)
         if (updatedFines) {
             return res.json(updatedFines);
         } else {
@@ -142,9 +141,22 @@ export const updateFines = async (req: express.Request, res: express.Response) =
 
 export const refreshFines = async (req: express.Request, res: express.Response) => {
    console.log("refreshing...")
-   // 1. CHECK WHETHER WE NEED TO CREATE A NEW FINE FOR ANY EXISTING LOAN
-        // 1.1 CREATE NEW FINES
-        // 1.2 CONTINUE IF NO NEED
+
+   const {date} = req.body
+
+   // STEP 1: FIND ALL BOOK LOANS THAT HAVEN'T BEEN RETURNED AS OF TODAY
+   const loans_not_returned = await prisma.book_loans.findMany({
+         where : {date_in: null},
+   })
+
+   // STEP 2: FIND ALL "LATE" BOOK LOANS THAT HAVEN'T BEEN RETURNED AS OF TODAY
+   const late_loans_not_returned = loans_not_returned.filter((loan) => {
+    console.log(loan.due_date)
+    console.log(loan.due_date < date)
+    return String(loan.due_date) < date
+   })
+
+   
 
    // 2. UPDATE STEP 
         // 2.1 LOAN IS STILL OUT AND NOT PAID [PAID = FALSE] -> UPDATE ITS FINE AMOUNT [(today - due_date) * $0.25]

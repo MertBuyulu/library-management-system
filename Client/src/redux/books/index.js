@@ -70,12 +70,9 @@ const BooksSlice = createSlice({
   },
 });
 
-export function BooksSearchBar() {
-  return <Search />;
-}
 export const SelectBooks = (state) => state.books.books;
 
-export const SelectBookssWithKeys = createSelector([SelectBooks], (books) =>
+export const SelectBooksWithKeys = createSelector([SelectBooks], (books) =>
   books.map((book, index) => {
     return { ...book, key: index + 1 };
   })

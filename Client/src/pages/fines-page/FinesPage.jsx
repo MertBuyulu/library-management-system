@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 // components
 import { Table, Tag, message, Input } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
@@ -31,8 +32,9 @@ const FinesPage = () => {
   const borrowers = useSelector(SelectBorrowersWithKeys);
 
   const [filtered, setFiltered] = useState(false);
+  const [dayCount, setDayCount] = useState(1);
   const [enteredAmount, setEnteredAmount] = useState(0);
-  
+
   // EDITING KEY DOES NOT WORK.
   //const [editingKey, setEditingKey] = useState(0);
   const [clickedFullPay, setclickedFullPay] = useState(false);
@@ -45,7 +47,7 @@ const FinesPage = () => {
       (loan) => loan.card_id === current_borrower.card_id
     );
     let borrower_fines = [];
-    
+
     // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
     borrower_loans.forEach((current_loan) => {
       const fine = fines.find((fine) => fine.loan_id === current_loan.loan_id);
@@ -69,7 +71,6 @@ const FinesPage = () => {
   });
 
   const startSinglePayment = async (fine) => {
-    //setEditingKey(fine.key);
     if (await validatePayment(fine.loan_id)) {
       setclickedSingePay(true);
     } else {
@@ -117,7 +118,10 @@ const FinesPage = () => {
   };
 
   const handleTableRefresh = () => {
-    dispatch(refreshFines());
+    const today = moment().add(dayCount, "day");
+    console.log(today);
+    dispatch(refreshFines({ date: today }));
+    setDayCount(dayCount + 1);
   };
 
   const handleFiltering = () => {
@@ -167,7 +171,7 @@ const FinesPage = () => {
   const errorMultipleFines = (card_id) => {
     message.info("Action in progress...", 2, () =>
       message.error(
-        `Error: Payment not allowed... One or more books associated with Borrower ID ${card_id} has been returned yet.`,
+        `Error: Payment not allowed... One or more books associated with Borrower ID ${card_id} have not been returned yet.`,
         3
       )
     );
@@ -231,7 +235,9 @@ const FinesPage = () => {
               </Input.Group>
             )
           ) : (
-            <span>NO PAYMENT DUE</span>
+            <Tag style={{ fontSize: 13, padding: 5 }} color="default">
+              NO PAYMENT DUE
+            </Tag>
           ),
       },
     ];
@@ -306,7 +312,9 @@ const FinesPage = () => {
             </Input.Group>
           )
         ) : (
-          <span>NO PAYMENT DUE</span>
+          <Tag style={{ fontSize: 13, padding: 5 }} color="default">
+            NO PAYMENT DUE
+          </Tag>
         ),
     },
   ];

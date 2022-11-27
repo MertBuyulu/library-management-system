@@ -76,6 +76,14 @@ const AuthorsSlice = createSlice({
 
 export const SelectAuthors = (state) => state.authors.authors;
 
+export const SelectAuthorsWithKeys = createSelector(
+  [SelectAuthors],
+  (authors) =>
+    authors.map((author, index) => {
+      return { ...author, key: index + 1 };
+    })
+);
+
 export const SelectAuthorCount = createSelector([SelectAuthors], (authors) => {
   return authors.reduce((accumulator) => accumulator + 1, 0);
 });

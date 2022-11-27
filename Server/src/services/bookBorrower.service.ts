@@ -1,5 +1,4 @@
 import express from "express";
-import { REPL_MODE_SLOPPY } from "repl";
 import { prisma } from "../utils/PrismaClient"
 
 // DEFINE TYPES
@@ -31,15 +30,10 @@ export const getBorrower = async (
     req: express.Request,
     res: express.Response
 ) => {
-    // DEFINE GIVEN SSN 
-    const givenSSN = Boolean(req.query["givenSSN"])
-
-    // DEFINE BORROWER
-    var borrower;
 
     const { card_id } = req.params;
 
-    borrower = await prisma.borrower.findUnique({
+    const borrower = await prisma.borrower.findUnique({
         where: {
             card_id: card_id,
         },
@@ -48,7 +42,8 @@ export const getBorrower = async (
     if (borrower) {
         return res.json(borrower);
     } else {
-        return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
+        //  RETURN EMPTY JSON OBJECT IF THE BORROWER WITH THE GIVEN CARD_ID DOES NOT EXIST IN THE BORROWER TABLE
+        return res.json({});
     }
 
 };
@@ -85,7 +80,7 @@ export const createBorrower = async (
 ) => {
     try {
         // GET VARIABLES FROM BODY
-        const ssn = req.body['ssn'];
+        const ssn = Number(req.body['ssn']);
         const bname = req.body['bname'];
         const address = req.body['address'];
         const phone = req.body['phone'];
@@ -98,6 +93,8 @@ export const createBorrower = async (
             address: address,
             phone: phone,
         };
+
+        console.log(borrower)
 
         // OUTPUT TO CONSOLE
         console.log('[server] Creating borrower ' + card_id)
@@ -174,8 +171,6 @@ export const updateBorrower = async (
         }
     }
 };
-
-
 
 // UTILS
 

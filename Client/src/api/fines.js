@@ -8,4 +8,4 @@ export const updateFine = (id, updatedFine) =>
   axios.put(`${url}/${id}`, updatedFine);
 export const updateFines = (updatedFines) => axios.put(`${url}`, updatedFines);
 export const deleteFine = (id) => axios.delete(`${url}/${id}`);
-export const refreshFines = () => axios.put(`${url}/refresh`);
+export const refreshFines = (date) => axios.put(`${url}/refresh`, date);

@@ -10,14 +10,17 @@ export const getFines = createAsyncThunk("posts/getFines", async () => {
   }
 });
 
-export const refreshFines = createAsyncThunk("posts/refreshFines", async () => {
-  try {
-    const response = await api.refreshFines();
-    return response.data;
-  } catch (error) {
-    return error.message;
+export const refreshFines = createAsyncThunk(
+  "posts/refreshFines",
+  async (date) => {
+    try {
+      const response = await api.refreshFines(date);
+      return response.data;
+    } catch (error) {
+      return error.message;
+    }
   }
-});
+);
 
 export const createFine = createAsyncThunk("posts/createFine", async (loan) => {
   try {

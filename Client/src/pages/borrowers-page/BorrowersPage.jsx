@@ -5,6 +5,7 @@ import "./BorrowersPage.styles.scss";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import Table from "../../components/table/Table.component";
+import { message } from "antd";
 import Modal from "../../components/modal/Modal";
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -42,28 +43,33 @@ const BorrowersPage = () => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const on
-   = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
-    // ALERT MESSAGE
-    var alertMessage = ""
-    var toAlert = false
-
-    // CHECK SSN TO BE A NUMBER
-    if (Number.isInteger(Number.parseInt(ssn)))
-      alert("SSN IS A NUMBER")
-      
-    // if (await validateSsn(ssn))
-    //   //dispatch(createBorrower({ ssn, bname, address, phone }));
-    //   alert("Valid SSN!!!");
-
-    else alert("Invalid SSN!!!");
+    if (await validateSsn(ssn)) {
+      dispatch(createBorrower({ ssn, bname, address, phone }));
+      success();
+    } else {
+      error(ssn);
+    }
 
     // close the modal pop up page
     toggleModal();
     // reset the state
     setState({ ...initialState });
+  };
+
+  const success = () =>
+    message.info("Request in progress...", 2, () =>
+      message.success(`Success: New borrower is added to the system!!`, 3)
+    );
+
+  const error = (ssn) => {
+    message.info("Request in progress...", 2, () =>
+      message.error(
+        `Error: Request denied... ${ssn} is already in use. Please enter a unique ssn number.`,
+        3
+      )
+    );
   };
 
   const columns = [
@@ -78,7 +84,7 @@ const BorrowersPage = () => {
     <div className="borrowers-page">
       <div className="space-y-1">
         <Modal toggleModal={toggleModal} modal={modal}>
-          <form onSubmit={on}>
+          <form onSubmit={onSubmit}>
             <FormInput
               name="ssn"
               type="text"

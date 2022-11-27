@@ -4,7 +4,7 @@ import moment from "moment";
 import "./LoansPage.styles.scss";
 // componenents
 import { SearchOutlined } from "@ant-design/icons";
-import { Table, Input, Space } from "antd";
+import { Table, Input, Space, Tag } from "antd";
 import Highlighter from "react-highlight-words";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 // redux
@@ -34,9 +34,8 @@ const LoansPage = () => {
   });
 
   const handleSingleCheckIn = (record) => {
-    // CST IS THE DEFAULT TIME ZONE
-    const today = moment().format();
-    console.log(today);
+    // UTC IS THE DEFAULT TIME ZONE
+    const today = moment();
     const { loan_id, card_id, isbn, date_out, date_in, due_date } = record;
     const updatedLoan = {
       ...{ loan_id, isbn, card_id, date_out, due_date, date_in },
@@ -54,7 +53,7 @@ const LoansPage = () => {
       loans.find((loan) => loan.key === key)
     );
 
-    const today = moment().format();
+    const today = moment();
     const updatedLoans = selectedLoans.map((loan) => {
       return { loan_id: loan.loan_id, date_in: today };
     });
@@ -75,7 +74,7 @@ const LoansPage = () => {
     onChange: onSelectChange,
     // "2022-11-24T00:00:00.000Z" IS BEING USED FOR TESTING PURPOSES ONLY
     getCheckboxProps: (record) => {
-      if (record.date_in > "2022-11-24T00:00:00.000Z")
+      if (record.date_in !== null)
         return {
           disabled: true,
         };
@@ -228,6 +227,11 @@ const LoansPage = () => {
       key: 7,
       align: "center",
       width: 150,
+      sorter: (a, b) => {
+        a = a.date_in || "";
+        b = b.date_in || "";
+        return a.localeCompare(b);
+      },
     },
     {
       title: "Action",
@@ -236,17 +240,16 @@ const LoansPage = () => {
       align: "center",
       width: 150,
       // CONDITIONALLY RENDER BUTTON
-      render: (_, record) => (
-        // !record.date_in ? (
-        <CustomButton onClick={() => handleSingleCheckIn(record)} small>
-          Check in now
-        </CustomButton>
-      ),
-      // ) : (
-      //   <CustomButton flag={true} small>
-      //     Checked in
-      //   </CustomButton>
-      // ),
+      render: (_, record) =>
+        !record.date_in ? (
+          <CustomButton onClick={() => handleSingleCheckIn(record)} small>
+            Check in now
+          </CustomButton>
+        ) : (
+          <Tag style={{ fontSize: 13, padding: 5 }} color="default">
+            ALREADY CHECKED IN
+          </Tag>
+        ),
     },
   ];
 

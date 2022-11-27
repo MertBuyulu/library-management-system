@@ -47,7 +47,7 @@ export const getBookLoan = async (
     }
 };
 
-// TODO: THE RESULT IS NOT FILTERED BASED ON THE DATE_IN FIELD VALUE
+// THE RESULT IS NOT FILTERED BASED ON THE DATE_IN FIELD VALUE
 export const getSomeBookLoans = async (
     req: express.Request,
     res: express.Response
@@ -59,10 +59,11 @@ export const getSomeBookLoans = async (
     const book_loans = await prisma.book_loans.findMany({
         where: {
             loan_id: { in: SelectedIDs },
-            date_in: undefined
+            date_in: null
         },
     });
 
+    console.log(book_loans)
     if (book_loans) {
         return res.json(book_loans);
     }
@@ -73,62 +74,43 @@ export const getSomeBookLoans = async (
     }
 };
 
-// // DEFINE CREATE BOOK LOAN FUNCTION
-// export const createBookLoans = async (
-//     req: express.Request,
-//     res: express.Response
-// ) => {
-//     type loanInput = {
-//         isbn: string,
-//         card_id: string,
-//         date_out: Date,
-//         due_date: Date,
-//     }
+export const getActiveBookLoansCount = async (
+    req: express.Request,
+    res: express.Response
+) => {
 
-//     try {
-//         var data: loanInput[] = Array.from(req.body)
-//         var length = req.body.length
-//     } catch {
-//         console.log("Data is not in list form.")
-//         var data: loanInput[] = []
-//         data.push(req.body)
-//     }
+    try {
+    const {card_id} = req.params
+    
+    const activeLoanCount =await prisma.book_loans.count({ where: {card_id: card_id, date_in: null}})
 
-//     try {
+    return res.json({active_loans: activeLoanCount});
+    
+    } catch {
+        return res.status(400).json({ "Success": "Failure", "Message": "Couting active loans of borrower couldn't be completed due to some error." })
+    }
+};
 
-//         var bookLoanList = data.map((loan: loanInput) => {
-//             return (
-//                 {
-//                     loan_id: uuidv4(),
-//                     isbn: loan["isbn"],
-//                     card_id: loan["card_id"],
-//                     date_out: new Date(loan["date_out"]),
-//                     due_date: new Date(loan["due_date"]),
-//                     date_in: null
-//                 }
-//             )
-//         })
 
-//         // CREATE IN DATABASE
-//         const bookLoanCreate = await prisma.book_loans.createMany({
-//             data: bookLoanList
-//         });
+export const getActiveBookLoanByISBN = async (
+    req: express.Request,
+    res: express.Response
+) => {
 
-//         if (bookLoanCreate.count) {
-//             console.log('[server] Created Book Loan(s) ' + bookLoanCreate.count)
-//             return res.json('[server] Created Book Loan(s) ' + bookLoanCreate.count);
-//         }
-//         else {
-//             console.log(bookLoanCreate)
-//             return res.status(404).json({ "Success": "Failure", "Message": "Book Loan could not be created." })
-//         }
+    try {
+    const {isbn} = req.params
+    
+    const activeLoan =await prisma.book_loans.findFirst({ where: {isbn: isbn, date_in: null}})
 
-//     } catch (err: unknown) {
-//         if (err instanceof Error) {
-//             return res.status(409).json({ message: err.message });
-//         }
-//     }
-// };
+    if(activeLoan)
+        return res.json({active_loan: activeLoan})
+    else 
+        return res.json({})
+    
+    } catch {
+        return res.status(400).json({ "Success": "Failure", "Message": "Couting active loans of borrower couldn't be completed due to some error." })
+    }
+};
 
 // DEFINE CREATE BOOK LOAN FUNCTION
 export const createBookLoan = async (

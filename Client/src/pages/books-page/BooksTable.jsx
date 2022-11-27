@@ -1,6 +1,6 @@
-import React from "react"
+import React from "react";
 // components
-import { Table } from "antd"
+import { Table } from "antd";
 
 // const columns = [
 //     {
@@ -71,49 +71,47 @@ import { Table } from "antd"
 // ];
 
 const columns = [
-    {
-        title: "ISBN",
-        dataIndex: "isbn",
-        key: 1,
-        // align: "center",
-        // width: 150,
-    },
-    { title: "Title", dataIndex: "title", key: 2 },
-    {
-        title: "Author Name",
-        dataIndex: "Author",
-        key: 3,
-        // align: "center",
-        // width: 150,
-    },
+  {
+    title: "ISBN",
+    dataIndex: "isbn",
+    key: 1,
+    align: "center",
+  },
+  { title: "Title", dataIndex: "title", key: 2 },
+  {
+    title: "Authors",
+    dataIndex: "authors",
+    key: 3,
+    align: "center",
+  },
 ];
 
 const BooksTable = (props) => {
-    const { books } = props
-    const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
+  const { books } = props;
+  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
 
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: (e) => setSelectedRowKeys(e),
-        // "2022-11-24T00:00:00.000Z" IS BEING USED FOR TESTING PURPOSES ONLY
-        // getCheckboxProps: (record) => {
-        //   if (record.date_in > "2022-11-24T00:00:00.000Z")
-        //     return {
-        //       disabled: true,
-        //     };
-        // },
-    };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (e) => setSelectedRowKeys(e),
+    // "2022-11-24T00:00:00.000Z" IS BEING USED FOR TESTING PURPOSES ONLY
+    // getCheckboxProps: (record) => {
+    //   if (record.date_in > "2022-11-24T00:00:00.000Z")
+    //     return {
+    //       disabled: true,
+    //     };
+    // },
+  };
 
-    return (
-        <Table
-            dataSource={books}
-            columns={columns}
-            pagination={{
-                position: ["bottomCenter"],
-            }}
-            rowSelection={rowSelection}
-        />
-    )
-}
+  return (
+    <Table
+      dataSource={books}
+      columns={columns}
+      pagination={{
+        position: ["bottomCenter"],
+      }}
+      rowSelection={rowSelection}
+    />
+  );
+};
 
-export default BooksTable
+export default BooksTable;
