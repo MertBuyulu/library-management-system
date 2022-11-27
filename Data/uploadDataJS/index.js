@@ -15,10 +15,10 @@ var borrowers = await csv().fromFile("borrowers.csv")
 var books = await csv().fromFile("books.csv")
 
 // // ADD ALL BORROWERS
-await addAllBorrowers(borrowers)
+// await addAllBorrowers(borrowers)
 
 // // ADD ALL BOOKS
-await addAllBooks(books)
+// await addAllBooks(books)
 
 // ADD ALL AUTHORS (AUTHOR INFORMATION IS STORED INSIDE BOOKS.CSV)
 await addAllAuthors(books)
