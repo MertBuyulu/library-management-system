@@ -4,9 +4,7 @@ import "./BorrowersPage.styles.scss";
 // components
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
-import Table from "../../components/table/Table.component";
-import { message } from "antd";
-import Modal from "../../components/modal/Modal";
+import { message, Table, Drawer } from "antd";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { createBorrower } from "../../redux/borrowers/borrowers.utils";
@@ -73,17 +71,25 @@ const BorrowersPage = () => {
   };
 
   const columns = [
-    { heading: "Borrower ID", value: "card_id", key: 1 },
-    { heading: "Ssn", value: "ssn", key: 2 },
-    { heading: "Full Name", value: "bname", key: 3 },
-    { heading: "Home Adress", value: "address", key: 4 },
-    { heading: "Phone", value: "phone", key: 5 },
+    { title: "Borrower ID", dataIndex: "card_id", key: 1 },
+    { title: "Ssn", dataIndex: "ssn", key: 2 },
+    { title: "Full Name", dataIndex: "bname", key: 3 },
+    { title: "Home Adress", dataIndex: "address", key: 4 },
+    { title: "Phone", dataIndex: "phone", key: 5 },
   ];
 
   return (
     <div className="borrowers-page">
       <div className="space-y-1">
-        <Modal toggleModal={toggleModal} modal={modal}>
+        <CustomButton onClick={toggleModal} wide>
+          ADD BORROWER
+        </CustomButton>
+        <Drawer
+          title="Add Borrower"
+          placement="right"
+          onClose={toggleModal}
+          open={modal}
+        >
           <form onSubmit={onSubmit}>
             <FormInput
               name="ssn"
@@ -122,10 +128,10 @@ const BorrowersPage = () => {
               <CustomButton onClick={onCancel}>CANCEL</CustomButton>
             </div>
           </form>
-        </Modal>
+        </Drawer>
       </div>
       <div>
-        <Table data={borrowers} columns={columns} />
+        <Table dataSource={borrowers} columns={columns} />
       </div>
     </div>
   );

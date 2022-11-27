@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // styles
 import "./BooksPage.styles.scss";
 // components
-import { Drawer, message, Modal } from "antd";
+import { Drawer, message } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import BooksTable from "./BooksTable";
