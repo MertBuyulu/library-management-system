@@ -42,11 +42,22 @@ const BorrowersPage = () => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const onSubmit = async (e) => {
+  const on
+   = async (e) => {
     e.preventDefault();
-    if (await validateSsn(ssn))
-      //dispatch(createBorrower({ ssn, bname, address, phone }));
-      alert("Valid SSN!!!");
+
+    // ALERT MESSAGE
+    var alertMessage = ""
+    var toAlert = false
+
+    // CHECK SSN TO BE A NUMBER
+    if (Number.isInteger(Number.parseInt(ssn)))
+      alert("SSN IS A NUMBER")
+      
+    // if (await validateSsn(ssn))
+    //   //dispatch(createBorrower({ ssn, bname, address, phone }));
+    //   alert("Valid SSN!!!");
+
     else alert("Invalid SSN!!!");
 
     // close the modal pop up page
@@ -65,9 +76,9 @@ const BorrowersPage = () => {
 
   return (
     <div className="borrowers-page">
-      <div>
+      <div className="space-y-1">
         <Modal toggleModal={toggleModal} modal={modal}>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={on}>
             <FormInput
               name="ssn"
               type="text"
