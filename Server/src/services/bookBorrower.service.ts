@@ -79,25 +79,17 @@ export const getBorrowerBySSN = async (
 
 };
 
-
-// DEFINE GET NEW BORROWER ID 
-export const getNewBorrowerID = () => {
-
-    return
-}
-
-
 export const createBorrower = async (
     req: express.Request,
     res: express.Response
 ) => {
     try {
         // GET VARIABLES FROM BODY
-        const card_id = req.body['card_id'];
         const ssn = req.body['ssn'];
         const bname = req.body['bname'];
         const address = req.body['address'];
         const phone = req.body['phone'];
+        const card_id = await getNewBorrowerID();
 
         const borrower: Borrower = {
             card_id: card_id,
@@ -182,3 +174,15 @@ export const updateBorrower = async (
         }
     }
 };
+
+
+
+// UTILS
+
+// GET NEW BORROWER ID 
+export const getNewBorrowerID = async () => {
+    // DEFINE NUMBER OF CURRENT BORROWERS
+    const currNumBorrowers: number = await prisma.borrower.count()
+
+    return "ID" + String(currNumBorrowers + 1).padStart(6, "0")
+}
