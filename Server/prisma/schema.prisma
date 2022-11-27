@@ -32,9 +32,9 @@ model book_loans {
   loan_id  String    @id @db.VarChar
   isbn     String    @db.VarChar
   card_id  String    @db.VarChar
-  date_out DateTime  @db.Date
-  due_date DateTime  @db.Date
-  date_in  DateTime? @db.Date
+  date_out DateTime  @db.Timestamp(6)
+  due_date DateTime  @db.Timestamp(6)
+  date_in  DateTime? @db.Timestamp(6)
   borrower borrower  @relation(fields: [card_id], references: [card_id], onDelete: NoAction, onUpdate: NoAction)
   book     book      @relation(fields: [isbn], references: [isbn], onDelete: NoAction, onUpdate: NoAction)
   fines    fines?

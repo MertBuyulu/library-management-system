@@ -53,12 +53,12 @@ export const getSomeBookLoans = async (
     res: express.Response
 ) => {
 
-   const SelectedIDs: string[] = Array.from(req.body)
+    const SelectedIDs: string[] = Array.from(req.body)
 
-   // RETURN ALL BOOK_LOANS TUPLES WHERE THE DATE_IN VALUE IS SET TO NULL/UNDEFINED
+    // RETURN ALL BOOK_LOANS TUPLES WHERE THE DATE_IN VALUE IS SET TO NULL/UNDEFINED
     const book_loans = await prisma.book_loans.findMany({
         where: {
-            loan_id: {in: SelectedIDs},
+            loan_id: { in: SelectedIDs },
             date_in: undefined
         },
     });
@@ -66,57 +66,106 @@ export const getSomeBookLoans = async (
     if (book_loans) {
         return res.json(book_loans);
     }
-    else if (book_loans === null){
+    else if (book_loans === null) {
         return res.json({})
     } else {
         return res.status(400).json({ message: "[server] Could not retrieve selected book loans" });
     }
 };
 
-// DEFINE GET BORROWER
+// // DEFINE CREATE BOOK LOAN FUNCTION
+// export const createBookLoans = async (
+//     req: express.Request,
+//     res: express.Response
+// ) => {
+//     type loanInput = {
+//         isbn: string,
+//         card_id: string,
+//         date_out: Date,
+//         due_date: Date,
+//     }
+
+//     try {
+//         var data: loanInput[] = Array.from(req.body)
+//         var length = req.body.length
+//     } catch {
+//         console.log("Data is not in list form.")
+//         var data: loanInput[] = []
+//         data.push(req.body)
+//     }
+
+//     try {
+
+//         var bookLoanList = data.map((loan: loanInput) => {
+//             return (
+//                 {
+//                     loan_id: uuidv4(),
+//                     isbn: loan["isbn"],
+//                     card_id: loan["card_id"],
+//                     date_out: new Date(loan["date_out"]),
+//                     due_date: new Date(loan["due_date"]),
+//                     date_in: null
+//                 }
+//             )
+//         })
+
+//         // CREATE IN DATABASE
+//         const bookLoanCreate = await prisma.book_loans.createMany({
+//             data: bookLoanList
+//         });
+
+//         if (bookLoanCreate.count) {
+//             console.log('[server] Created Book Loan(s) ' + bookLoanCreate.count)
+//             return res.json('[server] Created Book Loan(s) ' + bookLoanCreate.count);
+//         }
+//         else {
+//             console.log(bookLoanCreate)
+//             return res.status(404).json({ "Success": "Failure", "Message": "Book Loan could not be created." })
+//         }
+
+//     } catch (err: unknown) {
+//         if (err instanceof Error) {
+//             return res.status(409).json({ message: err.message });
+//         }
+//     }
+// };
+
+// DEFINE CREATE BOOK LOAN FUNCTION
 export const createBookLoan = async (
     req: express.Request,
     res: express.Response
 ) => {
-    type loanInput = {
-        isbn: string,
-        card_id: string,
-        date_out: Date,
-        due_date: Date,
-    }
 
     try {
-        var data: loanInput[] = Array.from(req.body)
-        var length = req.body.length
-    } catch {
-        console.log("Data is not in list form.")
-        var data: loanInput[] = []
-        data.push(req.body)
-    }
+        // DEFINE DATE BOOK CHECKED OUT
+        const date_out = new Date()
 
-    try {
+        // DEFINE DUE DATE OF BOOK
+        var due_date = new Date()
+        due_date.setDate(date_out.getDate() + 14)
 
-        var bookLoanList = data.map((loan: loanInput) => {
-            return (
-                {
-                    loan_id: uuidv4(),
-                    isbn: loan["isbn"],
-                    card_id: loan["card_id"],
-                    date_out: new Date(loan["date_out"]),
-                    due_date: new Date(loan["due_date"]),
-                    date_in: new Date()
-                }
-            )
-        })
+
+
+        // DEFINE BOOK ITSELF
+        var bookLoan: Prisma.book_loansUncheckedCreateInput = {
+            loan_id: uuidv4(),
+            isbn: req.body["isbn"],
+            card_id: req.body["card_id"],
+            date_out: date_out,
+            due_date: due_date,
+            date_in: null
+        }
+
 
         // CREATE IN DATABASE
-        const bookLoanCreate = await prisma.book_loans.createMany({
-            data: bookLoanList
+        const bookLoanCreate = await prisma.book_loans.create({
+            data: bookLoan
         });
 
-        if (bookLoanCreate.count) {
-            console.log('[server] Created Book Loan(s) ' + bookLoanCreate.count)
-            return res.json('[server] Created Book Loan(s) ' + bookLoanCreate.count);
+        // OUTPUT BASED ON SUCCESS
+        if (bookLoanCreate) {
+            console.log('[server] Created Book Loan ' + bookLoanCreate.loan_id)
+            return res.json(bookLoanCreate);
         }
         else {
             console.log(bookLoanCreate)
@@ -177,7 +226,7 @@ export const updateBookLoans = async (req: express.Request, res: express.Respons
         loan_id: string,
         date_in: Date,
     }
-    
+
     // DEFINE DATA
     const data: updateLoan[] = Array.from(req.body)
 
