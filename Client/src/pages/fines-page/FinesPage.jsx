@@ -18,18 +18,21 @@ import {
 import { validatePayment, validatMultiplePayments } from "../../utils/utils";
 
 const FinesPage = () => {
+  // DISPATCH WILL ALLOW FOR ACTIONS TO CHANGE STORE
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getFines());
   }, [dispatch]);
 
+  // SELECTORS WILL GET THE DATA FROM THE STORE
   const fines = useSelector(SelectFines);
   const loans = useSelector(SelectLoans);
   const borrowers = useSelector(SelectBorrowersWithKeys);
 
   const [filtered, setFiltered] = useState(false);
   const [enteredAmount, setEnteredAmount] = useState(0);
+  
   // EDITING KEY DOES NOT WORK.
   //const [editingKey, setEditingKey] = useState(0);
   const [clickedFullPay, setclickedFullPay] = useState(false);
@@ -42,6 +45,7 @@ const FinesPage = () => {
       (loan) => loan.card_id === current_borrower.card_id
     );
     let borrower_fines = [];
+    
     // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
     borrower_loans.forEach((current_loan) => {
       const fine = fines.find((fine) => fine.loan_id === current_loan.loan_id);
