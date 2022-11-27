@@ -42,13 +42,33 @@ const BooksPage = () => {
   const [state, setState] = useState(initialState);
   const { isbn, title, author } = state;
 
+  // DEFINE BOOKS TO DISPLAY
+  const [booksDisplayed, setBooksDisplayed] = useState(books)
+
+  console.log(booksDisplayed[0])
+
   const onChange = (e) => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const handleSearchChange = (search) => {
-    console.log(search)
-  }
+  const handleChange = (event) => {
+    event.preventDefault();
+    setSearchContent(event.target.value)
+    if (event.target.value.length > 0){
+      var result = books.filter((bookRow) => {
+        if(bookRow["title"].includes(event.target.value)  || bookRow["isbn"].includes(event.target.value)){
+          return true
+        }else{
+          return false
+        }
+      })
+
+      setBooksDisplayed(result)
+    }
+    else{
+      setBooksDisplayed(books)
+    }
+}
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
@@ -78,29 +98,23 @@ const BooksPage = () => {
     setState({ ...initialState });
   };
 
-
-  const columns = [
-    { heading: "ISBN", value: "isbn", key: 1 },
-    { heading: "Title", value: "title", key: 2 },
-    // { heading: "Author", value: "author", key: 3 },
-  ];
-
   return (
     <div className="books-page">
-      <div className={"flex flex-col space-y-1"}>
-        <div className={"justify-center content-center"}>
-        {/* <Search onChange={handleSearchChange} /> */}
-        </div>
+        <input
+        onChange={handleChange}
+        />
+        
+        {/* <Search searchContent={searchContent} /> */}
         <CustomButton
           onClick={() => {
             toggleModal()
           }}
-        >
+          >
           {" "}
           Add Book
         </CustomButton>
-        <BooksTable books={books} />
-      </div>
+        <BooksTable books={booksDisplayed} />
+
       <Drawer
       title="Add Book" placement="right" onClose={toggleModal} open={modalOpen}
       >
