@@ -8,6 +8,17 @@ module.exports = {
   },
     plugins: [
         require('flowbite/plugin')
-    ]
+    ],
 
+  variants: {
+      extend: {
+          display: ["group-hover"],
+      },
+  },
+  variants: {
+    extend: {
+        hidden: ["group-hover"],
+    },
+},
 }
+
