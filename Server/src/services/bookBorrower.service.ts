@@ -94,8 +94,6 @@ export const createBorrower = async (
             phone: phone,
         };
 
-        console.log(borrower)
-
         // OUTPUT TO CONSOLE
         console.log('[server] Creating borrower ' + card_id)
 

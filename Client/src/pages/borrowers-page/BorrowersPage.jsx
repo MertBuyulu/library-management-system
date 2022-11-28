@@ -8,7 +8,7 @@ import { message, Table, Drawer } from "antd";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { createBorrower } from "../../redux/borrowers/borrowers.utils";
-import { SelectBorrowers } from "../../redux/borrowers/index";
+import { SelectBorrowersWithKeys } from "../../redux/borrowers/index";
 // validation
 import { validateSsn } from "../../utils/utils";
 
@@ -21,7 +21,7 @@ const initialState = {
 
 const BorrowersPage = () => {
   const dispatch = useDispatch();
-  const borrowers = useSelector(SelectBorrowers);
+  const borrowers = useSelector(SelectBorrowersWithKeys);
 
   const [state, setState] = useState(initialState);
   const [modal, setModal] = useState(false);

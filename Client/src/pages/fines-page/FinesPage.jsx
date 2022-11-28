@@ -40,7 +40,6 @@ const FinesPage = () => {
   const [clickedFullPay, setclickedFullPay] = useState(false);
   const [clickedSinglePay, setclickedSingePay] = useState(false);
 
-  let index = 0;
   const outerTableData = borrowers.map((current_borrower) => {
     // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING FILTER
     const borrower_loans = loans.filter(
@@ -49,12 +48,10 @@ const FinesPage = () => {
     let borrower_fines = [];
 
     // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
-    borrower_loans.forEach((current_loan) => {
+    borrower_loans.forEach((current_loan, index) => {
       const fine = fines.find((fine) => fine.loan_id === current_loan.loan_id);
       if (fine) {
         borrower_fines.push({ ...fine, key: index + 1 });
-        // UPDATE THE INDEX KEY
-        index = index + 1;
       }
     });
 
@@ -119,7 +116,6 @@ const FinesPage = () => {
 
   const handleTableRefresh = () => {
     const today = moment().add(dayCount, "day");
-    console.log(today);
     dispatch(refreshFines({ date: today }));
     setDayCount(dayCount + 1);
   };

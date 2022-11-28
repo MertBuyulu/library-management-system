@@ -12,7 +12,6 @@ import { fetchBookAuthors } from "../../api/bookAuthors";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooksWithKeys } from "../../redux/books/index";
-import { SelectAuthorById } from "../../redux/authors";
 // validation
 import {
   isBorrowerEligible,
@@ -27,29 +26,39 @@ const initialState = {
 };
 
 const BooksPage = () => {
-  // hooks
-  const [modalOpen, setModalOpen] = useState(false);
-  const [searchContent, setSearchContent] = useState("");
-  const [booksAuthorsData, setBookAuthorsData] = useState({});
-
-  // TASK:  IMPLEMENT USE EFFECT ON BOOK AUTHORS
-  // WHY:   CAN'T STORE BOOK_AUTHORS IN LOCAL STORAGE DUE 10 MB MEMORY CAP
-  // useEffect(
-  //   () => async () => {
-  //     const response = await fetchBookAuthors();
-  //     setBookAuthorsData(response);
-  //   },
-  //   []
-  // );
-
-  // redux
+  // REDUX
   const dispatch = useDispatch();
   const books = useSelector(SelectBooksWithKeys);
   const [state, setState] = useState(initialState);
   const { isbn, title, author } = state;
 
+  // REACT HOOKS
+  const [modalOpen, setModalOpen] = useState(false);
+  const [searchContent, setSearchContent] = useState("");
+  const [bookAuthorsData, setBookAuthorsData] = useState([]);
+
   // DEFINE BOOKS TO DISPLAY
   const [booksDisplayed, setBooksDisplayed] = useState(books);
+
+  // FETCH BOOK AUTHORS TABLE DATA FROM THE SERVER
+  useEffect(() => {
+    const getBookAuthors = async () => {
+      const { data } = await fetchBookAuthors();
+      setBookAuthorsData(data);
+    };
+
+    getBookAuthors();
+  }, []);
+
+  // TODO: CONSTRUCT THE DATA TO BE PRESENTED IN THE TABLE HERE
+
+  const startCheckOut = () => {
+    console.log("started checkout process");
+  };
+
+  const processCheckOut = () => {
+    console.log("continuing with the process");
+  };
 
   const onChange = (e) => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
@@ -104,8 +113,6 @@ const BooksPage = () => {
     setState({ ...initialState });
   };
 
-  const handleCheckOut = () => {};
-
   return (
     <div className="books-page">
       <input onChange={handleChange} />
@@ -119,8 +126,11 @@ const BooksPage = () => {
         {" "}
         Add Book
       </CustomButton>
-      <BooksTable books={booksDisplayed} />
-
+      <BooksTable
+        books={booksDisplayed}
+        startCheckOut={startCheckOut}
+        isBookAvailable={isBookAvailable}
+      />
       <Drawer
         title="Add Book"
         placement="right"

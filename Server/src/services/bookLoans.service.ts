@@ -6,7 +6,7 @@ import { prisma } from "../utils/PrismaClient"
 import { v4 as uuidv4 } from 'uuid';
 
 // DEFINE TYPES
-interface BookLoan extends Prisma.book_loansUncheckedCreateInput {
+export interface BookLoan extends Prisma.book_loansUncheckedCreateInput {
 }
 
 // DEFINE GET ALL BORROWERS ROUTE
@@ -126,8 +126,6 @@ export const createBookLoan = async (
         var due_date = new Date()
         due_date.setDate(date_out.getDate() + 14)
 
-
-
         // DEFINE BOOK ITSELF
         var bookLoan: Prisma.book_loansUncheckedCreateInput = {
             loan_id: uuidv4(),
@@ -137,7 +135,6 @@ export const createBookLoan = async (
             due_date: due_date,
             date_in: null
         }
-
 
         // CREATE IN DATABASE
         const bookLoanCreate = await prisma.book_loans.create({
