@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 // styles
 import "./BooksPage.styles.scss";
@@ -16,6 +17,10 @@ import { fetchBookAuthors } from "../../api/bookAuthors";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooksWithKeys } from "../../redux/books/index";
+import { createBook } from "../../redux/books/books.utils";
+import { createAuthor } from "../../redux/authors/authors.utils";
+import { createBookAuthor } from "../../redux/bookAuthors/book_authors.utils";
+
 
 // validation
 import {
@@ -23,7 +28,6 @@ import {
   isBookAvailable,
   validateBorrowerId,
 } from "../../utils/utils";
-import { createBook } from "../../redux/books/books.utils";
 
 const initialAddBookState = {
   isbn: "",
@@ -108,28 +112,38 @@ const BooksPage = () => {
 
     // NOTIFICATION
 
-    // DEFINE BOOK
+    // CREATE BOOK
     const book = {
       title: title,
       isbn: isbn
     }
+    
+    // CREATE AUTHOR
+    const newAuthorID = uuidv4();
+    const authorObject = {
+      author_id: newAuthorID,
+      name: author
+    }
 
-    dispatch(createBook(book))
-
-    // const author = {
-    //   // id
-
-    // }
+    console.log(authorObject)
+     
+     
+    // CREATE IN BOOK AUTHOR TABLE
+    const bookAuthor = {
+      id: uuidv4(),
+      author_id: newAuthorID,
+      isbn: isbn
+    }
+    
+    //await Promise.all([dispatch(createBook(book)), dispatch(createAuthor(author)), dispatch(createBookAuthor(bookAuthor))])
+    dispatch(createBook(book)).then((e)=>dispatch(createAuthor(authorObject))).then((e)=> dispatch(createBookAuthor(bookAuthor)))
+    // 
+    // 
     message.success("Added" + title + " by " + author, 2);
-
-    // const bookAuthor = {
-
-    // }
-
-
+    
     // CLOSE MODAL
     toggleModal();
-
+    
     // RESET THE STATE
     setState({ ...initialAddBookState });
   };
