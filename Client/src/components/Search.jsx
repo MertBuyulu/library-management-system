@@ -14,7 +14,7 @@ const Search = () => {
   };
 
   return (
-    <form className="">
+    <form>
       <div className="relative">
         <input
           onChange={handleChange}
@@ -26,7 +26,7 @@ const Search = () => {
         ></input>
 
         {showSearchIcon ? (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3  pointer-events-none">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
             <svg
               aria-hidden="true"
               className="w-5 h-5 text-gray-500 dark:text-gray-400 "
@@ -38,7 +38,7 @@ const Search = () => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="3"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               ></path>
             </svg>

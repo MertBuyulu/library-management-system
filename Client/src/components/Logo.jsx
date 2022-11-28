@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Logo = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex space-x-2 items-stretch">
-      <div>
+    <div className="absolute flex">
         <Button
           style={{ fontWeight: "bold", color: "black" }}
           onClick={() => {
@@ -18,7 +17,6 @@ const Logo = () => {
           Library
         </Button>
       </div>
-    </div>
   );
 };
 

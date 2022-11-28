@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import "./HomePage.styles.scss";
 
 // components
-import Search from "../components/Search";
 import StatCard from "../components/StatCard";
 
 // redux imports
@@ -36,11 +35,8 @@ const HomePage = () => {
 
   return (
     <div>
-      <div className="bg-[#d9d9d9] w-screen h-screen">
+      <div className=" w-screen h-screen">
         <div className={"flex flex-col items-center"}>
-          <div className="m-20">
-            <Search />
-          </div>
           <div className={"flex space-x-10 m-2"}>
             <StatCard Name={"Books"} Amount={bookCount} />
             <StatCard Name={"Authors"} Amount={authorCount} />

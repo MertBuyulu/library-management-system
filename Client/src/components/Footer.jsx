@@ -10,8 +10,8 @@ const Footer = () => {
     //   </ul>
     // </footer>
     <div>
-      <footer className="bg-[#d9d9d9] p-2 dark:bg-gray-800 relative ">
-        <div className="justify-center flex font-bold text-2xl bottom-0 h-16">
+      <footer className="">
+        <div className=" flex justify-center font-bold text-2xl bottom-0 h-16 ">
           <div> Team Beriyllium </div>
         </div>
       </footer>
