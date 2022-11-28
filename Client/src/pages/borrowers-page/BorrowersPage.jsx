@@ -43,7 +43,7 @@ const BorrowersPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (await validateSsn(ssn)) {
+    if (await validateSsn(ssn) && !Number.isNaN(Number(ssn))) {
       dispatch(createBorrower({ ssn, bname, address, phone }));
       success();
     } else {
@@ -56,17 +56,22 @@ const BorrowersPage = () => {
     setState({ ...initialState });
   };
 
-  const success = () =>
-    message.info("Request in progress...", 2, () =>
-      message.success(`Success: New borrower is added to the system!!`, 3)
+  const success = () => {
+    message.info("Request in progress...", 2, () => {
+      message.success('Success: New Borrower is added to the system!', 3)
+    }
     );
+  }
 
   const error = (ssn) => {
-    message.info("Request in progress...", 2, () =>
-      message.error(
-        `Error: Request denied... ${ssn} is already in use. Please enter a unique ssn number.`,
-        3
-      )
+    message.info("Request in progress...", 2, () => {
+      if (Number.isNaN(Number(ssn))) {
+        message.error( `Error: Request denied... ${ssn} is invalid. Please ensure ssn is a unique number.`, 3)
+      }
+      else {
+        message.error( `Error: Request denied... ${ssn} is already in use. Please enter a unique ssn number.`, 3)
+      }
+    }
     );
   };
 

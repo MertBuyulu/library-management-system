@@ -57,12 +57,17 @@ export const getBorrowerBySSN = async (
     // DEFINE BORROWER
     var borrower;
 
+    try {
     const { ssn } = req.params;
     borrower = await prisma.borrower.findFirst({
         where: {
             ssn: Number(ssn),
         },
     });
+    } catch (err: unknown) {
+        console.log('[server] Could not verify borrower')
+        return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
+    }
 
     if (borrower)
         return res.json(borrower);
@@ -71,21 +76,34 @@ export const getBorrowerBySSN = async (
     else {
         return res.status(404).json({ "Success": "Failure", "Message": "Borrower not found." })
     }
-
 };
 
 export const createBorrower = async (
     req: express.Request,
     res: express.Response
 ) => {
+    let valid:boolean = false;
+    var card_id:string = "";
+    var bname:string = "";
+    var address:string = "";
+    var phone:string = "";
+    var ssn:number = 0;
+
     try {
         // GET VARIABLES FROM BODY
-        const ssn = Number(req.body['ssn']);
-        const bname = req.body['bname'];
-        const address = req.body['address'];
-        const phone = req.body['phone'];
-        const card_id = await getNewBorrowerID();
-
+        ssn = Number(req.body['ssn']);
+        bname = req.body['bname'];
+        address = req.body['address'];
+        phone = req.body['phone'];
+        card_id = await getNewBorrowerID();
+        valid = true;
+    }   catch (err: unknown) {
+        if (err instanceof Error) {
+            console.log('[server] Could not create borrower')
+            return res.status(409).json({ message: "Could not create borrower", "error": err.message });
+        }
+    }
+    if(!Number.isNaN(ssn)) {
         const borrower: Borrower = {
             card_id: card_id,
             ssn: ssn,
@@ -104,11 +122,6 @@ export const createBorrower = async (
 
         // RETURN
         return res.json(borrowerCreate);
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            console.log('[server] Could not create borrower')
-            return res.status(409).json({ message: "Could not create borrower", "error": err.message });
-        }
     }
 };
 
