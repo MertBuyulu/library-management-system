@@ -3,7 +3,7 @@ import React from "react";
 import { Table, Tag } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 
-const BooksTable = ({ books, startCheckOut, isBookAvailable }) => {
+const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
   const columns = [
     {
       title: "ISBN",
@@ -24,21 +24,26 @@ const BooksTable = ({ books, startCheckOut, isBookAvailable }) => {
       dataIndex: "status",
       key: 4,
       align: "center",
-      // render: async (_, { isbn, title }) =>
-      //   (await isBookAvailable(isbn, title)) ? <span>S</span> : <span>F</span>,
-      render: (_, record) => <span>Temp</span>,
+      render: (_, record) => {
+        return (
+      (isBookAvailable(record.isbn, record.title)) ? <span>Available</span> : <span>Not Available</span>
+        )
+      }
+      // render: (_, record) => <span>Temp</span>,
     },
     {
       title: "Action",
       dataIndex: "action",
       key: 5,
       align: "center",
-      render: (_, record) => (
-        <CustomButton onClick={startCheckOut} small>
+      render: (_, record) => {
+        return(
+        <CustomButton onClick={(e) => startCheckout(record.isbn,record.authors, record.title )} small>
           CHECK OUT
         </CustomButton>
-      ),
-    },
+        )
+      }
+    }
   ];
 
   return (
