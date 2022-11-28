@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import "./BooksPage.styles.scss";
 
 // components
-import { Drawer, message } from "antd";
+import { Drawer, message, notification } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import BooksTable from "./BooksTable";
@@ -28,6 +28,7 @@ import {
   isBookAvailable,
   validateBorrowerId,
 } from "../../utils/utils";
+import { createLoan } from "../../redux/loans/loans.utils";
 
 const initialAddBookState = {
   isbn: "",
@@ -35,16 +36,25 @@ const initialAddBookState = {
   author: "",
 };
 
+const initialBookCheckoutState = {
+  isbn: "",
+  title: "",
+  borrower: "",
+}
+
 const BooksPage = () => {
   // HOOKS & REDUX & STATE MANAGEMENT
-  const [modalOpen, setModalOpen] = useState(false);
+  const [bookCreationModalOpen, setBookCreationModalOpen] = useState(false);
+  const [bookCheckoutModalOpen, setBookCheckoutModalOpen] = useState(false);
   const [searchContent, setSearchContent] = useState("");
   const [booksAuthorsData, setBookAuthorsData] = useState({});
   const dispatch = useDispatch();
   const books = useSelector(SelectBooksWithKeys);
-  const [state, setState] = useState(initialAddBookState);
-  const { isbn, title, author } = state;
+  const [bookAddState, setBookAddState] = useState(initialAddBookState);
+  const [bookCheckoutState, setBookCheckoutState] = useState(initialBookCheckoutState);
+  const { isbn, title, author} = bookAddState;
   const [booksDisplayed, setBooksDisplayed] = useState(books);
+
 
   // FETCH BOOK AUTHORS TABLE DATA FROM THE SERVER
   useEffect(() => {
@@ -57,17 +67,40 @@ const BooksPage = () => {
   }, []);
 
   // TODO: CONSTRUCT THE DATA TO BE PRESENTED IN THE TABLE HERE
+  const onHandleCheckout = (e) => {
+    e.preventDefault();   
+    dispatch(createLoan({
+      isbn: bookCheckoutState.isbn,
+      card_id: bookCheckoutState.borrower
+    })).then((e) => 
+      {
+        try{
+          if(e.payload.toLowerCase().includes("failed")){
+            message.error("Could not checkout!")
+          }
+        }catch{
+            message.success("Checked out!")
+        }
 
-  const startCheckOut = () => {
-    console.log("started checkout process");
+      })
+
+    cancelBookCheckoutModal();
+
+    
+    
   };
 
-  const processCheckOut = () => {
-    console.log("continuing with the process");
+  const startCheckout = (isbn, authors, title) => {
+    setBookCheckoutState({...bookCheckoutState, isbn: isbn,  title: title})
+    toggleBookCheckoutModal();
+  }
+
+  const onBookCheckoutFormChange = (e) => {
+    setBookCheckoutState({ ...bookCheckoutState, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const onChange = (e) => {
-    setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
+  const onBookAddFormChange = (e) => {
+    setBookAddState({ ...bookAddState, [e.currentTarget.name]: e.currentTarget.value });
   };
 
   const handleSearchChange = (e) => {
@@ -91,16 +124,25 @@ const BooksPage = () => {
     }
   };
 
-  const toggleModal = () => {
-    setModalOpen(!modalOpen);
+  const toggleBookCreationModal = () => {
+    setBookCreationModalOpen(!bookCreationModalOpen);
   };
 
-  const onCancel = (e) => {
-    toggleModal();
-    setState({ ...initialAddBookState });
+  const cancelBookCreationModal = (e) => {
+    toggleBookCreationModal();
+    setBookAddState({ ...initialAddBookState });
   };
 
 
+  const cancelBookCheckoutModal = (e) => {
+    toggleBookCheckoutModal();
+    setBookCheckoutState({ ...initialBookCheckoutState });
+  };
+
+
+  const toggleBookCheckoutModal = () => {
+    setBookCheckoutModalOpen(!bookCheckoutModalOpen);
+  };
 
   const onBookAddSubmit = async (e) => {
     e.preventDefault();
@@ -125,7 +167,7 @@ const BooksPage = () => {
       name: author
     }
 
-    console.log(authorObject)
+
      
      
     // CREATE IN BOOK AUTHOR TABLE
@@ -135,27 +177,24 @@ const BooksPage = () => {
       isbn: isbn
     }
     
-    //await Promise.all([dispatch(createBook(book)), dispatch(createAuthor(author)), dispatch(createBookAuthor(bookAuthor))])
     dispatch(createBook(book)).then((e)=>dispatch(createAuthor(authorObject))).then((e)=> dispatch(createBookAuthor(bookAuthor)))
-    // 
-    // 
+
+
     message.success("Added" + title + " by " + author, 2);
     
     // CLOSE MODAL
-    toggleModal();
+    toggleBookCreationModal();
     
     // RESET THE STATE
-    setState({ ...initialAddBookState });
+    setBookAddState({ ...initialAddBookState });
   };
 
   return (
     <div className="books-page">
       <input onChange={handleSearchChange} placeholder={"Search ISBN, Title, Author"} className="border border-transparent block mb-4 p-4 pl-4 text-lg text-gray-900 rounded-lg bg-gray-200 dark:text-white" />
-
-      {/* <Search searchContent={searchContent} /> */}
       <CustomButton
         onClick={() => {
-          toggleModal();
+          toggleBookCreationModal();
         }}
       >
         {" "}
@@ -163,46 +202,86 @@ const BooksPage = () => {
       </CustomButton>
       <BooksTable
         books={booksDisplayed}
-        startCheckOut={startCheckOut}
+        startCheckout={startCheckout}
+        toggleBookCheckoutModal={toggleBookCheckoutModal}
         isBookAvailable={isBookAvailable}
       />
       <Drawer
         title="Add Book"
         placement="right"
-        onClose={toggleModal}
-        open={modalOpen}
+        onClose={toggleBookCreationModal}
+        open={bookCreationModalOpen}
       >
         <form onSubmit={onBookAddSubmit}>
           <FormInput
             name="isbn"
             type="text"
             label="ISBN"
-            value={isbn}
-            onChange={onChange}
+            value={bookAddState.isbn}
+            handleChange={onBookAddFormChange}
             required
           />
           <FormInput
             name="title"
             type="text"
             label="Book Title"
-            value={title}
-            onChange={onChange}
+            value={bookAddState.title}
+            handleChange={onBookAddFormChange}
             required
           />
           <FormInput
             name="author"
             type="text"
             label="Author"
-            value={author}
-            onChange={onChange}
+            value={bookAddState.author}
+            handleChange={onBookAddFormChange}
             required
           />
           <div className="flex justify-between">
             <CustomButton>Submit</CustomButton>
-            <CustomButton onClick={onCancel}>CANCEL</CustomButton>
+            <CustomButton onClick={cancelBookCreationModal}>CANCEL</CustomButton>
           </div>
         </form>
       </Drawer>
+
+      <Drawer
+        title="Checkout Book"
+        placement="left"
+        onClose={toggleBookCheckoutModal}
+        open={bookCheckoutModalOpen}
+      >
+        <form onSubmit={onHandleCheckout}>
+          <FormInput
+            name="isbn"
+            type="text"
+            label="ISBN"
+            value={bookCheckoutState.isbn}
+            handleChange={onBookCheckoutFormChange}
+            required
+          />
+          <FormInput
+            name="title"
+            type="text"
+            label="Book Title"
+            value={bookCheckoutState.title}
+            handleChange={onBookCheckoutFormChange}
+            required
+          />
+          <FormInput
+            name="borrower"
+            type="text"
+            label="Borrower"
+            value={bookCheckoutState.borrower}
+            handleChange={onBookCheckoutFormChange}
+            required
+          />
+          <div className="flex justify-between">
+            <CustomButton>Submit</CustomButton>
+            <CustomButton onClick={cancelBookCheckoutModal}>CANCEL</CustomButton>
+          </div>
+        </form>
+      </Drawer>
+
     </div>
   );
 };
