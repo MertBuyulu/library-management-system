@@ -1,8 +1,8 @@
-
-
 import { Prisma } from "@prisma/client";
 import express from "express";
+import finesRouter from "../routes/bookFines.route";
 import { prisma } from "../utils/PrismaClient"
+import { BookLoan } from "./bookLoans.service"
 
 
 // DEFINE TYPES
@@ -79,7 +79,7 @@ export const createFine = async (
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.send(409).json({ message: err.message });
+            return res.status(409).json({ message: err.message });
         }
     }
 };
@@ -108,10 +108,10 @@ export const updateFine = async (req: express.Request, res: express.Response) =>
     const data = req.body
 
     // IF THE REMAINING BALANCE IS NOT ZERO, THEN SET PAID FIELD TO FALSE
-    data.paid = data.fine_amount? false: true
-    
-   //UPDATE
-    const updatedFine = await prisma.fines.update({ where: { loan_id: loan_id }, data: data})
+    data.paid = data.fine_amount ? false : true
+
+    //UPDATE
+    const updatedFine = await prisma.fines.update({ where: { loan_id: loan_id }, data: data })
 
     // ERROR HANDLING
     if (updatedFine) {
@@ -124,46 +124,53 @@ export const updateFine = async (req: express.Request, res: express.Response) =>
 export const updateFines = async (req: express.Request, res: express.Response) => {
 
     const SelectedIDs: string[] = Array.from(req.body)
-    
+
     // UPDATE FINES
-    await prisma.fines.updateMany({where: {"loan_id": {in: SelectedIDs}}, data: {fine_amount: 0, paid: true}})
+    await prisma.fines.updateMany({ where: { "loan_id": { in: SelectedIDs } }, data: { fine_amount: 0, paid: true } })
 
     // FETCH THE UPDATED FINES
     const updatedFines = await prisma.fines.findMany()
 
-        if (updatedFines) {
-            return res.json(updatedFines);
-        } else {
-            return res.status(400).json({ message: "[server] Could not retrieve selected book loans" });
+    if (updatedFines) {
+        return res.json(updatedFines);
+    } else {
+        return res.status(400).json({ message: "[server] Could not retrieve selected book loans" });
     }
 }
 
 
 export const refreshFines = async (req: express.Request, res: express.Response) => {
-   console.log("refreshing...")
+    const { date } = req.body
 
-   const {date} = req.body
+    const refresh_time = new Date(date);
 
-   // STEP 1: FIND ALL BOOK LOANS THAT HAVEN'T BEEN RETURNED AS OF TODAY
-   const loans_not_returned = await prisma.book_loans.findMany({
-         where : {date_in: null},
-   })
+    // STEP 1: FIND ALL BOOK LOANS THAT HAVEN'T BEEN RETURNED AS OF TODAY
+    const loans_not_returned = await prisma.book_loans.findMany({
+        where: { date_in: null },
+    })
 
-   // STEP 2: FIND ALL "LATE" BOOK LOANS THAT HAVEN'T BEEN RETURNED AS OF TODAY
-   const late_loans_not_returned = loans_not_returned.filter((loan) => {
-    console.log(loan.due_date)
-    console.log(loan.due_date < date)
-    return String(loan.due_date) < date
-   })
+    // STEP 2: FIND ALL "LATE" BOOK LOANS THAT HAVEN'T BEEN RETURNED AS OF TODAY
+    const late_loans_not_returned = loans_not_returned.filter((loan) =>
+        (loan.due_date.toISOString().localeCompare(date) === -1)
+    )
 
-   
+    // STEP 3: EITHER CREATE A NEW FINE OR UPDATE AN EXISTING FINE'S FINE AMOUNT
+    late_loans_not_returned.forEach(async (late_loan) => {
+        // CALCULATE THE DIFFERENCE BETWEEN TODAY'S DATE AND THE DUE DATE OF THE GIVEN LOAN
+        let diff_in_time = refresh_time.getTime() - late_loan.due_date.getTime();
+        let diff_in_days = Math.floor(diff_in_time / 86400000)
 
-   // 2. UPDATE STEP 
-        // 2.1 LOAN IS STILL OUT AND NOT PAID [PAID = FALSE] -> UPDATE ITS FINE AMOUNT [(today - due_date) * $0.25]
-        // 2.2 LOAN IS RETURNED BUT NOT PAID [PAID = FALSE] -> DO NOTHING
-        // 2.3 LOAN IS RETURNED AND PAID -> DO NOTHING
+        await prisma.fines.upsert({
+            where: { loan_id: late_loan.loan_id }, update: {
+                fine_amount: (.25 * diff_in_days)
+            }, create: {
+                loan_id: late_loan.loan_id, fine_amount: (.25 * diff_in_days), paid: false
+            }
+        })
+    })
 
-    // RETURN ALL FINES [UPDATED/NEW/NOT_UPDATED] AS JSON TO THE CLIENT
+    // STEP 4: RETURN ALL FINES [UPDATED/NEW/NOT_UPDATED] AS JSON TO THE CLIENT
+    return res.json(await prisma.fines.findMany())
 }
 
 

@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
+
 // styles
 import "./BooksPage.styles.scss";
+
 // components
 import { Drawer, message } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import BooksTable from "./BooksTable";
 import Search from "../../components/Search";
+
 // api
 import { fetchBookAuthors } from "../../api/bookAuthors";
+
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooksWithKeys } from "../../redux/books/index";
-import { SelectAuthorById } from "../../redux/authors";
+import { createBook } from "../../redux/books/books.utils";
+import { createAuthor } from "../../redux/authors/authors.utils";
+import { createBookAuthor } from "../../redux/bookAuthors/book_authors.utils";
+
+
 // validation
 import {
   isBorrowerEligible,
@@ -20,49 +29,55 @@ import {
   validateBorrowerId,
 } from "../../utils/utils";
 
-const initialState = {
+const initialAddBookState = {
   isbn: "",
   title: "",
   author: "",
 };
 
 const BooksPage = () => {
-  // hooks
+  // HOOKS & REDUX & STATE MANAGEMENT
   const [modalOpen, setModalOpen] = useState(false);
   const [searchContent, setSearchContent] = useState("");
   const [booksAuthorsData, setBookAuthorsData] = useState({});
-
-  // TASK:  IMPLEMENT USE EFFECT ON BOOK AUTHORS
-  // WHY:   CAN'T STORE BOOK_AUTHORS IN LOCAL STORAGE DUE 10 MB MEMORY CAP
-  // useEffect(
-  //   () => async () => {
-  //     const response = await fetchBookAuthors();
-  //     setBookAuthorsData(response);
-  //   },
-  //   []
-  // );
-
-  // redux
   const dispatch = useDispatch();
   const books = useSelector(SelectBooksWithKeys);
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(initialAddBookState);
   const { isbn, title, author } = state;
-
-  // DEFINE BOOKS TO DISPLAY
   const [booksDisplayed, setBooksDisplayed] = useState(books);
+
+  // FETCH BOOK AUTHORS TABLE DATA FROM THE SERVER
+  useEffect(() => {
+    const getBookAuthors = async () => {
+      const { data } = await fetchBookAuthors();
+      setBookAuthorsData(data);
+    };
+
+    getBookAuthors();
+  }, []);
+
+  // TODO: CONSTRUCT THE DATA TO BE PRESENTED IN THE TABLE HERE
+
+  const startCheckOut = () => {
+    console.log("started checkout process");
+  };
+
+  const processCheckOut = () => {
+    console.log("continuing with the process");
+  };
 
   const onChange = (e) => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const handleChange = (e) => {
+  const handleSearchChange = (e) => {
     e.preventDefault();
     setSearchContent(e.target.value);
     if (e.target.value.length > 0) {
       let result = books.filter((bookRow) => {
         if (
-          bookRow["title"].includes(e.target.value) ||
-          bookRow["isbn"].includes(e.target.value)
+          bookRow["title"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return true;
         } else {
@@ -82,12 +97,13 @@ const BooksPage = () => {
 
   const onCancel = (e) => {
     toggleModal();
-    setState({ ...initialState });
+    setState({ ...initialAddBookState });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
 
+
+  const onBookAddSubmit = async (e) => {
+    e.preventDefault();
     // CHECK FOR VALID ISBN NUMBER
 
     // CHECK FOR VALID AUTHOR
@@ -95,20 +111,46 @@ const BooksPage = () => {
     // CHECK FOR CORRECT BOOK TITLE
 
     // NOTIFICATION
-    message.info("Adding " + title + " by " + author, 1);
 
+    // CREATE BOOK
+    const book = {
+      title: title,
+      isbn: isbn
+    }
+    
+    // CREATE AUTHOR
+    const newAuthorID = uuidv4();
+    const authorObject = {
+      author_id: newAuthorID,
+      name: author
+    }
+
+    console.log(authorObject)
+     
+     
+    // CREATE IN BOOK AUTHOR TABLE
+    const bookAuthor = {
+      id: uuidv4(),
+      author_id: newAuthorID,
+      isbn: isbn
+    }
+    
+    //await Promise.all([dispatch(createBook(book)), dispatch(createAuthor(author)), dispatch(createBookAuthor(bookAuthor))])
+    dispatch(createBook(book)).then((e)=>dispatch(createAuthor(authorObject))).then((e)=> dispatch(createBookAuthor(bookAuthor)))
+    // 
+    // 
+    message.success("Added" + title + " by " + author, 2);
+    
     // CLOSE MODAL
     toggleModal();
-
+    
     // RESET THE STATE
-    setState({ ...initialState });
+    setState({ ...initialAddBookState });
   };
-
-  const handleCheckOut = () => {};
 
   return (
     <div className="books-page">
-      <input onChange={handleChange} />
+      <input onChange={handleSearchChange} placeholder={"Search ISBN, Title, Author"} className="border border-transparent block mb-4 p-4 pl-4 text-lg text-gray-900 rounded-lg bg-gray-200 dark:text-white" />
 
       {/* <Search searchContent={searchContent} /> */}
       <CustomButton
@@ -119,15 +161,18 @@ const BooksPage = () => {
         {" "}
         Add Book
       </CustomButton>
-      <BooksTable books={booksDisplayed} />
-
+      <BooksTable
+        books={booksDisplayed}
+        startCheckOut={startCheckOut}
+        isBookAvailable={isBookAvailable}
+      />
       <Drawer
         title="Add Book"
         placement="right"
         onClose={toggleModal}
         open={modalOpen}
       >
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onBookAddSubmit}>
           <FormInput
             name="isbn"
             type="text"

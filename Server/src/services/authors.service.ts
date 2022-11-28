@@ -20,6 +20,7 @@ export const getAllAuthors = async (
         console.log("[server] Getting Authors Meta")
         return res.json({ "Amount": await prisma.authors.count() })
     }
+
     console.log("[server] Getting all Authors")
     return res.json(await prisma.authors.findMany());
 };
@@ -30,6 +31,7 @@ export const getAuthor = async (
     res: express.Response
 ) => {
     const { author_id } = req.params;
+
     const author = await prisma.authors.findUnique({
         where: {
             author_id: author_id,
@@ -56,6 +58,7 @@ export const createAuthor = async (
         const author_id: string = req.body['author_id'];
         const name: string = req.body['name'];
 
+        console.log("[server] Creating a new Author " + author_id + "(" + name + ")")
         const author: author = {
             author_id: author_id,
             name: name
@@ -76,7 +79,7 @@ export const createAuthor = async (
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.send(409).json({ "Message": "Could not create author", message: err.message });
+            return res.status(409).json({ "Message": "Could not create author", message: err.message });
         }
     }
 };
