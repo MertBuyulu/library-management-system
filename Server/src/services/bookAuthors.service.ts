@@ -58,6 +58,8 @@ export const createBookAuthor = async (
         const author_id = req.body['author_id'];
         const isbn = req.body['isbn'];
 
+        console.log("[server] Creating a new bookAuthor (authorid: " + author_id + ")" + "(isbn: " + isbn + ")")
+
         const bookAuthor: bookAuthor = {
             id: id,
             author_id: author_id,
@@ -79,7 +81,7 @@ export const createBookAuthor = async (
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.send(409).json({ message: err.message });
+            return res.status(409).json({ message: err.message });
         }
     }
 };

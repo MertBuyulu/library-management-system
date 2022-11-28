@@ -75,23 +75,30 @@ export const createBook = async (
 
     } catch (err: unknown) {
         if (err instanceof Error) {
-            return res.send(409).json({ message: err.message });
+            return res.status(409).json({ message: err.message });
         }
     }
 };
 
 // DELETE BOOK 
 export const deleteBook = async (req: express.Request, res: express.Response) => {
-    // GET BOOK FROM PARAMS
-    const { isbn } = req.params
 
-    // DELETE BOOK
-    const deletingBook = await prisma.book.delete({ where: { isbn: isbn } })
+    try {
+        // GET BOOK FROM PARAMS
+        const { isbn } = req.params
 
-    if (deletingBook) {
-        return res.json(deletingBook)
-    } else {
-        return res.status(400).json({ "Success": "Failure", "Message": "Book could not be deleted due to non existent resource." })
+        // DELETE BOOK
+        const deletingBook = await prisma.book.delete({ where: { isbn: isbn } })
+
+        if (deletingBook) {
+            return res.json(deletingBook)
+        } else {
+            return res.status(400).json({ "Success": "Failure", "Message": "Book could not be deleted due to non existent resource." })
+        }
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            return res.status(409).json({ message: err.message });
+        }
     }
 }
 
