@@ -1,43 +1,45 @@
 import React, { useEffect, useState } from "react";
+
 // styles
 import "./BooksPage.styles.scss";
+
 // components
 import { Drawer, message } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import BooksTable from "./BooksTable";
 import Search from "../../components/Search";
+
 // api
 import { fetchBookAuthors } from "../../api/bookAuthors";
+
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooksWithKeys } from "../../redux/books/index";
+
 // validation
 import {
   isBorrowerEligible,
   isBookAvailable,
   validateBorrowerId,
 } from "../../utils/utils";
+import { createBook } from "../../redux/books/books.utils";
 
-const initialState = {
+const initialAddBookState = {
   isbn: "",
   title: "",
   author: "",
 };
 
 const BooksPage = () => {
-  // REDUX
-  const dispatch = useDispatch();
-  const books = useSelector(SelectBooksWithKeys);
-  const [state, setState] = useState(initialState);
-  const { isbn, title, author } = state;
-
-  // REACT HOOKS
+  // HOOKS & REDUX & STATE MANAGEMENT
   const [modalOpen, setModalOpen] = useState(false);
   const [searchContent, setSearchContent] = useState("");
-  const [bookAuthorsData, setBookAuthorsData] = useState([]);
-
-  // DEFINE BOOKS TO DISPLAY
+  const [booksAuthorsData, setBookAuthorsData] = useState({});
+  const dispatch = useDispatch();
+  const books = useSelector(SelectBooksWithKeys);
+  const [state, setState] = useState(initialAddBookState);
+  const { isbn, title, author } = state;
   const [booksDisplayed, setBooksDisplayed] = useState(books);
 
   // FETCH BOOK AUTHORS TABLE DATA FROM THE SERVER
@@ -64,14 +66,14 @@ const BooksPage = () => {
     setState({ ...state, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const handleChange = (e) => {
+  const handleSearchChange = (e) => {
     e.preventDefault();
     setSearchContent(e.target.value);
     if (e.target.value.length > 0) {
       let result = books.filter((bookRow) => {
         if (
-          bookRow["title"].includes(e.target.value) ||
-          bookRow["isbn"].includes(e.target.value)
+          bookRow["title"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return true;
         } else {
@@ -91,12 +93,13 @@ const BooksPage = () => {
 
   const onCancel = (e) => {
     toggleModal();
-    setState({ ...initialState });
+    setState({ ...initialAddBookState });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
 
+
+  const onBookAddSubmit = async (e) => {
+    e.preventDefault();
     // CHECK FOR VALID ISBN NUMBER
 
     // CHECK FOR VALID AUTHOR
@@ -104,18 +107,36 @@ const BooksPage = () => {
     // CHECK FOR CORRECT BOOK TITLE
 
     // NOTIFICATION
-    message.info("Adding " + title + " by " + author, 1);
+
+    // DEFINE BOOK
+    const book = {
+      title: title,
+      isbn: isbn
+    }
+
+    dispatch(createBook(book))
+
+    // const author = {
+    //   // id
+
+    // }
+    message.success("Added" + title + " by " + author, 2);
+
+    // const bookAuthor = {
+
+    // }
+
 
     // CLOSE MODAL
     toggleModal();
 
     // RESET THE STATE
-    setState({ ...initialState });
+    setState({ ...initialAddBookState });
   };
 
   return (
     <div className="books-page">
-      <input onChange={handleChange} />
+      <input onChange={handleSearchChange} placeholder={"Search ISBN, Title, Author"} className="border border-transparent block mb-4 p-4 pl-4 text-lg text-gray-900 rounded-lg bg-gray-200 dark:text-white" />
 
       {/* <Search searchContent={searchContent} /> */}
       <CustomButton
@@ -137,7 +158,7 @@ const BooksPage = () => {
         onClose={toggleModal}
         open={modalOpen}
       >
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onBookAddSubmit}>
           <FormInput
             name="isbn"
             type="text"
