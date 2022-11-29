@@ -63,35 +63,21 @@ How do we handle multiple author names?
 
 [x] - Create CRUD Operations with Node.js Express TypeScript Server (Srilokh)
 
-[~] - Create Test Coverages for all CRUD operations ()
-
-[~] - Implement general design and flow on Figma ()
+[x] - Create Test Coverages for all CRUD operations ()
 
 [~] - Create Front-end using React ()
+   [x] - Implement Redux 
+   [x] - Pages to work on (Books, Authors, Borrowers/Members, Loans, Fines)
+   [x] - Components(Books, Authors, Borrower Component, Loans(Table), Fines(Table))
 
-[~] - Implement Requirements with UI with Backend ()
+[ ] - Check requirements before deployment ()
 
-[ ] - Implement Redux Basics
+[] - Create Part 2 Submission Documents (Design Doc, Final Submission)
 
-[ ] - Pages to work on (Books, Authors, Borrowers/Members, Loans, Fines)
+[ ] - Mock Demo (Run through all requirements)
 
-[ ] - Components(Books, Authors, Borrower Component, Loans (Table), Fines(Table))
+[ ] - Final Turn in
 
-[ ] - Change the search bar component to have a dropdown for picking between which things to search for 
-
-[ ] - Validate all of the types from project instructions 
-
-[ ] - Triple check requirements before deployment ()
-
-[ ] - Deploy Project ()
-
-[~] - Create Part 2 Submission Documents ()
-
-[ ] - Create Demo ()
-
-[ ] - Mock Demo ()
-
-[ ] - Final Turn in ()
 
 
 > Helpful
