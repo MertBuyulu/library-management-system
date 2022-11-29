@@ -12,7 +12,7 @@ const Footer = () => {
     <div>
       <footer className="">
         <div className=" flex justify-center font-bold text-2xl bottom-0 h-16 ">
-          <div> Team Beriyllium </div>
+          <div> Team Beryllium </div>
         </div>
       </footer>
     </div>
