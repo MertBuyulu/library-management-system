@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 // components
-import { Table, Tag } from "antd";
+import { Table, Tag, Skeleton } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 
 const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
@@ -18,6 +18,12 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
       dataIndex: "authors",
       key: 3,
       align: "center",
+      render: (_, record) => {
+        return (
+          // record.book_authors[0].authors.name
+          record.book_authors.map((bookAuthorObj, key) => {return (key==0 ? ''+(bookAuthorObj.authors.name)+' ' : ', '+(bookAuthorObj.authors.name)+'')})
+          )
+      },
     },
     {
       title: "Status",
@@ -25,11 +31,9 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
       key: 4,
       align: "center",
       render: (_, record) => {
-        return isBookAvailable(record.isbn, record.title) ? (
-          <span>Available</span>
-        ) : (
-          <span>Not Available</span>
-        );
+
+        return ("Available")
+
       },
       // render: (_, record) => <span>Temp</span>,
     },

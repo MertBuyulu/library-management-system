@@ -258,7 +258,7 @@ const BooksPage = () => {
   };
 
   return (
-    <div className="books-page">
+    <div className="books-page w-auto">
       <input
         onChange={handleSearchChange}
         placeholder={"Search ISBN, Title, Author"}
@@ -272,12 +272,16 @@ const BooksPage = () => {
         {" "}
         Add Book
       </CustomButton>
+      <div className={"mt-1"}>
       <BooksTable
+        className={"books-table"}
         books={booksDisplayed}
         startCheckout={startCheckout}
         toggleBookCheckoutModal={toggleBookCheckoutModal}
         isBookAvailable={isBookAvailable}
+        
       />
+      </div>
       <Drawer
         title="Add Book"
         placement="right"
