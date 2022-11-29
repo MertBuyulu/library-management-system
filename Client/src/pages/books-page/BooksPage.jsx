@@ -16,6 +16,7 @@ import { fetchBookAuthors } from "../../api/bookAuthors";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { SelectBooksWithKeys } from "../../redux/books/index";
+import { SelectAuthors } from "../../redux/authors/index";
 import { createBook } from "../../redux/books/books.utils";
 import { createAuthor } from "../../redux/authors/authors.utils";
 import { createBookAuthor } from "../../redux/bookAuthors/book_authors.utils";
@@ -45,9 +46,10 @@ const BooksPage = () => {
   const [bookCreationModalOpen, setBookCreationModalOpen] = useState(false);
   const [bookCheckoutModalOpen, setBookCheckoutModalOpen] = useState(false);
   const [searchContent, setSearchContent] = useState("");
-  const [booksAuthorsData, setBookAuthorsData] = useState({});
+  const [booksAuthorsData, setBookAuthorsData] = useState([]);
   const dispatch = useDispatch();
   const books = useSelector(SelectBooksWithKeys);
+  const authors = useSelector(SelectAuthors);
   const [bookAddState, setBookAddState] = useState(initialAddBookState);
   const [bookCheckoutState, setBookCheckoutState] = useState(
     initialBookCheckoutState
@@ -65,7 +67,33 @@ const BooksPage = () => {
     getBookAuthors();
   }, []);
 
-  // TODO: CONSTRUCT THE DATA TO BE PRESENTED IN THE TABLE HERE
+  const AuthorsDictionary = Object.fromEntries(
+    authors.map((author) => [author.author_id, author.name])
+  );
+
+  const mergedBooksAuthorData = Object.values(
+    booksAuthorsData.reduce((acc, { isbn, author_id }) => {
+      acc[isbn] ??= { isbn: isbn, authors: [] };
+      acc[isbn].authors.push(author_id);
+
+      return acc;
+    }, {})
+  );
+  console.log(mergedBooksAuthorData)
+
+  const mergedBooksAuthorDataDictionary = Object.fromEntries(
+    mergedBooksAuthorData.map((item) => [item.isbn, item.authors])
+  );
+  
+
+  // const booksTableData = books.map((book) => {
+  //   const authorIDs = mergedBooksAuthorDataDictionary[book.isbn];
+  //   const authorNames = authorIDs.map((id) => AuthorsDictionary[id]);
+  //   return {
+  //     ...book,
+  //     authors: authorNames,
+  //   };
+  // });
 
   const startCheckout = (isbn, authors, title) => {
     setBookCheckoutState({ ...bookCheckoutState, isbn: isbn, title: title });
