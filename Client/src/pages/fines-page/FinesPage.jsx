@@ -327,7 +327,7 @@ const FinesPage = () => {
         )}
         <CustomButton onClick={handleTableRefresh}>Refresh Fines</CustomButton>
       </div>
-      <Table
+      <Table className="container mx-auto"
         pagination={{
           position: ["bottomCenter"],
         }}

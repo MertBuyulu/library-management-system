@@ -265,6 +265,7 @@ const LoansPage = () => {
           {hasSelected ? `Selected ${selectedRowKeys.length} loans` : ""}
         </span>
       </div>
+      <div className="container mx-auto">
       <Table
         pagination={{
           position: ["bottomCenter"],
@@ -273,6 +274,7 @@ const LoansPage = () => {
         dataSource={data}
         columns={columns}
       />
+      </div>
     </div>
   );
 };
