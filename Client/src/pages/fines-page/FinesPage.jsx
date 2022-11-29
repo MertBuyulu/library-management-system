@@ -316,8 +316,8 @@ const FinesPage = () => {
   ];
 
   return (
-    <div>
-      <div className="flex justify-center">
+    <div className="">
+      <div className="flex justify-center pt-4 pb-4">
         {!filtered ? (
           <CustomButton onClick={handleFiltering}>
             Filter Paid Fines

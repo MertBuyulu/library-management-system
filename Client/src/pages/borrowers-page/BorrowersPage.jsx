@@ -85,7 +85,7 @@ const BorrowersPage = () => {
 
   return (
     <div className="borrowers-page">
-      <div className="space-y-1">
+      <div className="pb-4 pt-4">
         <CustomButton onClick={toggleModal} wide>
           ADD BORROWER
         </CustomButton>

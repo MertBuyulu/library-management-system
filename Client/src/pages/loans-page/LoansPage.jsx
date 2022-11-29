@@ -257,7 +257,7 @@ const LoansPage = () => {
 
   return (
     <div>
-      <div className="loans-page">
+      <div className="flex justify-center pt-4 pb-4">
         <CustomButton onClick={handleMultipleCheckIn}>
           Check in all
         </CustomButton>
