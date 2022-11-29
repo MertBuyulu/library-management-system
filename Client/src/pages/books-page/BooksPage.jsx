@@ -178,11 +178,12 @@ const BooksPage = () => {
     setSearchContent(e.target.value);
     if (e.target.value.length > 0) {
       let result = books.filter((bookRow) => {
+        var authors = bookRow.book_authors.map((bookAuthorObj, key) => { return key === 0 ? "" + bookAuthorObj.authors.name + " ": ", " + bookAuthorObj.authors.name + "";})
+        authors = authors.join(',')
         if (
-          bookRow["title"]
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase())
+          bookRow["title"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          authors.toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return true;
         } else {
