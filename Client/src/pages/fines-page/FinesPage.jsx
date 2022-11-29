@@ -319,13 +319,13 @@ const FinesPage = () => {
     <div className="">
       <div className="flex justify-center pt-4 pb-4">
         {!filtered ? (
-          <CustomButton onClick={handleFiltering}>
+          <CustomButton onClick={handleFiltering} wide>
             Filter Paid Fines
           </CustomButton>
         ) : (
           <CustomButton onClick={handleReset}>Reset</CustomButton>
         )}
-        <CustomButton onClick={handleTableRefresh}>Refresh Fines</CustomButton>
+        <CustomButton onClick={handleTableRefresh} wide>Refresh Fines</CustomButton>
       </div>
       <Table className="container mx-auto"
         pagination={{
