@@ -34,17 +34,16 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    
-      <div>
-        <div className="flex flex-col items-center">
-          <div className="flex space-x-10 m-20 py-20">
-            <StatCard Name={"Books"} Amount={bookCount} />
-            <StatCard Name={"Authors"} Amount={authorCount} />
-            <StatCard Name={"Borrowers"} Amount={borrowerCount} />
-            <StatCard Name={"Loans"} Amount={loanCount} />
-          </div>
+    <div>
+      <div className="flex flex-col items-center">
+        <div className="flex space-x-10 m-20 py-20">
+          <StatCard Name={"Books"} Amount={bookCount} />
+          <StatCard Name={"Authors"} Amount={authorCount} />
+          <StatCard Name={"Borrowers"} Amount={borrowerCount} />
+          <StatCard Name={"Loans"} Amount={loanCount} />
         </div>
       </div>
+    </div>
   );
 };
 

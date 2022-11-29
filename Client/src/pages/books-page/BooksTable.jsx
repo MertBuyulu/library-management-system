@@ -25,10 +25,12 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
       key: 4,
       align: "center",
       render: (_, record) => {
-        return (
-      (isBookAvailable(record.isbn, record.title)) ? <span>Available</span> : <span>Not Available</span>
-        )
-      }
+        return isBookAvailable(record.isbn, record.title) ? (
+          <span>Available</span>
+        ) : (
+          <span>Not Available</span>
+        );
+      },
       // render: (_, record) => <span>Temp</span>,
     },
     {
@@ -37,13 +39,18 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
       key: 5,
       align: "center",
       render: (_, record) => {
-        return(
-        <CustomButton onClick={(e) => startCheckout(record.isbn,record.authors, record.title )} small>
-          CHECK OUT
-        </CustomButton>
-        )
-      }
-    }
+        return (
+          <CustomButton
+            onClick={() =>
+              startCheckout(record.isbn, record.authors, record.title)
+            }
+            small
+          >
+            CHECK OUT
+          </CustomButton>
+        );
+      },
+    },
   ];
 
   return (

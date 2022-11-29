@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // styles
 import "./BooksPage.styles.scss";
 
 // components
-import { Drawer, message, notification } from "antd";
+import { Drawer, message } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 import FormInput from "../../components/form-input/FormInput.component";
 import BooksTable from "./BooksTable";
-import Search from "../../components/Search";
 
 // api
 import { fetchBookAuthors } from "../../api/bookAuthors";
@@ -21,12 +20,11 @@ import { createBook } from "../../redux/books/books.utils";
 import { createAuthor } from "../../redux/authors/authors.utils";
 import { createBookAuthor } from "../../redux/bookAuthors/book_authors.utils";
 
-
 // validation
 import {
   isBorrowerEligible,
   isBookAvailable,
-  validateBorrowerId,
+  validateBorrowerID,
 } from "../../utils/utils";
 import { createLoan } from "../../redux/loans/loans.utils";
 
@@ -39,8 +37,8 @@ const initialAddBookState = {
 const initialBookCheckoutState = {
   isbn: "",
   title: "",
-  borrower: "",
-}
+  card_id: "",
+};
 
 const BooksPage = () => {
   // HOOKS & REDUX & STATE MANAGEMENT
@@ -51,10 +49,11 @@ const BooksPage = () => {
   const dispatch = useDispatch();
   const books = useSelector(SelectBooksWithKeys);
   const [bookAddState, setBookAddState] = useState(initialAddBookState);
-  const [bookCheckoutState, setBookCheckoutState] = useState(initialBookCheckoutState);
-  const { isbn, title, author} = bookAddState;
+  const [bookCheckoutState, setBookCheckoutState] = useState(
+    initialBookCheckoutState
+  );
+  const { isbn, title, author } = bookAddState;
   const [booksDisplayed, setBooksDisplayed] = useState(books);
-
 
   // FETCH BOOK AUTHORS TABLE DATA FROM THE SERVER
   useEffect(() => {
@@ -67,40 +66,111 @@ const BooksPage = () => {
   }, []);
 
   // TODO: CONSTRUCT THE DATA TO BE PRESENTED IN THE TABLE HERE
-  const onHandleCheckout = (e) => {
-    e.preventDefault();   
-    dispatch(createLoan({
-      isbn: bookCheckoutState.isbn,
-      card_id: bookCheckoutState.borrower
-    })).then((e) => 
-      {
-        try{
-          if(e.payload.toLowerCase().includes("failed")){
-            message.error("Could not checkout!")
-          }
-        }catch{
-            message.success("Checked out!")
-        }
-
-      })
-
-    cancelBookCheckoutModal();
-
-    
-    
-  };
 
   const startCheckout = (isbn, authors, title) => {
-    setBookCheckoutState({...bookCheckoutState, isbn: isbn,  title: title})
+    setBookCheckoutState({ ...bookCheckoutState, isbn: isbn, title: title });
     toggleBookCheckoutModal();
-  }
+  };
+
+  const onHandleCheckout = async (e) => {
+    e.preventDefault();
+    if (await validateBorrowerID(bookCheckoutState.card_id)) {
+      successBorrowerID();
+      if (await isBookAvailable(bookCheckoutState.isbn)) {
+        bookAvailable();
+        if (await isBorrowerEligible(bookCheckoutState.card_id)) {
+          eligible();
+          dispatch(
+            createLoan({
+              isbn: bookCheckoutState.isbn,
+              card_id: bookCheckoutState.card_id,
+            })
+          );
+          successCheckOut();
+        } else {
+          notEligible();
+        }
+      } else {
+        bookNotAvailable();
+      }
+    } else {
+      errorBorrowerID();
+    }
+
+    cancelBookCheckoutModal();
+  };
+
+  const successCheckOut = () => {
+    message.success(
+      `Success: Borrower with ID ${bookCheckoutState.card_id} checked out the book with ISBN ${bookCheckoutState.isbn}`,
+      3
+    );
+  };
+
+  const successBorrowerID = () =>
+    message.info("Validating the existence of the borrower ID...", 2, () =>
+      message.success(`Success: Validation passed!! Request in progress...`, 3)
+    );
+
+  const errorBorrowerID = () => {
+    message.info("Validating the existence of the borrower ID...", 2, () =>
+      message.error(`Error: Validation failed...Request denied.`, 3)
+    );
+  };
+
+  const bookAvailable = () => {
+    message.info("Checking the avaiability of the borrower ID...", 2, () =>
+      message.success(
+        `Success: The books requested is avaiable. Request in progress...`,
+        3
+      )
+    );
+  };
+
+  const bookNotAvailable = () => {
+    message.info("Checking the avaiability of the borrower ID...", 2, () =>
+      message.error(
+        `Error: The books requested is not avaiable at the moment...Request denied.`,
+        3
+      )
+    );
+  };
+
+  const eligible = () => {
+    message.info(
+      "Validating whether the borrower attempting to check out the book is eligble to check out any more books...",
+      2,
+      () =>
+        message.success(
+          `Success: Validation passed!! Request in progress...`,
+          3
+        )
+    );
+  };
+
+  const notEligible = () =>
+    message.info(
+      "Validating whether the borrower attempting to check out the book is eligble to check out any more books...",
+      2,
+      () =>
+        message.error(
+          `Error: A borrower can at most have three active loans... Request denied.`,
+          3
+        )
+    );
 
   const onBookCheckoutFormChange = (e) => {
-    setBookCheckoutState({ ...bookCheckoutState, [e.currentTarget.name]: e.currentTarget.value });
+    setBookCheckoutState({
+      ...bookCheckoutState,
+      [e.currentTarget.name]: e.currentTarget.value,
+    });
   };
 
   const onBookAddFormChange = (e) => {
-    setBookAddState({ ...bookAddState, [e.currentTarget.name]: e.currentTarget.value });
+    setBookAddState({
+      ...bookAddState,
+      [e.currentTarget.name]: e.currentTarget.value,
+    });
   };
 
   const handleSearchChange = (e) => {
@@ -109,7 +179,9 @@ const BooksPage = () => {
     if (e.target.value.length > 0) {
       let result = books.filter((bookRow) => {
         if (
-          bookRow["title"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          bookRow["title"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
           bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return true;
@@ -133,12 +205,10 @@ const BooksPage = () => {
     setBookAddState({ ...initialAddBookState });
   };
 
-
   const cancelBookCheckoutModal = (e) => {
     toggleBookCheckoutModal();
     setBookCheckoutState({ ...initialBookCheckoutState });
   };
-
 
   const toggleBookCheckoutModal = () => {
     setBookCheckoutModalOpen(!bookCheckoutModalOpen);
@@ -157,41 +227,43 @@ const BooksPage = () => {
     // CREATE BOOK
     const book = {
       title: title,
-      isbn: isbn
-    }
-    
+      isbn: isbn,
+    };
+
     // CREATE AUTHOR
     const newAuthorID = uuidv4();
     const authorObject = {
       author_id: newAuthorID,
-      name: author
-    }
+      name: author,
+    };
 
-
-     
-     
     // CREATE IN BOOK AUTHOR TABLE
     const bookAuthor = {
       id: uuidv4(),
       author_id: newAuthorID,
-      isbn: isbn
-    }
-    
-    dispatch(createBook(book)).then((e)=>dispatch(createAuthor(authorObject))).then((e)=> dispatch(createBookAuthor(bookAuthor)))
+      isbn: isbn,
+    };
 
+    dispatch(createBook(book))
+      .then((e) => dispatch(createAuthor(authorObject)))
+      .then((e) => dispatch(createBookAuthor(bookAuthor)));
 
     message.success("Added" + title + " by " + author, 2);
-    
+
     // CLOSE MODAL
     toggleBookCreationModal();
-    
+
     // RESET THE STATE
     setBookAddState({ ...initialAddBookState });
   };
 
   return (
     <div className="books-page">
-      <input onChange={handleSearchChange} placeholder={"Search ISBN, Title, Author"} className="border border-transparent block mb-4 p-4 pl-4 text-lg text-gray-900 rounded-lg bg-gray-200 dark:text-white" />
+      <input
+        onChange={handleSearchChange}
+        placeholder={"Search ISBN, Title, Author"}
+        className="border border-transparent block mb-4 p-4 pl-4 text-lg text-gray-900 rounded-lg bg-gray-200 dark:text-white"
+      />
       <CustomButton
         onClick={() => {
           toggleBookCreationModal();
@@ -239,7 +311,9 @@ const BooksPage = () => {
           />
           <div className="flex justify-between">
             <CustomButton>Submit</CustomButton>
-            <CustomButton onClick={cancelBookCreationModal}>CANCEL</CustomButton>
+            <CustomButton onClick={cancelBookCreationModal}>
+              CANCEL
+            </CustomButton>
           </div>
         </form>
       </Drawer>
@@ -268,20 +342,21 @@ const BooksPage = () => {
             required
           />
           <FormInput
-            name="borrower"
+            name="card_id"
             type="text"
             label="Borrower"
-            value={bookCheckoutState.borrower}
+            value={bookCheckoutState.card_id}
             handleChange={onBookCheckoutFormChange}
             required
           />
           <div className="flex justify-between">
             <CustomButton>Submit</CustomButton>
-            <CustomButton onClick={cancelBookCheckoutModal}>CANCEL</CustomButton>
+            <CustomButton onClick={cancelBookCheckoutModal}>
+              CANCEL
+            </CustomButton>
           </div>
         </form>
       </Drawer>
-
     </div>
   );
 };
