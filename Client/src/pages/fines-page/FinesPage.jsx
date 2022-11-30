@@ -40,16 +40,29 @@ const FinesPage = () => {
   const [clickedFullPay, setclickedFullPay] = useState(false);
   const [clickedSinglePay, setclickedSingePay] = useState(false);
 
+  const loansCombinedUnderBorrowerID = Object.values(
+    loans.reduce((acc, { card_id, loan_id }) => {
+      acc[card_id] ??= { card_id: card_id, loans: [] };
+      acc[card_id].loans.push(loan_id);
+
+      return acc;
+    }, {})
+  );
+
+  const loansDict = Object.fromEntries(
+    loansCombinedUnderBorrowerID.map((item) => [item.card_id, item.loans])
+  );
+
   const outerTableData = borrowers.map((current_borrower) => {
-    // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING FILTER
-    const borrower_loans = loans.filter(
-      (loan) => loan.card_id === current_borrower.card_id
-    );
+    // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING THE LOANS DICTIONARY
+    const borrower_loansIDs = loansDict[current_borrower.card_id]
+      ? loansDict[current_borrower.card_id]
+      : [];
+
     let borrower_fines = [];
 
-    // USING THE LOANS, FIND EACH OF THE FINES ASSOCIATED WITH A SINGLE LOAN
-    borrower_loans.forEach((current_loan, index) => {
-      const fine = fines.find((fine) => fine.loan_id === current_loan.loan_id);
+    borrower_loansIDs.forEach((current_loan, index) => {
+      const fine = fines.find((fine) => fine.loan_id === current_loan);
       if (fine) {
         borrower_fines.push({ ...fine, key: index + 1 });
       }
@@ -325,9 +338,12 @@ const FinesPage = () => {
         ) : (
           <CustomButton onClick={handleReset}>Reset</CustomButton>
         )}
-        <CustomButton onClick={handleTableRefresh} wide>Refresh Fines</CustomButton>
+        <CustomButton onClick={handleTableRefresh} wide>
+          Refresh Fines
+        </CustomButton>
       </div>
-      <Table className="container mx-auto"
+      <Table
+        className="container mx-auto"
         pagination={{
           position: ["bottomCenter"],
         }}
