@@ -85,7 +85,7 @@ const BorrowersPage = () => {
 
   return (
     <div className="borrowers-page">
-      <div className="pb-4 pt-4">
+      <div className="pb-4 pt-4 ">
         <CustomButton onClick={toggleModal} wide>
           ADD BORROWER
         </CustomButton>
@@ -135,7 +135,7 @@ const BorrowersPage = () => {
           </form>
         </Drawer>
       </div>
-      <div>
+      <div className="container">
         <Table dataSource={borrowers} columns={columns} />
       </div>
     </div>

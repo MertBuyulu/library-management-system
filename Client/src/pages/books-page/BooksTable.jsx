@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // components
-import { Table, Tag } from "antd";
+import { Table, Tag, Skeleton } from "antd";
 import CustomButton from "../../components/custom-button/CustomButton.component";
 
 const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
@@ -18,20 +18,25 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
       dataIndex: "authors",
       key: 3,
       align: "center",
+      render: (_, record) => {
+        return (
+          // record.book_authors[0].authors.name
+          record.book_authors.map((bookAuthorObj, key) => {
+            return key === 0
+              ? "" + bookAuthorObj.authors.name + " "
+              : ", " + bookAuthorObj.authors.name + "";
+          })
+        );
+      },
     },
     {
       title: "Status",
       dataIndex: "status",
       key: 4,
       align: "center",
-      render: (_, record) => {
-        return isBookAvailable(record.isbn, record.title) ? (
-          <span>Available</span>
-        ) : (
-          <span>Not Available</span>
-        );
-      },
-      // render: (_, record) => <span>Temp</span>,
+      render: (_, record) => (
+        <StatusCell record={record} isBookAvailable={isBookAvailable} />
+      ),
     },
     {
       title: "Action",
@@ -61,6 +66,23 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
         position: ["bottomCenter"],
       }}
     />
+  );
+};
+
+const StatusCell = ({ isBookAvailable, record }) => {
+  const [statusData, setStatusData] = useState(false);
+  useEffect(() => {
+    const getStatus = async (record) => {
+      const res = await isBookAvailable(record.isbn);
+      setStatusData(res);
+    };
+    getStatus(record);
+  }, [isBookAvailable, record]);
+
+  return statusData ? (
+    <Tag color="green">AVAILABLE</Tag>
+  ) : (
+    <Tag color="volcano">NOT AVAILABLE</Tag>
   );
 };
 

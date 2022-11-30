@@ -23,6 +23,7 @@ const AuthorsPage = () => {
     },
   ];
   return (
+    <div className="container mx-auto">
     <Table
       pagination={{
         position: ["bottomCenter"],
@@ -30,6 +31,7 @@ const AuthorsPage = () => {
       dataSource={authors}
       columns={columns}
     />
+    </div>
   );
 };
 

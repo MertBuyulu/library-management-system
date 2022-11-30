@@ -257,14 +257,15 @@ const LoansPage = () => {
 
   return (
     <div>
-      <div className="flex justify-center pt-4 pb-4">
-        <CustomButton onClick={handleMultipleCheckIn}>
+      <div className="flex justify-center w-full pt-4 pb-4">
+        <CustomButton onClick={handleMultipleCheckIn} wide>
           Check in all
         </CustomButton>
         <span>
           {hasSelected ? `Selected ${selectedRowKeys.length} loans` : ""}
         </span>
       </div>
+      <div className="container mx-auto">
       <Table
         pagination={{
           position: ["bottomCenter"],
@@ -273,6 +274,7 @@ const LoansPage = () => {
         dataSource={data}
         columns={columns}
       />
+      </div>
     </div>
   );
 };

@@ -206,11 +206,12 @@ const BooksPage = () => {
     setSearchContent(e.target.value);
     if (e.target.value.length > 0) {
       let result = books.filter((bookRow) => {
+        var authors = bookRow.book_authors.map((bookAuthorObj, key) => { return key === 0 ? "" + bookAuthorObj.authors.name + " ": ", " + bookAuthorObj.authors.name + "";})
+        authors = authors.join(',')
         if (
-          bookRow["title"]
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase())
+          bookRow["title"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase()) ||
+          authors.toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return true;
         } else {
@@ -286,7 +287,7 @@ const BooksPage = () => {
   };
 
   return (
-    <div className="books-page">
+    <div className="books-page w-auto">
       <input
         onChange={handleSearchChange}
         placeholder={"Search ISBN, Title, Author"}
@@ -300,12 +301,16 @@ const BooksPage = () => {
         {" "}
         Add Book
       </CustomButton>
+      <div className={"mt-1"}>
       <BooksTable
+        className={"books-table"}
         books={booksDisplayed}
         startCheckout={startCheckout}
         toggleBookCheckoutModal={toggleBookCheckoutModal}
         isBookAvailable={isBookAvailable}
+        
       />
+      </div>
       <Drawer
         title="Add Book"
         placement="right"
