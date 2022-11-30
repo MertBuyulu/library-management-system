@@ -41,21 +41,29 @@ const initialBookCheckoutState = {
   card_id: "",
 };
 
+const initialBookAuthorState = {
+  id: "",
+  author_id: "",
+  isbn: "",
+};
+
 const BooksPage = () => {
-  // HOOKS & REDUX & STATE MANAGEMENT
-  const [bookCreationModalOpen, setBookCreationModalOpen] = useState(false);
-  const [bookCheckoutModalOpen, setBookCheckoutModalOpen] = useState(false);
-  const [searchContent, setSearchContent] = useState("");
-  const [booksAuthorsData, setBookAuthorsData] = useState([]);
+  // REDUX & STATE MANAGEMENT
   const dispatch = useDispatch();
   const books = useSelector(SelectBooksWithKeys);
   const authors = useSelector(SelectAuthors);
-  const [bookAddState, setBookAddState] = useState(initialAddBookState);
+  const [booksAuthorsData, setBookAuthorsData] = useState([
+    initialBookAuthorState,
+  ]);
+  const [searchContent, setSearchContent] = useState("");
   const [bookCheckoutState, setBookCheckoutState] = useState(
     initialBookCheckoutState
   );
+  const [bookAddState, setBookAddState] = useState(initialAddBookState);
+  const [bookCreationModalOpen, setBookCreationModalOpen] = useState(false);
+  const [bookCheckoutModalOpen, setBookCheckoutModalOpen] = useState(false);
+
   const { isbn, title, author } = bookAddState;
-  const [booksDisplayed, setBooksDisplayed] = useState(books);
 
   // FETCH BOOK AUTHORS TABLE DATA FROM THE SERVER
   useEffect(() => {
@@ -63,10 +71,10 @@ const BooksPage = () => {
       const { data } = await fetchBookAuthors();
       setBookAuthorsData(data);
     };
-
     getBookAuthors();
   }, []);
 
+  // CONSTRUCT THE BOOK'S TABLE DATA
   const AuthorsDictionary = Object.fromEntries(
     authors.map((author) => [author.author_id, author.name])
   );
@@ -79,22 +87,25 @@ const BooksPage = () => {
       return acc;
     }, {})
   );
-  console.log(mergedBooksAuthorData)
 
   const mergedBooksAuthorDataDictionary = Object.fromEntries(
     mergedBooksAuthorData.map((item) => [item.isbn, item.authors])
   );
-  
 
-  // const booksTableData = books.map((book) => {
-  //   const authorIDs = mergedBooksAuthorDataDictionary[book.isbn];
-  //   const authorNames = authorIDs.map((id) => AuthorsDictionary[id]);
-  //   return {
-  //     ...book,
-  //     authors: authorNames,
-  //   };
-  // });
+  const booksTableData = books.map((book) => {
+    const authorIDs = mergedBooksAuthorDataDictionary[book.isbn];
+    const authorNames = authorIDs
+      ? authorIDs.map((id) => AuthorsDictionary[id])
+      : [];
+    return {
+      ...book,
+      authors: authorNames,
+    };
+  });
 
+  const [booksDisplayed, setBooksDisplayed] = useState(booksTableData);
+
+  // HANDLERS
   const startCheckout = (isbn, authors, title) => {
     setBookCheckoutState({ ...bookCheckoutState, isbn: isbn, title: title });
     toggleBookCheckoutModal();
@@ -135,6 +146,7 @@ const BooksPage = () => {
     );
   };
 
+  // OPERATIONAL SUCCESS/ERROR MESSAGES
   const successBorrowerID = () =>
     message.info("Validating the existence of the borrower ID...", 2, () =>
       message.success(`Success: Validation passed!! Request in progress...`, 3)
@@ -187,6 +199,7 @@ const BooksPage = () => {
         )
     );
 
+  // HANDLERS CONT'D
   const onBookCheckoutFormChange = (e) => {
     setBookCheckoutState({
       ...bookCheckoutState,
@@ -205,13 +218,16 @@ const BooksPage = () => {
     e.preventDefault();
     setSearchContent(e.target.value);
     if (e.target.value.length > 0) {
-      let result = books.filter((bookRow) => {
-        var authors = bookRow.book_authors.map((bookAuthorObj, key) => { return key === 0 ? "" + bookAuthorObj.authors.name + " ": ", " + bookAuthorObj.authors.name + "";})
-        authors = authors.join(',')
+      let result = booksTableData.filter((bookRow) => {
+        const row_authors = bookRow.authors.join(",");
         if (
-          bookRow["title"].toLowerCase().includes(e.target.value.toLowerCase()) ||
-          bookRow["isbn"].toLowerCase().includes(e.target.value.toLowerCase()) ||
-          authors.toLowerCase().includes(e.target.value.toLowerCase())
+          bookRow["title"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          bookRow["isbn"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          row_authors.toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           return true;
         } else {
@@ -221,7 +237,7 @@ const BooksPage = () => {
 
       setBooksDisplayed(result);
     } else {
-      setBooksDisplayed(books);
+      setBooksDisplayed(booksTableData);
     }
   };
 
@@ -302,14 +318,13 @@ const BooksPage = () => {
         Add Book
       </CustomButton>
       <div className={"mt-1"}>
-      <BooksTable
-        className={"books-table"}
-        books={booksDisplayed}
-        startCheckout={startCheckout}
-        toggleBookCheckoutModal={toggleBookCheckoutModal}
-        isBookAvailable={isBookAvailable}
-        
-      />
+        <BooksTable
+          className={"books-table"}
+          books={booksDisplayed}
+          startCheckout={startCheckout}
+          toggleBookCheckoutModal={toggleBookCheckoutModal}
+          isBookAvailable={isBookAvailable}
+        />
       </div>
       <Drawer
         title="Add Book"

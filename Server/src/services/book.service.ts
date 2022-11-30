@@ -20,8 +20,8 @@ export const getAllBooks = async (
     }
 
     console.log("[server] Getting all Books")
-    // return res.json(await prisma.book.findMany({ include: { book_authors: { include: { authors: { select: { name: true } } } } } }));
-    return res.json(await prisma.book.findMany());
+   // return res.json(await prisma.book.findMany({ include: { book_authors: { include: { authors: { select: { name: true } } } } } }));
+   return res.json(await prisma.book.findMany())
 };
 
 // DEFINE GET BORROWER
