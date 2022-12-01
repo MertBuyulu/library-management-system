@@ -17,7 +17,6 @@ import {
 
 // validation methods
 import { validatePayment, validatMultiplePayments } from "../../utils/utils";
-import { current } from "@reduxjs/toolkit";
 
 const FinesPage = () => {
   // DISPATCH WILL ALLOW FOR ACTIONS TO CHANGE STORE
@@ -31,13 +30,11 @@ const FinesPage = () => {
   const fines = useSelector(SelectFines);
   const loans = useSelector(SelectLoans);
   const borrowers = useSelector(SelectBorrowersWithKeys);
-
-  const [filtered, setFiltered] = useState(false);
+  // LOCAL STATES
   const [dayCount, setDayCount] = useState(1);
+  const [filtered, setFiltered] = useState(false);
+  const [editingKey, setEditingKey] = useState(0);
   const [enteredAmount, setEnteredAmount] = useState(0);
-
-  // EDITING KEY DOES NOT WORK.
-  //const [editingKey, setEditingKey] = useState(0);
   const [clickedFullPay, setclickedFullPay] = useState(false);
   const [clickedSinglePay, setclickedSingePay] = useState(false);
 
@@ -90,8 +87,10 @@ const FinesPage = () => {
   });
 
   const startSinglePayment = async (fine) => {
+    // RESET THE EDITING KEY
+    setEditingKey(0);
     if (await validatePayment(fine.loan_id)) {
-      setclickedSingePay(true);
+      setEditingKey(fine.key) && setclickedSingePay(true);
     } else {
       errorSingleFine(fine.loan_id);
     }
@@ -111,12 +110,14 @@ const FinesPage = () => {
     setEnteredAmount(0);
   };
 
-  const startBatchPayment = async ({ card_id, borrower_fines }) => {
+  const startBatchPayment = async ({ card_id, borrower_fines, key }) => {
+    // RESET THE EDITING KEY
+    setEditingKey(0);
     const loan_ids = borrower_fines.map((fine) => {
       return fine.loan_id;
     });
     if (await validatMultiplePayments(loan_ids)) {
-      setclickedFullPay(true);
+      setEditingKey(key) && setclickedFullPay(true);
     } else {
       errorMultipleFines(card_id);
     }
@@ -156,10 +157,9 @@ const FinesPage = () => {
     setEnteredAmount(e.currentTarget.value);
   };
 
-  // TO ALLOW ONLY ONE TABLE TO BE EDITED AT ANY TIME - DOESN'T WORK
-  // const isEditing = (key) => {
-  //   return key === editingKey;
-  // };
+  const isEditing = (rowKey) => {
+    return rowKey === editingKey;
+  };
 
   const successSingleFine = (balance_left) =>
     message.info("Action in progress...", 2, () =>
@@ -230,7 +230,7 @@ const FinesPage = () => {
         width: !clickedSinglePay ? 150 : 200,
         render: (_, record) =>
           record.fine_amount ? (
-            !clickedSinglePay ? (
+            !isEditing(record.key) && !clickedSinglePay ? (
               <CustomButton onClick={() => startSinglePayment(record)} small>
                 Pay Fine
               </CustomButton>
@@ -306,7 +306,7 @@ const FinesPage = () => {
       width: !clickedFullPay ? 150 : 200,
       render: (_, record) =>
         record.total_fine_amount ? (
-          !clickedFullPay ? (
+          !isEditing(record.key) & !clickedFullPay ? (
             <CustomButton onClick={() => startBatchPayment(record)} small>
               Pay All Fines
             </CustomButton>
