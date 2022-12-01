@@ -22,11 +22,48 @@ const initialState = {
 const BorrowersPage = () => {
   const dispatch = useDispatch();
   const borrowers = useSelector(SelectBorrowersWithKeys);
+  const [borrowersDisplayed, setBorrowersDisplayed] = useState(borrowers)
+  const [searchContent, setSearchContent] = useState("")
 
   const [state, setState] = useState(initialState);
   const [modal, setModal] = useState(false);
 
   const { ssn, bname, address, phone } = state;
+
+  const handleSearchChange = (e) => {
+    e.preventDefault();
+    setSearchContent(e.target.value);
+    if (e.target.value.length > 0) {
+      let result = borrowers.filter((borrower) => {
+        console.log(borrower)
+        if (
+          String(borrower["ssn"])
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          borrower["phone"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          borrower["bname"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          borrower["card_id"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          borrower["address"]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase())
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      setBorrowersDisplayed(result);
+    } else {
+      setBorrowersDisplayed(borrowers);
+    }
+  };
 
   const toggleModal = () => {
     setModal(!modal);
@@ -79,14 +116,19 @@ const BorrowersPage = () => {
     { title: "Borrower ID", dataIndex: "card_id", key: 1 },
     { title: "Ssn", dataIndex: "ssn", key: 2 },
     { title: "Full Name", dataIndex: "bname", key: 3 },
-    { title: "Home Adress", dataIndex: "address", key: 4 },
+    { title: "Home Address", dataIndex: "address", key: 4 },
     { title: "Phone", dataIndex: "phone", key: 5 },
   ];
 
   return (
-    <div className="borrowers-page">
-      <div className="pb-4 pt-4 ">
-        <CustomButton onClick={toggleModal} wide>
+    <div className="borrowers-page w-auto">
+      {/* <div className="pb-4 pt-4 "> */}
+      <input
+        onChange={handleSearchChange}
+        placeholder={"Search Borrower ID, SSN, Full Name, Address, Phone"}
+        className="border border-transparent block mb-4 p-4 pl-4 text-lg text-gray-900 rounded-lg bg-gray-200 dark:text-white"
+      />
+        <CustomButton onClick={toggleModal}>
           ADD BORROWER
         </CustomButton>
         <Drawer
@@ -134,9 +176,9 @@ const BorrowersPage = () => {
             </div>
           </form>
         </Drawer>
-      </div>
+      {/* </div> */}
       <div className="container">
-        <Table dataSource={borrowers} columns={columns} />
+        <Table dataSource={borrowersDisplayed} columns={columns} />
       </div>
     </div>
   );
