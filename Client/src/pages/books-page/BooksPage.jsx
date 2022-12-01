@@ -249,7 +249,7 @@ const BooksPage = () => {
       .then((e) => dispatch(createAuthor(authorObject)))
       .then((e) => dispatch(createBookAuthor(bookAuthor)));
 
-    message.success("Added" + title + " by " + author, 2);
+    message.success("Added " + title + " by " + author, 2);
 
     // CLOSE MODAL
     toggleBookCreationModal();
