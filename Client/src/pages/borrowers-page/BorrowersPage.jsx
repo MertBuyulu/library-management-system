@@ -43,12 +43,23 @@ const BorrowersPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (await validateSsn(ssn) && !Number.isNaN(Number(ssn))) {
-      dispatch(createBorrower({ ssn, bname, address, phone }));
-      success();
-    } else {
-      error(ssn);
+    if(ssn.length != 9){
+      message.error( `Error: Please enter an SSN of 9 digits long`, 3)
+      return
     }
+
+    if(Number.isNaN(Number(ssn))){
+      message.error( `Error: Please enter an SSN with digits only`, 3)
+      return
+    }
+
+    if(!await validateSsn(ssn)){
+      message.error( `Error: Please enter an unique SSN`, 3)
+      return
+    }
+    success();
+    dispatch(createBorrower({ ssn, bname, address, phone }));
+
 
     // close the modal pop up page
     toggleModal();
@@ -63,17 +74,6 @@ const BorrowersPage = () => {
     );
   }
 
-  const error = (ssn) => {
-    message.info("Request in progress...", 2, () => {
-      if (Number.isNaN(Number(ssn))) {
-        message.error( `Error: Request denied... ${ssn} is invalid. Please ensure ssn is a unique number.`, 3)
-      }
-      else {
-        message.error( `Error: Request denied... ${ssn} is already in use. Please enter a unique ssn number.`, 3)
-      }
-    }
-    );
-  };
 
   const columns = [
     { title: "Borrower ID", dataIndex: "card_id", key: 1 },
