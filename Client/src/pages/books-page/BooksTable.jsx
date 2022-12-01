@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 // components
-import { Table, Tag, Skeleton } from "antd";
+import { Table, Tag, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import CustomButton from "../../components/custom-button/CustomButton.component";
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
   const columns = [
@@ -18,15 +21,13 @@ const BooksTable = ({ books, startCheckout, isBookAvailable }) => {
       dataIndex: "authors",
       key: 3,
       align: "center",
-      render: (_, record) => {
-        return (
-          // record.book_authors[0].authors.name
-          record.book_authors.map((bookAuthorObj, key) => {
-            return key === 0
-              ? "" + bookAuthorObj.authors.name + " "
-              : ", " + bookAuthorObj.authors.name + "";
-          })
-        );
+      render: (_, { authors }) => {
+        const length = authors.length;
+        if (length > 0) {
+          return <span>{authors.join(", ")}</span>;
+        } else {
+          return <Spin indicator={antIcon} />;
+        }
       },
     },
     {
