@@ -17,6 +17,7 @@ import {
 
 // validation methods
 import { validatePayment, validatMultiplePayments } from "../../utils/utils";
+import { current } from "@reduxjs/toolkit";
 
 const FinesPage = () => {
   // DISPATCH WILL ALLOW FOR ACTIONS TO CHANGE STORE
@@ -53,6 +54,13 @@ const FinesPage = () => {
     loansCombinedUnderBorrowerID.map((item) => [item.card_id, item.loans])
   );
 
+  const finesDict = Object.fromEntries(
+    fines.map(({ loan_id, fine_amount, paid }) => [
+      loan_id,
+      { loan_id, fine_amount, paid },
+    ])
+  );
+
   const outerTableData = borrowers.map((current_borrower) => {
     // FIND THE LOANS ASSOCIATED WITH THE CURRENT BORROWER USING THE LOANS DICTIONARY
     const borrower_loansIDs = loansDict[current_borrower.card_id]
@@ -61,8 +69,9 @@ const FinesPage = () => {
 
     let borrower_fines = [];
 
-    borrower_loansIDs.forEach((current_loan, index) => {
-      const fine = fines.find((fine) => fine.loan_id === current_loan);
+    // FIND THE FINES ASSOCIATED WITH THE CURRENT BORROWER'S LOAN IDs USING THE FINES DICTIONARY
+    borrower_loansIDs.forEach((current_loan_id, index) => {
+      const fine = finesDict[current_loan_id];
       if (fine) {
         borrower_fines.push({ ...fine, key: index + 1 });
       }
