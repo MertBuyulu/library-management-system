@@ -65,18 +65,21 @@ How do we handle multiple author names?
 
 [x] - Create Test Coverages for all CRUD operations ()
 
-[~] - Create Front-end using React ()
-   [x] - Implement Redux 
-   [x] - Pages to work on (Books, Authors, Borrowers/Members, Loans, Fines)
-   [x] - Components(Books, Authors, Borrower Component, Loans(Table), Fines(Table))
+[x] - Implement Redux 
 
-[ ] - Check requirements before deployment ()
+[x] - Pages to work on (Books, Authors, Borrowers/Members, Loans, Fines)
 
-[] - Create Part 2 Submission Documents (Design Doc, Final Submission)
+[x] - Components(Books, Authors, Borrower Component, Loans(Table), Fines(Table))
 
-[ ] - Mock Demo (Run through all requirements)
+[x] - Check requirements before deployment ()
 
-[ ] - Final Turn in
+[x] - Create Part 2 Submission Documents (Design Doc, Final Submission)
+
+[x] - Mock Demo (Run through all requirements)
+
+[x] - Final Turn in
+
+Final Grade : A
 
 
 
