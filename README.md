@@ -1,4 +1,6 @@
-# BERYLLIUM LIBRARY-MANAGEMENT-SYSTEM
+# [BERYLLIUM LIBRARY-MANAGEMENT-SYSTEM](https://lms-ui-service-hdzl5gs7hq-vp.a.run.app/)
+
+https://user-images.githubusercontent.com/75606167/212603563-b7b2caa3-d90e-47dd-a90b-3edfaeab811a.mp4
 
 > Requirements for running
 
@@ -34,18 +36,6 @@
       3. npx prisma db pull
    2. Client:
       1. Inspect -> Apllication -> Local Storage -> Clear (localhost:3000)
-
-
-> Important
-Milestone 2 - November, 18, 2022
-1. Run Initial Dependencies (Thu Nov 3)
-2. Finish "uploadDataJS" application (Monday Nov 7th @ 8:00pm)
-
-> Questions
-
-Are there any additional specifications to unique id of an author?
-How do we handle multiple author names? 
-
 
 > Tasks
 
