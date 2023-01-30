@@ -1,6 +1,8 @@
 # [BERYLLIUM LIBRARY-MANAGEMENT-SYSTEM](https://lms-ui-service-hdzl5gs7hq-vp.a.run.app/)
 
-https://user-images.githubusercontent.com/75606167/212603563-b7b2caa3-d90e-47dd-a90b-3edfaeab811a.mp4
+
+<video src='https://user-images.githubusercontent.com/75606167/212603563-b7b2caa3-d90e-47dd-a90b-3edfaeab811a.mp4'></video>
+
 
 > Requirements for running
 
